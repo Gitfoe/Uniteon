@@ -4,25 +4,27 @@ using UnityEngine;
 
 public class Controller : MonoBehaviour
 {
-    
     public float moveSpeed;
-
+    private Animator _animator;
     private bool _isMoving;
-
     private Vector2 _gamerInput;
-
     private Vector2 _previousGamerInput;
-    // Start is called before the first frame update
-    void Start()
+    private static readonly int MoveX = Animator.StringToHash("moveX");
+    private static readonly int MoveY = Animator.StringToHash("moveY");
+    private static readonly int IsMoving = Animator.StringToHash("isMoving");
+
+    // Awake is called when the script is loaded
+    private void Awake()
     {
-        
+        _animator = GetComponent<Animator>(); 
+
     }
 
     // Update is called once per frame
     void Update()
     {
         if (!_isMoving) // Check if the gamer is not currently moving
-        {
+        { 
             // Check every frame if the gamer is applying an input
             _gamerInput.x = Input.GetAxisRaw("Horizontal"); // -1, 0 or 1
             _gamerInput.y = Input.GetAxisRaw("Vertical");
@@ -35,11 +37,14 @@ public class Controller : MonoBehaviour
                 }
                 else
                     _previousGamerInput = _gamerInput; // Save previous gamer input to know what to do with diagonal movements
+                _animator.SetFloat(MoveX, _gamerInput.x); // Pass variables through to animator
+                _animator.SetFloat(MoveY, _gamerInput.y);
                 var nextPos = transform.position; // transport.position = current position 
                 nextPos.x += _gamerInput.x; // Save new position in temporary variable
                 nextPos.y += _gamerInput.y;
                 StartCoroutine(Move(nextPos));
             }
+            _animator.SetBool(IsMoving, _isMoving);
         }
     }
 
