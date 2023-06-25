@@ -5,6 +5,7 @@ using UnityEngine;
 public class Controller : MonoBehaviour
 {
     public float moveSpeed;
+    public LayerMask objectsLayer;
     private Animator _animator;
     private bool _isMoving;
     private Vector2 _gamerInput;
@@ -16,8 +17,7 @@ public class Controller : MonoBehaviour
     // Awake is called when the script is loaded
     private void Awake()
     {
-        _animator = GetComponent<Animator>(); 
-
+        _animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -42,7 +42,8 @@ public class Controller : MonoBehaviour
                 var nextPos = transform.position; // transport.position = current position 
                 nextPos.x += _gamerInput.x; // Save new position in temporary variable
                 nextPos.y += _gamerInput.y;
-                StartCoroutine(Move(nextPos));
+                if (IsWalkable(nextPos))
+                    StartCoroutine(Move(nextPos));
             }
             _animator.SetBool(IsMoving, _isMoving);
         }
@@ -52,8 +53,8 @@ public class Controller : MonoBehaviour
     /// Coroutine to move a gamer on the grid.
     /// </summary>
     /// <param name="nextPos">The next position the player needs to be moved to.</param>
-    /// <returns>Nothing actually.</returns>
-    IEnumerator Move(Vector3 nextPos)
+    /// <returns>Nothing of importance.</returns>
+    private IEnumerator Move(Vector3 nextPos)
     {
         _isMoving = true;
         // Check if player's target position & current position is greater than a very small value (Epsilon)
@@ -66,5 +67,16 @@ public class Controller : MonoBehaviour
         }
         transform.position = nextPos; // If the current and target position are close, just set the position
         _isMoving = false;
+    }
+
+    /// <summary>
+    /// Checks if a tile is walkable and not blocked by an object.
+    /// </summary>
+    /// <param name="nextPos">The next position the player wants to move to.</param>
+    /// <returns>True if walkable and false if not.</returns>
+    private bool IsWalkable(Vector3 nextPos)
+    {
+        var getNextObject = Physics2D.OverlapCircle(nextPos, 0.2f, objectsLayer);
+        return ReferenceEquals(getNextObject, null);
     }
 }
