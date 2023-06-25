@@ -76,6 +76,7 @@ public class Controller : MonoBehaviour
     /// <returns>True if walkable and false if not.</returns>
     private bool IsWalkable(Vector3 nextPos)
     {
+        nextPos.y -= 0.5f; // move from head to foot of player to look more natural in-game
         var getNextObject = Physics2D.OverlapCircle(nextPos, 0.2f, objectsLayer);
         return ReferenceEquals(getNextObject, null);
     }
