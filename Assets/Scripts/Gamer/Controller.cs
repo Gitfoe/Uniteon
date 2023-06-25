@@ -6,6 +6,7 @@ public class Controller : MonoBehaviour
 {
     public float moveSpeed;
     public LayerMask objectsLayer;
+    public LayerMask wildGrassLayer;
     private Animator _animator;
     private bool _isMoving;
     private Vector2 _gamerInput;
@@ -43,7 +44,10 @@ public class Controller : MonoBehaviour
                 nextPos.x += _gamerInput.x; // Save new position in temporary variable
                 nextPos.y += _gamerInput.y;
                 if (IsWalkable(nextPos))
+                {
                     StartCoroutine(Move(nextPos));
+                    CheckWildGrass();
+                }
             }
             _animator.SetBool(IsMoving, _isMoving);
         }
@@ -79,5 +83,16 @@ public class Controller : MonoBehaviour
         nextPos.y -= 0.5f; // move from head to foot of player to look more natural in-game
         var getNextObject = Physics2D.OverlapCircle(nextPos, 0.2f, objectsLayer);
         return ReferenceEquals(getNextObject, null);
+    }
+
+    /// <summary>
+    /// Checks if the gamer is on a wild grass grid position and if so triggers the battle scene based on odds.
+    /// </summary>
+    private void CheckWildGrass()
+    {
+        var getNextObject = Physics2D.OverlapCircle(transform.position, 0.2f, wildGrassLayer);
+        if (ReferenceEquals(getNextObject, null)) return;
+        if (Random.Range(0, 100) <= 10)
+            Debug.Log("Triggered wild encounter (code has to be programmed still)");
     }
 }
