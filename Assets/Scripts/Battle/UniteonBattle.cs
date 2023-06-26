@@ -10,6 +10,7 @@ public class UniteonBattle : MonoBehaviour
     [SerializeField] private UniteonUnit uniteonUnitFoe;
     [SerializeField] private UniteonHud uniteonHudGamer;
     [SerializeField] private UniteonHud uniteonHudFoe;
+    [SerializeField] private BattleDialogBox battleDialogBox;
     
     // Start is called before the first frame update
     private void Start()
@@ -26,5 +27,6 @@ public class UniteonBattle : MonoBehaviour
         uniteonHudGamer.SetGamerData(uniteonUnitGamer.Uniteon);
         uniteonUnitFoe.InitialiseUniteon();
         uniteonHudFoe.SetGamerData(uniteonUnitFoe.Uniteon);
+        StartCoroutine(battleDialogBox.TypeOutDialog($"A wild {uniteonUnitFoe.Uniteon.UniteonBase.UniteonName} appeared!"));
     }
 }
