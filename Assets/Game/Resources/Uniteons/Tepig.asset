@@ -16,8 +16,8 @@ MonoBehaviour:
   uniteonName: Tepig
   description: 'Tepig, the Flaming Pig Uniteon. Normally, fire shoots out of Tepig''s
     snout, but it shoots out smoke instead when it is feeling ill. '
-  frontSprite: {fileID: 360920603, guid: 645b92e2288dd8544b4ff04239b15734, type: 3}
-  backSprite: {fileID: -463120910, guid: ac6e7231f1e3b754fbe4d56b66f4fea7, type: 3}
+  frontSprite: {fileID: 7400000, guid: 91680a2a98320d94d82d29d921391d41, type: 2}
+  backSprite: {fileID: 7400000, guid: d8f6acb8636ff944399c72ef9c3b8bd1, type: 2}
   uniteonType1: 2
   uniteonType2: 0
   maxHealthPoints: 65

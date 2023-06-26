@@ -17,7 +17,7 @@ MonoBehaviour:
   description: 'Oshawott, the Sea Otter Uniteon. Oshawott attacks and defends using
     the scalchop that can be removed from its stomach. '
   frontSprite: {fileID: 7400000, guid: da62d40a8ba0b804c85d39d8698eb53f, type: 2}
-  backSprite: {fileID: 0}
+  backSprite: {fileID: 7400000, guid: 2065a77cc6ae0f94aab68046f3578f74, type: 2}
   uniteonType1: 3
   uniteonType2: 0
   maxHealthPoints: 55
