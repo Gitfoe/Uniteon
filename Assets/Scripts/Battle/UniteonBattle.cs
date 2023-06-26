@@ -13,7 +13,8 @@ public class UniteonBattle : MonoBehaviour
     [SerializeField] private UniteonHud uniteonHudFoe;
     [SerializeField] private BattleDialogBox battleDialogBox;
     private BattleState _battleState;
-    private int _actionState; 
+    private int _actionSelection;
+    private int _moveSelection;
     
     // Start is called before the first frame update
     private void Start()
@@ -31,6 +32,7 @@ public class UniteonBattle : MonoBehaviour
         uniteonHudGamer.SetGamerData(uniteonUnitGamer.Uniteon);
         uniteonUnitFoe.InitialiseUniteon();
         uniteonHudFoe.SetGamerData(uniteonUnitFoe.Uniteon);
+        battleDialogBox.SetMoveNames(uniteonUnitGamer.Uniteon.Moves);
         // Wait until wild encounter text has printed out
         yield return StartCoroutine(battleDialogBox.TypeOutDialog($"A wild {uniteonUnitFoe.Uniteon.UniteonBase.UniteonName} appeared!"));
         // Wait for some time after the text is done printing
@@ -68,37 +70,68 @@ public class UniteonBattle : MonoBehaviour
         {
             HandleActionSelection();
         }
+        else if (_battleState == BattleState.GamerMove)
+        {
+            HandleMoveSelection();
+        }
     }
 
     /// <summary>
-    /// Watches for input of the player and changes the graphics accordingly.
+    /// Watches for input of the player and changes the graphics accordingly in the action selection state.
     /// </summary>
     private void HandleActionSelection()
     {
         if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
         {
-            if (_actionState < 1)
-                _actionState++;
+            if (_actionSelection < 1)
+                _actionSelection++;
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
         {
-            if (_actionState > 0)
-                _actionState--; 
+            if (_actionSelection > 0)
+                _actionSelection--; 
         }
-        battleDialogBox.UpdateActionSelection(_actionState);
+        battleDialogBox.UpdateActionSelection(_actionSelection);
         // Transition to the next state if an action has been selected
-        if (Input.GetKeyDown(KeyCode.KeypadEnter))
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
         {
-            if (_actionState == 0) // Attack
+            if (_actionSelection == 0) // Attack
             {
                 ActionToMove();
             }
-            else if (_actionState == 1) // Run
+            else if (_actionSelection == 1) // Run
             {
                 throw new NotImplementedException();
             }
         }
-        
+    }
+    
+    /// <summary>
+    /// Watches for input of the player and changes the graphics accordingly in the move selection state.
+    /// </summary>
+    private void HandleMoveSelection()
+    {
+        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+        {
+            if (_moveSelection < uniteonUnitGamer.Uniteon.Moves.Count - 1)
+                _moveSelection++;
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) 
+        {
+            if (_moveSelection > 0)
+                _moveSelection--; 
+        }
+        else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+        {
+            if (_moveSelection < uniteonUnitGamer.Uniteon.Moves.Count - 2)
+                _moveSelection += 2;
+        }
+        else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+        {
+            if (_moveSelection > 0)
+                _moveSelection -= 2; 
+        }
+        battleDialogBox.UpdateMoveSelection(_moveSelection, uniteonUnitGamer.Uniteon.Moves[_moveSelection]); 
     }
 }
 

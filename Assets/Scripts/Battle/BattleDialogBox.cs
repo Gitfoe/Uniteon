@@ -52,14 +52,48 @@ public class BattleDialogBox : MonoBehaviour
     public void EnableActionSelector(bool enabled) => actionSelector.SetActive(enabled);
 
     /// <summary>
+    /// Highlights the correct selection in some texts list.
+    /// </summary>
+    /// <param name="selectedText">The selected text.</param>
+    /// <param name="textsList">The list that the selection has to take place in.</param>
+    private void UpdateSelection(int selectedText, List<Text> textsList)
+    {
+        for (var i = 0; i < textsList.Count; i++)
+        {
+            textsList[i].color = i == selectedText ? selectedColour : deselectedColour;
+        }
+    }
+    
+    /// <summary>
     /// Highlights the correct action selection.
     /// </summary>
     /// <param name="selectedAction">The currently selected action.</param>
-    public void UpdateActionSelection(int selectedAction)
+    public void UpdateActionSelection(int selectedAction) => UpdateSelection(selectedAction, actionTexts);
+
+    /// <summary>
+    /// Highlights the correct move selection.
+    /// </summary>
+    /// <param name="selectedMove">The currently selected move.</param>
+    /// <param name="uniteonMove">The move that is selected.</param>
+    public void UpdateMoveSelection(int selectedMove, Move uniteonMove)
     {
-        for (var i = 0; i < actionTexts.Count; i++)
+        powerPointsText.text = $"PP {uniteonMove.PowerPoints}/{uniteonMove.MoveBase.PowerPoints}";
+        typeText.text = uniteonMove.MoveBase.MoveType.ToString();
+        UpdateSelection(selectedMove, moveTexts);
+    }
+
+    /// <summary>
+    /// Sets the move names the Uniteon knows to the battle screen.
+    /// </summary>
+    /// <param name="moves">The list of moves a Uniteon knows.</param>
+    public void SetMoveNames(List<Move> moves)
+    {
+        for (int i = 0; i < moveTexts.Count; i++)
         {
-            actionTexts[i].color = i == selectedAction ? selectedColour : deselectedColour;
+            if (i < moves.Count)
+                moveTexts[i].text = moves[i].MoveBase.MoveName;
+            else
+                moveTexts[i].text = "---";
         }
     }
 }

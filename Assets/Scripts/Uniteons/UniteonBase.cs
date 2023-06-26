@@ -49,8 +49,8 @@ public struct LearnableMove
 {
     [SerializeField] private MoveBase moveBase;
     [SerializeField] private int level;
-    public MoveBase MoveBase { get; set; }
-    public int Level { get; set; }
+    public MoveBase MoveBase => moveBase;
+    public int Level => level;
 }
 
 public enum UniteonType
