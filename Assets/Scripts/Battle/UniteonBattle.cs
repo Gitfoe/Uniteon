@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 public class UniteonBattle : MonoBehaviour
 {
@@ -37,13 +37,13 @@ public class UniteonBattle : MonoBehaviour
         yield return StartCoroutine(battleDialogBox.TypeOutDialog($"A wild {uniteonUnitFoe.Uniteon.UniteonBase.UniteonName} appeared!"));
         // Wait for some time after the text is done printing
         yield return new WaitForSeconds(2f);
-        InitialiseToAction();
+        TransitionToAction();
     }
 
     /// <summary>
-    /// Transitions the scene state from initialisation to action.
+    /// Transitions the scene state to action.
     /// </summary>
-    private void InitialiseToAction()
+    private void TransitionToAction()
     {
         _battleState = BattleState.GamerAction;
         battleDialogBox.SetDialogText("Choose a strategic move...");
@@ -51,9 +51,9 @@ public class UniteonBattle : MonoBehaviour
     }
     
     /// <summary>
-    /// Transitions the scene state from action to move.
+    /// Transitions the scene state to move.
     /// </summary>
-    private void ActionToMove()
+    private void TransitionToMove()
     {
         _battleState = BattleState.GamerMove;
         battleDialogBox.EnableActionSelector(false);
@@ -97,7 +97,7 @@ public class UniteonBattle : MonoBehaviour
         {
             if (_actionSelection == 0) // Attack
             {
-                ActionToMove();
+                TransitionToMove();
             }
             else if (_actionSelection == 1) // Run
             {
@@ -131,7 +131,51 @@ public class UniteonBattle : MonoBehaviour
             if (_moveSelection > 0)
                 _moveSelection -= 2; 
         }
-        battleDialogBox.UpdateMoveSelection(_moveSelection, uniteonUnitGamer.Uniteon.Moves[_moveSelection]); 
+        battleDialogBox.UpdateMoveSelection(_moveSelection, uniteonUnitGamer.Uniteon.Moves[_moveSelection]);
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            battleDialogBox.EnableMoveSelector(false);
+            battleDialogBox.EnableDialogText(true);
+            StartCoroutine(ExecuteGamerMove());
+        }
+    }
+
+    /// <summary>
+    /// Attacks the foe as the gamer.
+    /// </summary>
+    /// <returns>Coroutine.</returns>
+    private IEnumerator ExecuteGamerMove()
+    {
+        _battleState = BattleState.Attacking;
+        var move = uniteonUnitGamer.Uniteon.Moves[_moveSelection]; // Get the selected move
+        yield return battleDialogBox.TypeOutDialog($"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} used {move.MoveBase.MoveName}!");
+        yield return  new WaitForSeconds(2f);
+        bool fainted = uniteonUnitFoe.Uniteon.TakeDamage(move, uniteonUnitGamer.Uniteon); // Attack foe
+        uniteonHudFoe.UpdateHealthPoints();
+        if (fainted)
+            yield return battleDialogBox.TypeOutDialog($"{uniteonUnitFoe.Uniteon.UniteonBase.UniteonName} has fainted!");
+        else
+            StartCoroutine(ExecuteFoeMove());
+    }
+
+    /// <summary>
+    /// The foe attacks the gamer.
+    /// </summary>
+    /// <returns>Coroutine.</returns>
+    private IEnumerator ExecuteFoeMove()
+    {
+        _battleState = BattleState.FoeMove;
+        // Quite simple battle AI - but get a random move of the foe
+        int randomMoveIndex = Random.Range(0, uniteonUnitFoe.Uniteon.Moves.Count);
+        Move move = uniteonUnitFoe.Uniteon.Moves[randomMoveIndex];
+        yield return battleDialogBox.TypeOutDialog($"{uniteonUnitFoe.Uniteon.UniteonBase.UniteonName} used {move.MoveBase.MoveName}");
+        yield return  new WaitForSeconds(2f);
+        bool fainted = uniteonUnitGamer.Uniteon.TakeDamage(move, uniteonUnitFoe.Uniteon); // Attack gamer
+        uniteonHudGamer.UpdateHealthPoints();
+        if (fainted)
+            yield return battleDialogBox.TypeOutDialog($"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} has fainted!");
+        else
+            TransitionToAction();
     }
 }
 

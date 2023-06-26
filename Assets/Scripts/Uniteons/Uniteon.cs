@@ -35,4 +35,25 @@ public class Uniteon
     public int SpecialAttack => Mathf.FloorToInt((UniteonBase.SpecialAttack * Level) / 100f) + 5;
     public int SpecialDefense => Mathf.FloorToInt((UniteonBase.SpecialDefense * Level) / 100f) + 5;
     public int Speed => Mathf.FloorToInt((UniteonBase.Speed * Level) / 100f) + 5;
+
+    /// <summary>
+    /// Take damage according to the official Pokemon algorithm at https://bulbapedia.bulbagarden.net/wiki/Damage
+    /// </summary>
+    /// <param name="move">The move that the Uniteon is getting attacked by.</param>
+    /// <param name="attacker">The attacking Uniteon.</param>
+    /// <returns>True if the Pokemon fainted and false if not.</returns>
+    public bool TakeDamage(Move move, Uniteon attacker)
+    {
+        float randomizeDamageModifier = Random.Range(0.85f, 1f);
+        float a = (2 * attacker.Level + 10) / 250f;
+        float d = a * move.MoveBase.Power * ((float)attacker.Attack / Defense) + 2;
+        int damage = Mathf.FloorToInt(d * randomizeDamageModifier);
+        HealthPoints -= damage;
+        if (HealthPoints <= 0)
+        {
+            HealthPoints = 0; // Avoid negative HP in the UI
+            return true;
+        }
+        return false;
+    }
 }
