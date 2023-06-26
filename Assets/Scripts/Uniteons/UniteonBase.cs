@@ -12,8 +12,8 @@ public class UniteonBase : ScriptableObject
     [SerializeField] private string uniteonName;
     [TextArea]
     [SerializeField] private string description;
-    [SerializeField] private Sprite frontSprite;
-    [SerializeField] private Sprite backSprite;
+    [SerializeField] private AnimationClip frontSprite;
+    [SerializeField] private AnimationClip backSprite;
     [SerializeField] private UniteonType uniteonType1; // Temporarily one sprite
     [SerializeField] private UniteonType uniteonType2;
     [SerializeField] private int maxHealthPoints;
@@ -28,8 +28,8 @@ public class UniteonBase : ScriptableObject
     public int UniteonID => uniteonID;
     public string UniteonName => uniteonName;
     public string Description => description;
-    public Sprite FrontSprite => frontSprite;
-    public Sprite BackSprite => backSprite;
+    public AnimationClip FrontSprite => frontSprite;
+    public AnimationClip BackSprite => backSprite;
     public UniteonType UniteonType1 => uniteonType1;
     public UniteonType UniteonType2 => uniteonType2;
     public int MaxHealthPoints => maxHealthPoints;

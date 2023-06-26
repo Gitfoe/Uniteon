@@ -16,8 +16,8 @@ MonoBehaviour:
   uniteonName: Snivy
   description: 'Snivy, the Veggie Snake Uniteon. Cool, calm, and collected, Snivy
     uses photosynthesis to collect energy with the leaf on its tail. '
-  frontSprite: {fileID: 1815830140, guid: 52f8bd4515d346f448defb64109b2f94, type: 3}
-  backSprite: {fileID: 1491494114, guid: 557f485fd5209de499812c44f15953da, type: 3}
+  frontSprite: {fileID: 0}
+  backSprite: {fileID: 0}
   uniteonType1: 4
   uniteonType2: 0
   maxHealthPoints: 45
