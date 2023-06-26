@@ -20,9 +20,16 @@ MonoBehaviour:
   backSprite: {fileID: -2039385428, guid: e4bc03ce99337f1449517032d2672408, type: 3}
   uniteonType1: 3
   uniteonType2: 0
-  healthPoints: 55
+  maxHealthPoints: 55
   attack: 55
   defense: 45
   specialAttack: 63
   specialDefense: 45
   speed: 45
+  learnableMoves:
+  - moveBase: {fileID: 11400000, guid: 00256136154f79444aadd80c2e4bc624, type: 2}
+    level: 1
+  - moveBase: {fileID: 11400000, guid: 542c164e3c0294449bae438a5f8d90c6, type: 2}
+    level: 4
+  - moveBase: {fileID: 11400000, guid: dce8d7addbabeaf4491328f71c5714be, type: 2}
+    level: 7

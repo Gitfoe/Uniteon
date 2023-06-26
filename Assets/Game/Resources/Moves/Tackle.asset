@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1c3c3bf392619847971b6dd32d35618, type: 3}
+  m_Name: Tackle
+  m_EditorClassIdentifier: 
+  moveID: 33
+  moveName: Tackle
+  description: 'A physical attack in which the user charges and slams into the target
+    with its whole body. '
+  moveType: 1
+  moveCategory: 0
+  powerPoints: 35
+  power: 40
+  accuracy: 100
