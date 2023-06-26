@@ -12,7 +12,7 @@ public class MoveBase : ScriptableObject
     [SerializeField] private string description;
     [SerializeField] private UniteonType moveType;
     [SerializeField] private MoveCategory moveCategory;
-    [SerializeField] public int powerPoints;
+    [SerializeField] private int powerPoints;
     [SerializeField] private int power;
     [SerializeField] private int accuracy;
     

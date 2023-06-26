@@ -6,15 +6,12 @@ public class HealthBar : MonoBehaviour
 {
     [SerializeField] private GameObject health;
     
-    // Start is called before the first frame update
-    void Start()
+    /// <summary>
+    /// Sets the health bar of the gamer to a new value.
+    /// </summary>
+    /// <param name="normalizedHealthPoints"></param>
+    public void SetGamerHealthBar(float normalizedHealthPoints)
     {
-        health.transform.localScale = new Vector3(0.5f, 1f);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        health.transform.localScale = new Vector3(normalizedHealthPoints, 1f);
     }
 }

@@ -15,7 +15,7 @@ public class Uniteon
     {
         UniteonBase = uniteonBase;
         Level = level;
-        HealthPoints = uniteonBase.MaxHealthPoints;
+        HealthPoints = MaxHealthPoints;
         // Add moves to Uniteon
         Moves = new List<Move>();
         foreach (var move in UniteonBase.LearnableMoves)
@@ -27,7 +27,7 @@ public class Uniteon
         }
     }
 
-    // Formula's from Pokemon to calculate stats based on level
+    // Formula's from Pokemon to calculate stats based on the current Uniteon's level
     // https://bulbapedia.bulbagarden.net/wiki/Stat#Generation_III_onward
     public int MaxHealthPoints => Mathf.FloorToInt((UniteonBase.MaxHealthPoints * Level) / 100f) + 10;
     public int Attack => Mathf.FloorToInt((UniteonBase.Attack * Level) / 100f) + 5;

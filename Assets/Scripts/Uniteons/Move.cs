@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,13 +8,17 @@ using UnityEngine;
 /// </summary>
 public class Move
 {
-    // Fields
+    // Properties
     public MoveBase MoveBase { get; set; }
     public int PowerPoints { get; set; }
 
     // Constructor
     public Move(MoveBase moveBase)
     {
+        if (moveBase == null) // Debug
+        {
+            throw new ArgumentNullException("moveBase", "MoveBase cannot be null");
+        }
         MoveBase = moveBase;
         PowerPoints = moveBase.PowerPoints;
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -43,7 +44,7 @@ public class UniteonBase : ScriptableObject
 /// <summary>
 /// Struct that holds a learnable move and at which level it is earned by leveling up.
 /// </summary>
-[System.Serializable]
+[Serializable]
 public struct LearnableMove
 {
     [SerializeField] private MoveBase moveBase;

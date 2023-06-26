@@ -304,6 +304,7 @@ GameObject:
   - component: {fileID: 162767275}
   - component: {fileID: 162767277}
   - component: {fileID: 162767276}
+  - component: {fileID: 162767278}
   m_Layer: 5
   m_Name: UniteonGamer
   m_TagString: Untagged
@@ -369,6 +370,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 162767274}
   m_CullTransparentMesh: 1
+--- !u!114 &162767278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 162767274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf18fccfc5a9c684d81da8370b5e99df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uniteonBase: {fileID: 11400000, guid: ed448f7f717f704489c1532755724c75, type: 2}
+  level: 7
+  isGamerUniteon: 1
 --- !u!1 &466040907
 GameObject:
   m_ObjectHideFlags: 0
@@ -7790,6 +7806,7 @@ GameObject:
   - component: {fileID: 769407657}
   - component: {fileID: 769407659}
   - component: {fileID: 769407658}
+  - component: {fileID: 769407660}
   m_Layer: 5
   m_Name: GamerHud
   m_TagString: Untagged
@@ -7859,6 +7876,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 769407656}
   m_CullTransparentMesh: 1
+--- !u!114 &769407660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 769407656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0374f6c06698e74ea15309c6adbcc39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nameText: {fileID: 2139230525}
+  levelText: {fileID: 671872685}
+  healthBar: {fileID: 84603087}
 --- !u!1 &780902371
 GameObject:
   m_ObjectHideFlags: 0
@@ -8107,7 +8139,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 987394723}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!4 &987394726
 Transform:
   m_ObjectHideFlags: 0
@@ -8411,6 +8443,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1495501004}
+  - component: {fileID: 1495501005}
   m_Layer: 0
   m_Name: UniteonBattle
   m_TagString: Untagged
@@ -8435,6 +8468,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1495501005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495501003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d52bc33afbaae1a4888a2f9a141a6b67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uniteonGamer: {fileID: 162767278}
+  gamerHud: {fileID: 769407660}
 --- !u!1 &1574635224
 GameObject:
   m_ObjectHideFlags: 0
