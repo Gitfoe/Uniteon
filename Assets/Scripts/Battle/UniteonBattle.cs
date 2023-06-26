@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class UniteonBattle : MonoBehaviour
 {
     // Fields
-    [SerializeField] private UniteonGamer uniteonGamer;
-    [SerializeField] private GamerHud gamerHud;
+    [SerializeField] private UniteonUnit uniteonUnitGamer;
+    [SerializeField] private UniteonUnit uniteonUnitFoe;
+    [SerializeField] private UniteonHud uniteonHudGamer;
+    [SerializeField] private UniteonHud uniteonHudFoe;
     
     // Start is called before the first frame update
     private void Start()
@@ -19,7 +22,9 @@ public class UniteonBattle : MonoBehaviour
     /// </summary>
     private void InitialiseBattle()
     {
-        uniteonGamer.InitialiseUniteon();
-        gamerHud.SetGamerData(uniteonGamer.Uniteon);
+        uniteonUnitGamer.InitialiseUniteon();
+        uniteonHudGamer.SetGamerData(uniteonUnitGamer.Uniteon);
+        uniteonUnitFoe.InitialiseUniteon();
+        uniteonHudFoe.SetGamerData(uniteonUnitFoe.Uniteon);
     }
 }
