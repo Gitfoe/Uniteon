@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eee582f9e7b43634c90523ac84ded514, type: 3}
+  m_Name: Snivy
+  m_EditorClassIdentifier: 
+  uniteonID: 495
+  uniteonName: Snivy
+  description: 'Snivy, the Veggie Snake Uniteon. Cool, calm, and collected, Snivy
+    uses photosynthesis to collect energy with the leaf on its tail. '
+  frontSprite: {fileID: 1815830140, guid: 52f8bd4515d346f448defb64109b2f94, type: 3}
+  backSprite: {fileID: 1491494114, guid: 557f485fd5209de499812c44f15953da, type: 3}
+  uniteonType1: 4
+  uniteonType2: 0
+  healthPoints: 45
+  attack: 45
+  defense: 55
+  specialAttack: 45
+  specialDefense: 55
+  speed: 63

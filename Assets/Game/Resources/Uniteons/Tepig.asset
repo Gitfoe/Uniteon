@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eee582f9e7b43634c90523ac84ded514, type: 3}
+  m_Name: Tepig
+  m_EditorClassIdentifier: 
+  uniteonID: 498
+  uniteonName: Tepig
+  description: 'Tepig, the Flaming Pig Uniteon. Normally, fire shoots out of Tepig''s
+    snout, but it shoots out smoke instead when it is feeling ill. '
+  frontSprite: {fileID: 360920603, guid: 645b92e2288dd8544b4ff04239b15734, type: 3}
+  backSprite: {fileID: -463120910, guid: ac6e7231f1e3b754fbe4d56b66f4fea7, type: 3}
+  uniteonType1: 2
+  uniteonType2: 0
+  healthPoints: 65
+  attack: 63
+  defense: 45
+  specialAttack: 45
+  specialDefense: 45
+  speed: 45
