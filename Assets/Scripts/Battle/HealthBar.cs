@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
@@ -11,18 +12,30 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private Image healthBorder;
     [SerializeField] private Color healthColourHalf;
     [SerializeField] private Color healthColourLow;
-    [SerializeField] private Color startFlashColour;
     [SerializeField] private Color endFlashColour;
     [SerializeField] private float flashDuration;
     private Coroutine _flashCoroutine;
+    private Color _originalHealthColor;
+    private Color _startFlashColour;
 
     /// <summary>
-    /// Sets the health bar to a new value.
+    /// Initialises variables.
+    /// </summary>
+    private void Awake()
+    {
+        _originalHealthColor = health.color;
+        _startFlashColour = healthBorder.color;
+    }
+    
+    /// <summary>
+    /// Sets the health bar to a new value and (re)sets the colors.
     /// </summary>
     /// <param name="normalizedHealthPoints">The normalized value of HP.</param>
     public void SetHealthBar(float normalizedHealthPoints)
     {
         health.transform.localScale = new Vector3(normalizedHealthPoints, 1f);
+        health.color = _originalHealthColor;
+        healthBorder.color = _startFlashColour;
     }
 
     /// <summary>
@@ -55,7 +68,7 @@ public class HealthBar : MonoBehaviour
     /// <returns>Coroutine.</returns>
     private IEnumerator FlashHealthBorder()
     {
-        Color startColor = startFlashColour;
+        Color startColor = _startFlashColour;
         Color endColor = endFlashColour;
         while (true)
         {
@@ -88,7 +101,7 @@ public class HealthBar : MonoBehaviour
                 break;
             case false when _flashCoroutine != null:
                 StopCoroutine(_flashCoroutine);
-                healthBorder.color = startFlashColour;
+                healthBorder.color = _startFlashColour;
                 _flashCoroutine = null;
                 break;
         }

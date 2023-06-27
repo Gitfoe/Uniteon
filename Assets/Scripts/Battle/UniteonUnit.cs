@@ -38,6 +38,7 @@ public class UniteonUnit : MonoBehaviour
             ? PlaySpriteAnimation(Uniteon.UniteonBase.BackSprite)
             : PlaySpriteAnimation(Uniteon.UniteonBase.FrontSprite));
         PlayBattleEnterAnimation();
+        _sprite.color = _originalColorSprite;
     }
     
     /// <summary>
@@ -60,6 +61,9 @@ public class UniteonUnit : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Plays the battle enter animation.
+    /// </summary>
     private void PlayBattleEnterAnimation()
     {
         if (isGamerUniteon)
@@ -69,6 +73,10 @@ public class UniteonUnit : MonoBehaviour
         _sprite.rectTransform.DOLocalMoveX(_originalPosSprite.x, 1.27f);
     }
 
+    /// <summary>
+    /// Plays the attack animations.
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator PlayAttackAnimations()
     {
         Sequence sequence = DOTween.Sequence();
@@ -79,6 +87,9 @@ public class UniteonUnit : MonoBehaviour
         yield return new WaitForSeconds(1f);
     }
 
+    /// <summary>
+    /// Plays the Uniteon hit animation.
+    /// </summary>
     public void PlayHitAnimation()
     {
         Sequence sequence = DOTween.Sequence();
@@ -87,6 +98,9 @@ public class UniteonUnit : MonoBehaviour
         sequence.SetLoops(2);
     }
 
+    /// <summary>
+    /// Plays a fainting animation when an Uniteon faints.
+    /// </summary>
     public void PlayFaintAnimation()
     {
         Sequence sequence = DOTween.Sequence();

@@ -16,11 +16,13 @@ public class UniteonBattle : MonoBehaviour
     private int _actionSelection;
     private int _moveSelection;
     
-    // Start is called before the first frame update
-    private void Start()
-    {
-        StartCoroutine(InitialiseBattle());
-    }
+    // Events
+    public event Action<bool> OnBattleOver;
+    
+    /// <summary>
+    /// Starts a wild Uniteon battle.
+    /// </summary>
+    public void InitiateBattle() => StartCoroutine(InitialiseBattle());
 
     /// <summary>
     /// Initializes the battle scene.
@@ -62,9 +64,9 @@ public class UniteonBattle : MonoBehaviour
     }
 
     /// <summary>
-    /// Every frame, check for a change in action selection.
+    /// Every frame, check for a change in action selection, if set active by the GameController.
     /// </summary>
-    private void Update()
+    public void ControllerUpdate()
     {
         if (_battleState == BattleState.GamerAction)
         {
@@ -159,6 +161,9 @@ public class UniteonBattle : MonoBehaviour
         {
             yield return battleDialogBox.TypeOutDialog($"{uniteonUnitFoe.Uniteon.UniteonBase.UniteonName} has fainted!");
             uniteonUnitFoe.PlayFaintAnimation();
+            yield return new WaitForSeconds(2f);
+            OnBattleOver?.Invoke(true);
+            //OnBattleOver(true);
         }
         else
             StartCoroutine(ExecuteFoeMove());
@@ -184,7 +189,9 @@ public class UniteonBattle : MonoBehaviour
         if (damageData.Fainted)
         {
             yield return battleDialogBox.TypeOutDialog($"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} has fainted!");
-            uniteonUnitGamer.PlayFaintAnimation(); 
+            uniteonUnitGamer.PlayFaintAnimation();
+            OnBattleOver?.Invoke(false);
+            //OnBattleOver(false);
         }
         else
             TransitionToAction();

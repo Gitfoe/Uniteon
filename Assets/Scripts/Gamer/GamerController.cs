@@ -1,12 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class Controller : MonoBehaviour
+public class GamerController : MonoBehaviour
 {
-    public float moveSpeed;
-    public LayerMask objectsLayer;
-    public LayerMask wildGrassLayer;
+    // Fields
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private LayerMask objectsLayer;
+    [SerializeField] private LayerMask wildGrassLayer;
     private Animator _animator;
     private bool _isMoving;
     private Vector2 _gamerInput;
@@ -14,6 +17,9 @@ public class Controller : MonoBehaviour
     private static readonly int MoveX = Animator.StringToHash("moveX");
     private static readonly int MoveY = Animator.StringToHash("moveY");
     private static readonly int IsMoving = Animator.StringToHash("isMoving");
+    
+    // Events
+    public event Action OnEncountered;
 
     // Awake is called when the script is loaded
     private void Awake()
@@ -21,8 +27,10 @@ public class Controller : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// Update is called once per frame if set active by the GameController.
+    /// </summary>
+    public void ControllerUpdate()
     {
         if (!_isMoving) // Check if the gamer is not currently moving
         { 
@@ -92,7 +100,11 @@ public class Controller : MonoBehaviour
     {
         var getNextObject = Physics2D.OverlapCircle(transform.position, 0.2f, wildGrassLayer);
         if (ReferenceEquals(getNextObject, null)) return;
-        if (Random.Range(0, 100) <= 10)
-            Debug.Log("Triggered wild encounter (code has to be programmed still)");
+        if (Random.Range(1, 101) <= 10)
+        {
+            _animator.SetBool(IsMoving, false);
+            OnEncountered?.Invoke();
+            //OnEncountered();
+        }
     }
 }

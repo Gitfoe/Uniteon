@@ -451,7 +451,6 @@ GameObject:
   - component: {fileID: 162767277}
   - component: {fileID: 162767276}
   - component: {fileID: 162767278}
-  - component: {fileID: 162767279}
   m_Layer: 5
   m_Name: UniteonUnitGamer
   m_TagString: Untagged
@@ -532,26 +531,6 @@ MonoBehaviour:
   uniteonBase: {fileID: 11400000, guid: ed448f7f717f704489c1532755724c75, type: 2}
   level: 7
   isGamerUniteon: 1
---- !u!95 &162767279
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 162767274}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 245f6a537f89cb548b43f6a169f2fc70, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &303561741
 GameObject:
   m_ObjectHideFlags: 0
@@ -606,7 +585,6 @@ MonoBehaviour:
   isGamer: 0
   health: {fileID: 488951583}
   healthBorder: {fileID: 1767096189}
-  healthColourFull: {r: 0.5019608, g: 0.909804, b: 0.627451, a: 1}
   healthColourHalf: {r: 1, g: 0.7529412, b: 0.3647059, a: 1}
   healthColourLow: {r: 0.8862745, g: 0.49019608, b: 0.5058824, a: 1}
   startFlashColour: {r: 0, g: 0, b: 0, a: 0}
@@ -8903,7 +8881,6 @@ MonoBehaviour:
   isGamer: 1
   health: {fileID: 84603085}
   healthBorder: {fileID: 763315263}
-  healthColourFull: {r: 0.5019608, g: 0.909804, b: 0.627451, a: 1}
   healthColourHalf: {r: 1, g: 0.75297, b: 0.36477983, a: 1}
   healthColourLow: {r: 0.8867924, g: 0.4908033, b: 0.50426316, a: 1}
   startFlashColour: {r: 0.09019608, g: 0.09019608, b: 0.09019608, a: 1}
@@ -9039,7 +9016,6 @@ GameObject:
   - component: {fileID: 1333168448}
   - component: {fileID: 1333168447}
   - component: {fileID: 1333168449}
-  - component: {fileID: 1333168450}
   m_Layer: 5
   m_Name: UniteonUnitFoe
   m_TagString: Untagged
@@ -9120,26 +9096,6 @@ MonoBehaviour:
   uniteonBase: {fileID: 11400000, guid: 6dbd16654a5094f4ab1fd566e9d95b00, type: 2}
   level: 5
   isGamerUniteon: 0
---- !u!95 &1333168450
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1333168445}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 852dff43af5766a40a3d7fb7169fceee, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1379196423
 GameObject:
   m_ObjectHideFlags: 0
@@ -9361,7 +9317,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1495501004
 Transform:
   m_ObjectHideFlags: 0
