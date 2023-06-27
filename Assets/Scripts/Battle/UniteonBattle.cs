@@ -36,7 +36,7 @@ public class UniteonBattle : MonoBehaviour
         // Wait until wild encounter text has printed out
         yield return StartCoroutine(battleDialogBox.TypeOutDialog($"A wild {uniteonUnitFoe.Uniteon.UniteonBase.UniteonName} appeared!"));
         // Wait for some time after the text is done printing
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         TransitionToAction();
     }
 
@@ -149,9 +149,10 @@ public class UniteonBattle : MonoBehaviour
         _battleState = BattleState.Attacking;
         var move = uniteonUnitGamer.Uniteon.Moves[_moveSelection]; // Get the selected move
         yield return battleDialogBox.TypeOutDialog($"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} used {move.MoveBase.MoveName}!");
-        yield return  new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
+        int previousHealthPoints = uniteonUnitFoe.Uniteon.HealthPoints;
         bool fainted = uniteonUnitFoe.Uniteon.TakeDamage(move, uniteonUnitGamer.Uniteon); // Attack foe
-        uniteonHudFoe.UpdateHealthPoints();
+        yield return uniteonHudFoe.UpdateHealthPoints(previousHealthPoints);
         if (fainted)
             yield return battleDialogBox.TypeOutDialog($"{uniteonUnitFoe.Uniteon.UniteonBase.UniteonName} has fainted!");
         else
@@ -168,10 +169,11 @@ public class UniteonBattle : MonoBehaviour
         // Quite simple battle AI - but get a random move of the foe
         int randomMoveIndex = Random.Range(0, uniteonUnitFoe.Uniteon.Moves.Count);
         Move move = uniteonUnitFoe.Uniteon.Moves[randomMoveIndex];
-        yield return battleDialogBox.TypeOutDialog($"{uniteonUnitFoe.Uniteon.UniteonBase.UniteonName} used {move.MoveBase.MoveName}");
-        yield return  new WaitForSeconds(2f);
+        yield return battleDialogBox.TypeOutDialog($"{uniteonUnitFoe.Uniteon.UniteonBase.UniteonName} used {move.MoveBase.MoveName}!");
+        yield return new WaitForSeconds(1f);
+        int previousHealthPoints = uniteonUnitGamer.Uniteon.HealthPoints;
         bool fainted = uniteonUnitGamer.Uniteon.TakeDamage(move, uniteonUnitFoe.Uniteon); // Attack gamer
-        uniteonHudGamer.UpdateHealthPoints();
+        yield return uniteonHudGamer.UpdateHealthPoints(previousHealthPoints);
         if (fainted)
             yield return battleDialogBox.TypeOutDialog($"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} has fainted!");
         else

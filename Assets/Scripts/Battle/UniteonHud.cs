@@ -23,14 +23,61 @@ public class UniteonHud : MonoBehaviour
         levelText.text = $"Lv.{uniteon.Level}";
         if (healthText != null) // Only assign health text if there is place for it (only for the gamer, not for the foe)
             healthText.text = $"{uniteon.HealthPoints}/{uniteon.MaxHealthPoints}";
-        healthBar.SetGamerHealthBar((float)uniteon.HealthPoints / uniteon.MaxHealthPoints); // Normalize health points
+        healthBar.SetHealthBar((float)uniteon.HealthPoints / uniteon.MaxHealthPoints); // Normalize health points
     }
 
     /// <summary>
-    /// Updates new health points to the health bar.
+    /// Updates new health points to the health bar, and if available, health text.
     /// </summary>
-    public void UpdateHealthPoints()
+    /// <param name="currentHealthPoints">The health points the Uniteon had before taking damage.</param>
+    public IEnumerator UpdateHealthPoints(float currentHealthPoints)
     {
-        healthBar.SetGamerHealthBar((float)_uniteon.HealthPoints / _uniteon.MaxHealthPoints); // Normalize health points
+        var updateCoroutines = new Coroutine[]
+        {
+            StartCoroutine(UpdateHealthText(currentHealthPoints)),
+            StartCoroutine(UpdateHealthBar())
+        };
+        foreach (var coroutine in updateCoroutines)
+        {
+            yield return coroutine;
+        }
+        // Flash health border between 0% and 20% HP
+        if ((float)_uniteon.HealthPoints / _uniteon.MaxHealthPoints <= 0.2)
+        {
+            healthBar.SetFlashingHealthBorder(true);
+        }
+        else if (_uniteon.HealthPoints / _uniteon.MaxHealthPoints <= 0)
+        {
+            healthBar.SetFlashingHealthBorder(false);
+        }
+    }
+    
+    /// <summary>
+    /// Updates the health text in a smooth manner.
+    /// </summary>
+    /// <param name="currentHealthPoints">The health points the Uniteon had before taking damage.</param>
+    /// <returns>Coroutine.</returns>
+    public IEnumerator UpdateHealthText(float currentHealthPoints)
+    {
+        if (healthText != null) // Only assign health text if there is place for it (only for the gamer, not for the foe)
+        {
+            float changeAmount = currentHealthPoints - _uniteon.HealthPoints; // Find the amount that has to be changed
+            while (currentHealthPoints - _uniteon.HealthPoints > Mathf.Epsilon) // Change the HP by a very small amount
+            {
+                currentHealthPoints -= changeAmount * Time.deltaTime;
+                healthText.text = $"{Mathf.Round(currentHealthPoints)}/{_uniteon.MaxHealthPoints}";
+                yield return null;
+            }
+            healthText.text = $"{_uniteon.HealthPoints}/{_uniteon.MaxHealthPoints}";
+        }
+    }
+    
+    /// <summary>
+    /// Updates the health bar in a smooth manner.
+    /// </summary>
+    /// <returns>Coroutine.</returns>
+    public IEnumerator UpdateHealthBar()
+    {
+        yield return healthBar.SetHealthBarSmoothly((float)_uniteon.HealthPoints / _uniteon.MaxHealthPoints); // Normalize health points
     }
 }
