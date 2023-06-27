@@ -149,12 +149,17 @@ public class UniteonBattle : MonoBehaviour
         _battleState = BattleState.Attacking;
         var move = uniteonUnitGamer.Uniteon.Moves[_moveSelection]; // Get the selected move
         yield return battleDialogBox.TypeOutDialog($"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} used {move.MoveBase.MoveName}!");
+        yield return uniteonUnitGamer.PlayAttackAnimations();
+        uniteonUnitFoe.PlayHitAnimation();
         int previousHealthPoints = uniteonUnitFoe.Uniteon.HealthPoints;
         DamageData damageData = uniteonUnitFoe.Uniteon.TakeDamage(move, uniteonUnitGamer.Uniteon); // Attack foe
         yield return uniteonHudFoe.UpdateHealthPoints(previousHealthPoints);
         yield return ShowDamageData(damageData);
         if (damageData.Fainted)
+        {
             yield return battleDialogBox.TypeOutDialog($"{uniteonUnitFoe.Uniteon.UniteonBase.UniteonName} has fainted!");
+            uniteonUnitFoe.PlayFaintAnimation();
+        }
         else
             StartCoroutine(ExecuteFoeMove());
     }
@@ -170,12 +175,17 @@ public class UniteonBattle : MonoBehaviour
         int randomMoveIndex = Random.Range(0, uniteonUnitFoe.Uniteon.Moves.Count);
         Move move = uniteonUnitFoe.Uniteon.Moves[randomMoveIndex];
         yield return battleDialogBox.TypeOutDialog($"{uniteonUnitFoe.Uniteon.UniteonBase.UniteonName} used {move.MoveBase.MoveName}!");
+        yield return uniteonUnitFoe.PlayAttackAnimations();
+        uniteonUnitGamer.PlayHitAnimation();
         int previousHealthPoints = uniteonUnitGamer.Uniteon.HealthPoints;
         DamageData damageData = uniteonUnitGamer.Uniteon.TakeDamage(move, uniteonUnitFoe.Uniteon); // Attack gamer
         yield return uniteonHudGamer.UpdateHealthPoints(previousHealthPoints);
         yield return ShowDamageData(damageData);
         if (damageData.Fainted)
+        {
             yield return battleDialogBox.TypeOutDialog($"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} has fainted!");
+            uniteonUnitGamer.PlayFaintAnimation(); 
+        }
         else
             TransitionToAction();
     }

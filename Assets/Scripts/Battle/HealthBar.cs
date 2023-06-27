@@ -9,14 +9,13 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private bool isGamer;
     [SerializeField] private Image health;
     [SerializeField] private Image healthBorder;
-    [SerializeField] private Color healthColourFull;
     [SerializeField] private Color healthColourHalf;
     [SerializeField] private Color healthColourLow;
     [SerializeField] private Color startFlashColour;
     [SerializeField] private Color endFlashColour;
     [SerializeField] private float flashDuration;
     private Coroutine _flashCoroutine;
-    
+
     /// <summary>
     /// Sets the health bar to a new value.
     /// </summary>

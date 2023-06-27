@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using DG.Tweening;
+using TMPro;
 
 public class UniteonUnit : MonoBehaviour
 {
@@ -8,20 +11,21 @@ public class UniteonUnit : MonoBehaviour
     [SerializeField] private UniteonBase uniteonBase;
     [SerializeField] private int level;
     [SerializeField] private bool isGamerUniteon; // To determine if the Uniteon is the gamer's or the foe's
-    private Animator _animator;
-    private AnimatorOverrideController _animatorOverrideController;
+    private Image _sprite;
+    private Vector3 _originalPosSprite;
+    private Color _originalColorSprite;
 
     // Properties
     public Uniteon Uniteon { get; set; }
     
-    // Awake is called when the script is loaded
+    /// <summary>
+    /// Initialise variables.
+    /// </summary>
     private void Awake()
     {
-        _animator = GetComponent<Animator>();
-        _animatorOverrideController = new AnimatorOverrideController
-        {
-            runtimeAnimatorController = _animator.runtimeAnimatorController
-        };
+        _sprite = GetComponent<Image>();
+        _originalPosSprite = _sprite.rectTransform.localPosition;
+        _originalColorSprite = _sprite.color;
     }
 
     /// <summary>
@@ -30,10 +34,63 @@ public class UniteonUnit : MonoBehaviour
     public void InitialiseUniteon()
     {
         Uniteon = new Uniteon(uniteonBase, level);
+        StartCoroutine(isGamerUniteon
+            ? PlaySpriteAnimation(Uniteon.UniteonBase.BackSprite)
+            : PlaySpriteAnimation(Uniteon.UniteonBase.FrontSprite));
+        PlayBattleEnterAnimation();
+    }
+    
+    /// <summary>
+    /// Starts playing the sprite of the Uniteon.
+    /// </summary>
+    /// <param name="sprites">The list of individual sprite frames.</param>
+    /// <returns>Coroutine.</returns>
+    private IEnumerator PlaySpriteAnimation(Sprite[] sprites)
+    {
+        int currentSpriteIndex = 0;
+        float spriteFramerate = 0.1f;
+        while (true)
+        {
+            _sprite.sprite = sprites[currentSpriteIndex];
+            currentSpriteIndex = (currentSpriteIndex + 1) % sprites.Length;
+            // Slow down the framerate if HP is below 20%
+            if (spriteFramerate >= 0.1f && (float)Uniteon.HealthPoints / Uniteon.MaxHealthPoints <= 0.2f)
+                spriteFramerate = 0.2f;
+            yield return new WaitForSeconds(spriteFramerate);
+        }
+    }
+
+    private void PlayBattleEnterAnimation()
+    {
         if (isGamerUniteon)
-            _animatorOverrideController["missingno"] = Uniteon.UniteonBase.BackSprite;
+            _sprite.rectTransform.localPosition = new Vector3(-500f, _originalPosSprite.y);
         else
-            _animatorOverrideController["missingno"] = Uniteon.UniteonBase.FrontSprite;
-        _animator.runtimeAnimatorController = _animatorOverrideController;
+            _sprite.rectTransform.localPosition = new Vector3( 500f, _originalPosSprite.y);
+        _sprite.rectTransform.DOLocalMoveX(_originalPosSprite.x, 1.27f);
+    }
+
+    public IEnumerator PlayAttackAnimations()
+    {
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(isGamerUniteon
+            ? _sprite.transform.DOLocalMove(new Vector3(_originalPosSprite.x + 50f, _originalPosSprite.y + 25f), 0.27f)
+            : _sprite.transform.DOLocalMove(new Vector3(_originalPosSprite.x - 50f, _originalPosSprite.y - 25f), 0.27f));
+        sequence.Append(_sprite.transform.DOLocalMove(_originalPosSprite, 0.27f));
+        yield return new WaitForSeconds(1f);
+    }
+
+    public void PlayHitAnimation()
+    {
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(_sprite.DOColor(Color.gray, 0.07f));
+        sequence.Append(_sprite.DOColor(_originalColorSprite, 0.07f));
+        sequence.SetLoops(2);
+    }
+
+    public void PlayFaintAnimation()
+    {
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(_sprite.transform.DOLocalMoveY(_originalPosSprite.y - 150f, 0.35f));
+        sequence.Join(_sprite.DOFade(0f, 0.35f));
     }
 }
