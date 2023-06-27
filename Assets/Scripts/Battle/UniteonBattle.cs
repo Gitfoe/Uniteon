@@ -12,6 +12,8 @@ public class UniteonBattle : MonoBehaviour
     [SerializeField] private UniteonHud uniteonHudGamer;
     [SerializeField] private UniteonHud uniteonHudFoe;
     [SerializeField] private BattleDialogBox battleDialogBox;
+    [SerializeField] private AudioClip sceneMusicIntro;
+    [SerializeField] private AudioClip sceneMusicLoop;
     private BattleState _battleState;
     private int _actionSelection;
     private int _moveSelection;
@@ -35,6 +37,7 @@ public class UniteonBattle : MonoBehaviour
         uniteonUnitFoe.InitialiseUniteon();
         uniteonHudFoe.SetGamerData(uniteonUnitFoe.Uniteon);
         battleDialogBox.SetMoveNames(uniteonUnitGamer.Uniteon.Moves);
+        AudioManager.i.PlayMusic(sceneMusicIntro, sceneMusicLoop);
         // Wait until wild encounter text has printed out
         yield return StartCoroutine(battleDialogBox.TypeOutDialog($"A wild {uniteonUnitFoe.Uniteon.UniteonBase.UniteonName} appeared!"));
         // Wait an additional second after the text is done printing

@@ -84,7 +84,7 @@ public class UniteonUnit : MonoBehaviour
             ? _sprite.transform.DOLocalMove(new Vector3(_originalPosSprite.x + 50f, _originalPosSprite.y + 25f), 0.27f)
             : _sprite.transform.DOLocalMove(new Vector3(_originalPosSprite.x - 50f, _originalPosSprite.y - 25f), 0.27f));
         sequence.Append(_sprite.transform.DOLocalMove(_originalPosSprite, 0.27f));
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.72f);
     }
 
     /// <summary>

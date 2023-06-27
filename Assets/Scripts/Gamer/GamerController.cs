@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -10,6 +11,9 @@ public class GamerController : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private LayerMask objectsLayer;
     [SerializeField] private LayerMask wildGrassLayer;
+    [SerializeField] private Camera mainCamera;
+    [SerializeField] private SpriteRenderer transitionBlock;
+    [SerializeField] private AudioClip sceneMusic;
     private Animator _animator;
     private bool _isMoving;
     private Vector2 _gamerInput;
@@ -17,14 +21,31 @@ public class GamerController : MonoBehaviour
     private static readonly int MoveX = Animator.StringToHash("moveX");
     private static readonly int MoveY = Animator.StringToHash("moveY");
     private static readonly int IsMoving = Animator.StringToHash("isMoving");
+    private float _cameraSize;
+    private bool _inTransition;
     
     // Events
     public event Action OnEncountered;
 
-    // Awake is called when the script is loaded
+    /// <summary>
+    /// Initialise variables.
+    /// </summary>
     private void Awake()
     {
         _animator = GetComponent<Animator>();
+        _cameraSize = mainCamera.orthographicSize;
+        _inTransition = false;
+        AudioManager.i.PlayMusic(sceneMusic);
+    }
+
+    /// <summary>
+    /// Sets a few key variables for switching back to the world mode from battle modes.
+    /// </summary>
+    public void InitialiseWorld()
+    {
+        transitionBlock.color = new Color(1f, 1f, 1f, 0f);
+        mainCamera.orthographicSize = _cameraSize;
+        _inTransition = false;
     }
 
     /// <summary>
@@ -32,7 +53,7 @@ public class GamerController : MonoBehaviour
     /// </summary>
     public void ControllerUpdate()
     {
-        if (!_isMoving) // Check if the gamer is not currently moving
+        if (!_isMoving && !_inTransition) // Check if the gamer is not currently moving or in transition
         { 
             // Check every frame if the gamer is applying an input
             _gamerInput.x = Input.GetAxisRaw("Horizontal"); // -1, 0 or 1
@@ -52,10 +73,7 @@ public class GamerController : MonoBehaviour
                 nextPos.x += _gamerInput.x; // Save new position in temporary variable
                 nextPos.y += _gamerInput.y;
                 if (IsWalkable(nextPos))
-                {
                     StartCoroutine(Move(nextPos));
-                    CheckWildGrass();
-                }
             }
             _animator.SetBool(IsMoving, _isMoving);
         }
@@ -65,7 +83,7 @@ public class GamerController : MonoBehaviour
     /// Coroutine to move a gamer on the grid.
     /// </summary>
     /// <param name="nextPos">The next position the player needs to be moved to.</param>
-    /// <returns>Nothing of importance.</returns>
+    /// <returns>Coroutine.</returns>
     private IEnumerator Move(Vector3 nextPos)
     {
         _isMoving = true;
@@ -79,6 +97,7 @@ public class GamerController : MonoBehaviour
         }
         transform.position = nextPos; // If the current and target position are close, just set the position
         _isMoving = false;
+        CheckWildGrass(); // Check if after moving a wild Uniteon has been encountered
     }
 
     /// <summary>
@@ -98,13 +117,19 @@ public class GamerController : MonoBehaviour
     /// </summary>
     private void CheckWildGrass()
     {
-        var getNextObject = Physics2D.OverlapCircle(transform.position, 0.2f, wildGrassLayer);
+        var grassPosition = transform.position;
+        grassPosition.y -= 0.5f; // Move gamer down to make the game not think that you're touching grass when you're 1 grid below it
+        var getNextObject = Physics2D.OverlapCircle(grassPosition, 0.2f, wildGrassLayer);
         if (ReferenceEquals(getNextObject, null)) return;
         if (Random.Range(1, 101) <= 10)
         {
+            _inTransition = true;
             _animator.SetBool(IsMoving, false);
-            OnEncountered?.Invoke();
-            //OnEncountered();
+            var sequence = DOTween.Sequence();
+            sequence.Append(mainCamera.DOOrthoSize(_cameraSize + 2.5f, 1.5f));
+            sequence.Append(mainCamera.DOOrthoSize(_cameraSize - 3.5f, 1.5f).SetEase(Ease.InSine));
+            sequence.Join(transitionBlock.DOFade(1f, 1.5f).SetEase(Ease.InSine));
+            sequence.OnComplete(() => OnEncountered?.Invoke());
         }
     }
 }
