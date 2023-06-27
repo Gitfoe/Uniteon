@@ -41,10 +41,25 @@ public class Uniteon
     /// </summary>
     /// <param name="move">The move that the Uniteon is getting attacked by.</param>
     /// <param name="attacker">The attacking Uniteon.</param>
-    /// <returns>True if the Pokemon fainted and false if not.</returns>
-    public bool TakeDamage(Move move, Uniteon attacker)
+    /// <returns>True if the Uniteon fainted and false if not.</returns>
+    public DamageData TakeDamage(Move move, Uniteon attacker)
     {
-        float randomizeDamageModifier = Random.Range(0.85f, 1f);
+        // 6.25% chance of a critical hit (double the damage)
+        float criticalHitModifier = 1f;
+        if (Random.Range(1, 101) <= 6.25f)
+            criticalHitModifier = 2f;
+        // Get effectiveness of move
+        float effectivenessType1 = EffectivenessChart.GetEffectiveness(move.MoveBase.MoveType, this.UniteonBase.UniteonType1);
+        float effectivenessType2 = EffectivenessChart.GetEffectiveness(move.MoveBase.MoveType, this.UniteonBase.UniteonType2);
+        float totalEffectivenessModifier = effectivenessType1 * effectivenessType2;
+        // Initialise damage data
+        DamageData damageData = new DamageData()
+        {
+            EffectivenessModifier = totalEffectivenessModifier,
+            CriticalHitModifier = criticalHitModifier
+        };
+        // Calculate damage
+        float randomizeDamageModifier = Random.Range(0.85f, 1f) * criticalHitModifier * totalEffectivenessModifier; // Randomize move's damage between 85% and 100%
         float a = (2 * attacker.Level + 10) / 250f;
         float d = a * move.MoveBase.Power * ((float)attacker.Attack / Defense) + 2;
         int damage = Mathf.FloorToInt(d * randomizeDamageModifier);
@@ -52,8 +67,19 @@ public class Uniteon
         if (HealthPoints <= 0)
         {
             HealthPoints = 0; // Avoid negative HP in the UI
-            return true;
+            damageData.Fainted = true;
         }
-        return false;
+        return damageData;
     }
+}
+
+/// <summary>
+/// Holds data related to taking damage.
+/// </summary>
+public class DamageData
+{
+    public bool Fainted { get; set; }
+    public float EffectivenessModifier { get; set; }
+    public float CriticalHitModifier { get; set; }
+    public DamageData() => Fainted = false;
 }

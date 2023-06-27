@@ -59,8 +59,9 @@ public enum UniteonType
     Normeon,
     Flamiteon,
     Aquoreon,
-    Herbeon,
     Voltineon,
+    Herbeon,
+    Frozeon,
     Battleon,
     Venomeon,
     Terreon,
@@ -69,8 +70,54 @@ public enum UniteonType
     Buggeon,
     Stondeon,
     Spectreon,
-    Shadoweon,
     Dracineon,
+    Shadoweon,
     Ironeon,
     Faerieon
+}
+
+/// <summary>
+/// The Uniteon type effectiveness chart, heavily 'inspired' by https://pokemondb.net/type
+/// </summary>
+public struct EffectivenessChart
+{
+    private static readonly float[][] Chart =
+    {
+        // @formatter:off
+        //              NOR  FIR  WAT  ELC  GRS  ICE  FGT  PSN  GRN  FLY  PSY  BGG  RCK  GST  DRA  DRK  STL  FRY
+        /*NOR*/ new[] { 1f,  1f,  1f,  1f,  1f,  1f,  1f,  1f,  1f,  1f,  1f,  1f, 0.5f, 0f,  1f,  1f, 0.5f, 1f },
+        /*FIR*/ new[] { 1f, 0.5f,0.5f, 1f,  2f,  2f,  1f,  1f,  1f,  1f,  1f,  2f, 0.5f, 1f, 0.5f, 1f,  2f,  1f },
+        /*WAT*/ new[] { 1f,  2f, 0.5f, 1f, 0.5f, 1f,  1f,  1f,  2f,  1f,  1f,  1f,  2f,  1f, 0.5f, 1f,  1f,  1f },
+        /*ELC*/ new[] { 1f,  1f,  2f, 0.5f,0.5f, 1f,  1f,  1f,  0f,  2f,  1f,  1f,  1f,  1f, 0.5f, 1f,  1f,  1f },
+        /*GRS*/ new[] { 1f, 0.5f, 2f,  1f, 0.5f, 1f,  1f, 0.5f, 2f, 0.5f, 1f, 0.5f, 2f,  1f, 0.5f, 1f, 0.5f, 1f },
+        /*ICE*/ new[] { 1f, 0.5f,0.5f, 1f,  2f, 0.5f, 1f,  1f,  2f,  2f,  1f,  1f,  1f,  1f,  2f,  1f, 0.5f, 1f },
+        /*FGT*/ new[] { 2f,  1f,  1f,  1f,  1f,  2f,  1f, 0.5f, 1f, 0.5f,0.5f,0.5f, 2f,  0f,  1f,  1f,  2f, 0.5f},
+        /*PSN*/ new[] { 1f,  1f,  1f,  1f,  2f,  1f,  1f, 0.5f,0.5f, 1f,  1f,  1f, 0.5f,0.5f, 1f,  1f,  0f,  2f },
+        /*GRN*/ new[] { 1f, 0.5f, 1f,  2f, 0.5f, 1f,  1f,  2f,  1f,  0f,  1f, 0.5f, 2f,  1f,  1f,  1f,  2f,  1f },
+        /*FLY*/ new[] { 1f,  1f,  1f, 0.5f, 2f,  1f,  2f,  1f,  1f,  1f,  1f,  2f, 0.5f, 1f,  1f,  1f, 0.5f, 1f },
+        /*PSY*/ new[] { 1f,  1f,  1f,  1f,  1f,  1f,  2f,  2f,  1f,  1f, 0.5f, 1f,  1f,  1f,  1f,  1f, 0.5f, 1f },
+        /*BGG*/ new[] { 1f, 0.5f, 1f,  1f,  2f,  1f, 0.5f,0.5f, 1f, 0.5f, 2f,  1f,  1f, 0.5f, 1f, 0.5f,0.5f,0.5f},
+        /*RCK*/ new[] { 1f,  2f,  1f,  1f,  1f,  2f, 0.5f, 1f, 0.5f, 2f,  1f,  2f,  1f,  1f,  1f,  1f, 0.5f, 1f },
+        /*GST*/ new[] {0.5f, 1f,  1f,  1f,  1f,  1f,  1f,  1f,  1f,  1f,  2f,  1f,  1f,  2f,  1f, 0.5f, 1f,  1f },
+        /*DRA*/ new[] { 1f,  1f,  1f,  1f,  1f,  1f,  1f,  1f,  1f,  1f,  1f,  1f,  1f,  1f,  2f,  1f, 0.5f, 0f },
+        /*DRK*/ new[] { 1f,  1f,  1f,  1f,  1f,  1f, 0.5f, 1f,  1f,  1f,  2f,  1f,  1f,  2f,  1f, 0.5f, 1f, 0.5f},
+        /*STL*/ new[] { 1f, 0.5f,0.5f,0.5f, 1f,  2f,  1f,  1f,  1f,  1f,  1f,  1f,  2f,  1f,  1f,  1f, 0.5f, 2f },
+        /*FRY*/ new[] { 1f, 0.5f, 1f,  1f,  1f,  1f,  2f, 0.5f, 1f,  1f,  1f,  1f,  1f,  1f,  2f,  2f, 0.5f, 1f }
+        // @formatter:on
+    };
+
+    /// <summary>
+    /// Get the effectiveness multiplier.
+    /// </summary>
+    /// <param name="attackType">The type of the attack.</param>
+    /// <param name="defenseType">The type of the defending Uniteon.</param>
+    /// <returns>The effectiveness multiplier for an attacker and a defender.</returns>
+    public static float GetEffectiveness(UniteonType attackType, UniteonType defenseType)
+    {
+        if (attackType == UniteonType.None || defenseType == UniteonType.None)
+            return 1; // If the Uniteon's type isn't set, give the default effectiveness value of 1
+        int row = (int)attackType - 1;
+        int column = (int)attackType - 1;
+        return Chart[row][column];
+    }
 }

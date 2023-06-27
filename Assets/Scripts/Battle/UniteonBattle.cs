@@ -35,7 +35,7 @@ public class UniteonBattle : MonoBehaviour
         battleDialogBox.SetMoveNames(uniteonUnitGamer.Uniteon.Moves);
         // Wait until wild encounter text has printed out
         yield return StartCoroutine(battleDialogBox.TypeOutDialog($"A wild {uniteonUnitFoe.Uniteon.UniteonBase.UniteonName} appeared!"));
-        // Wait for some time after the text is done printing
+        // Wait an additional second after the text is done printing
         yield return new WaitForSeconds(1f);
         TransitionToAction();
     }
@@ -141,7 +141,7 @@ public class UniteonBattle : MonoBehaviour
     }
 
     /// <summary>
-    /// Attacks the foe as the gamer.
+    /// The sequence for when the gamer attacks the foe.
     /// </summary>
     /// <returns>Coroutine.</returns>
     private IEnumerator ExecuteGamerMove()
@@ -149,18 +149,18 @@ public class UniteonBattle : MonoBehaviour
         _battleState = BattleState.Attacking;
         var move = uniteonUnitGamer.Uniteon.Moves[_moveSelection]; // Get the selected move
         yield return battleDialogBox.TypeOutDialog($"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} used {move.MoveBase.MoveName}!");
-        yield return new WaitForSeconds(1f);
         int previousHealthPoints = uniteonUnitFoe.Uniteon.HealthPoints;
-        bool fainted = uniteonUnitFoe.Uniteon.TakeDamage(move, uniteonUnitGamer.Uniteon); // Attack foe
+        DamageData damageData = uniteonUnitFoe.Uniteon.TakeDamage(move, uniteonUnitGamer.Uniteon); // Attack foe
         yield return uniteonHudFoe.UpdateHealthPoints(previousHealthPoints);
-        if (fainted)
+        yield return ShowDamageData(damageData);
+        if (damageData.Fainted)
             yield return battleDialogBox.TypeOutDialog($"{uniteonUnitFoe.Uniteon.UniteonBase.UniteonName} has fainted!");
         else
             StartCoroutine(ExecuteFoeMove());
     }
 
     /// <summary>
-    /// The foe attacks the gamer.
+    /// The sequence for when the foe attacks the gamer.
     /// </summary>
     /// <returns>Coroutine.</returns>
     private IEnumerator ExecuteFoeMove()
@@ -170,14 +170,38 @@ public class UniteonBattle : MonoBehaviour
         int randomMoveIndex = Random.Range(0, uniteonUnitFoe.Uniteon.Moves.Count);
         Move move = uniteonUnitFoe.Uniteon.Moves[randomMoveIndex];
         yield return battleDialogBox.TypeOutDialog($"{uniteonUnitFoe.Uniteon.UniteonBase.UniteonName} used {move.MoveBase.MoveName}!");
-        yield return new WaitForSeconds(1f);
         int previousHealthPoints = uniteonUnitGamer.Uniteon.HealthPoints;
-        bool fainted = uniteonUnitGamer.Uniteon.TakeDamage(move, uniteonUnitFoe.Uniteon); // Attack gamer
+        DamageData damageData = uniteonUnitGamer.Uniteon.TakeDamage(move, uniteonUnitFoe.Uniteon); // Attack gamer
         yield return uniteonHudGamer.UpdateHealthPoints(previousHealthPoints);
-        if (fainted)
+        yield return ShowDamageData(damageData);
+        if (damageData.Fainted)
             yield return battleDialogBox.TypeOutDialog($"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} has fainted!");
         else
             TransitionToAction();
+    }
+
+    /// <summary>
+    /// Prints critical hits and effectiveness to the dialog box.
+    /// </summary>
+    /// <param name="damageData">The damage data of the Uniteon.</param>
+    /// <returns></returns>
+    public IEnumerator ShowDamageData(DamageData damageData)
+    {
+        if (damageData.CriticalHitModifier > 1f)
+            yield return battleDialogBox.TypeOutDialog("It's a critical hit!");
+        switch (damageData.EffectivenessModifier)
+        {
+            case > 2f:
+                yield return battleDialogBox.TypeOutDialog("It's mega effective!!!");
+                break;
+            case > 1f:
+                yield return battleDialogBox.TypeOutDialog("It's super effective!");
+                break;
+            case < 1f:
+                yield return battleDialogBox.TypeOutDialog("It's not very effective...");
+                break;
+        }
+        
     }
 }
 

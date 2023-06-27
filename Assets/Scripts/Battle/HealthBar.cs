@@ -89,6 +89,7 @@ public class HealthBar : MonoBehaviour
                 break;
             case false when _flashCoroutine != null:
                 StopCoroutine(_flashCoroutine);
+                healthBorder.color = startFlashColour;
                 _flashCoroutine = null;
                 break;
         }

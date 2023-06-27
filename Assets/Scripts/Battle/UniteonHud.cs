@@ -41,14 +41,16 @@ public class UniteonHud : MonoBehaviour
         {
             yield return coroutine;
         }
-        // Flash health border between 0% and 20% HP
-        if ((float)_uniteon.HealthPoints / _uniteon.MaxHealthPoints <= 0.2)
+
+        switch ((float)_uniteon.HealthPoints / _uniteon.MaxHealthPoints)
         {
-            healthBar.SetFlashingHealthBorder(true);
-        }
-        else if (_uniteon.HealthPoints / _uniteon.MaxHealthPoints <= 0)
-        {
-            healthBar.SetFlashingHealthBorder(false);
+            // Flash health border between 0% and 20% HP
+            case <= 0f:
+                healthBar.SetFlashingHealthBorder(false);
+                break;
+            case <= 0.2f:
+                healthBar.SetFlashingHealthBorder(true);
+                break;
         }
     }
     
