@@ -117,7 +117,7 @@ public struct EffectivenessChart
         if (attackType == UniteonType.None || defenseType == UniteonType.None)
             return 1; // If the Uniteon's type isn't set, give the default effectiveness value of 1
         int row = (int)attackType - 1;
-        int column = (int)attackType - 1;
+        int column = (int)defenseType - 1;
         return Chart[row][column];
     }
 }

@@ -164,7 +164,7 @@ MonoBehaviour:
   - {fileID: -344225597, guid: 557f485fd5209de499812c44f15953da, type: 3}
   - {fileID: 1947459893, guid: 557f485fd5209de499812c44f15953da, type: 3}
   - {fileID: -453008672, guid: 557f485fd5209de499812c44f15953da, type: 3}
-  uniteonType1: 4
+  uniteonType1: 5
   uniteonType2: 0
   maxHealthPoints: 45
   attack: 45

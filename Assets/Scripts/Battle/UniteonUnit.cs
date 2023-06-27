@@ -101,10 +101,11 @@ public class UniteonUnit : MonoBehaviour
     /// <summary>
     /// Plays a fainting animation when an Uniteon faints.
     /// </summary>
-    public void PlayFaintAnimation()
+    public IEnumerator PlayFaintAnimation()
     {
         Sequence sequence = DOTween.Sequence();
         sequence.Append(_sprite.transform.DOLocalMoveY(_originalPosSprite.y - 150f, 0.35f));
         sequence.Join(_sprite.DOFade(0f, 0.35f));
+        yield return new WaitForSeconds(2f);
     }
 }

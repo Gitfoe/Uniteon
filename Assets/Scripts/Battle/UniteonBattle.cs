@@ -103,7 +103,7 @@ public class UniteonBattle : MonoBehaviour
             }
             else if (_actionSelection == 1) // Run
             {
-                throw new NotImplementedException();
+                OnBattleOver?.Invoke(false); // Just end the battle
             }
         }
     }
@@ -160,8 +160,7 @@ public class UniteonBattle : MonoBehaviour
         if (damageData.Fainted)
         {
             yield return battleDialogBox.TypeOutDialog($"{uniteonUnitFoe.Uniteon.UniteonBase.UniteonName} has fainted!");
-            uniteonUnitFoe.PlayFaintAnimation();
-            yield return new WaitForSeconds(2f);
+            yield return uniteonUnitFoe.PlayFaintAnimation();
             OnBattleOver?.Invoke(true);
             //OnBattleOver(true);
         }
@@ -189,7 +188,7 @@ public class UniteonBattle : MonoBehaviour
         if (damageData.Fainted)
         {
             yield return battleDialogBox.TypeOutDialog($"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} has fainted!");
-            uniteonUnitGamer.PlayFaintAnimation();
+            yield return uniteonUnitGamer.PlayFaintAnimation();
             OnBattleOver?.Invoke(false);
             //OnBattleOver(false);
         }
