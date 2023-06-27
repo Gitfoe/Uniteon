@@ -14,6 +14,8 @@ public class GamerController : MonoBehaviour
     [SerializeField] private Camera mainCamera;
     [SerializeField] private SpriteRenderer transitionBlock;
     [SerializeField] private AudioClip sceneMusic;
+    [SerializeField] private AudioClip wildMusicIntro;
+    [SerializeField] private AudioClip wildMusicLoop;
     private Animator _animator;
     private bool _isMoving;
     private Vector2 _gamerInput;
@@ -46,6 +48,7 @@ public class GamerController : MonoBehaviour
         transitionBlock.color = new Color(1f, 1f, 1f, 0f);
         mainCamera.orthographicSize = _cameraSize;
         _inTransition = false;
+        AudioManager.i.PlayMusic(sceneMusic);
     }
 
     /// <summary>
@@ -125,6 +128,8 @@ public class GamerController : MonoBehaviour
         {
             _inTransition = true;
             _animator.SetBool(IsMoving, false);
+            // Start battle transition
+            AudioManager.i.PlayMusic(wildMusicIntro, wildMusicLoop);
             var sequence = DOTween.Sequence();
             sequence.Append(mainCamera.DOOrthoSize(_cameraSize + 2.5f, 1.5f));
             sequence.Append(mainCamera.DOOrthoSize(_cameraSize - 3.5f, 1.5f).SetEase(Ease.InSine));

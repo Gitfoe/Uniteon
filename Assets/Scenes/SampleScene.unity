@@ -569,15 +569,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 269733544}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1023418549}
   - {fileID: 1745574583}
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_Father: {fileID: 2075463853}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &303561741
 GameObject:
@@ -7444,8 +7444,8 @@ Camera:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 5
-    height: 3
+    width: 1
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -9430,7 +9430,7 @@ Transform:
   m_GameObject: {fileID: 1477238023}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.5, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 519420032}
@@ -9460,6 +9460,8 @@ MonoBehaviour:
   mainCamera: {fileID: 519420031}
   transitionBlock: {fileID: 2012019279}
   sceneMusic: {fileID: 8300000, guid: 0d21a5938f3449a4faaa7ef9503e5c33, type: 3}
+  wildMusicIntro: {fileID: 8300000, guid: b5373601505befc429a0600ff447cbc8, type: 3}
+  wildMusicLoop: {fileID: 8300000, guid: e967ee42f42f25047883cb4a03e23e99, type: 3}
 --- !u!95 &1477238027
 Animator:
   serializedVersion: 4
@@ -9531,8 +9533,6 @@ MonoBehaviour:
   uniteonHudGamer: {fileID: 769407660}
   uniteonHudFoe: {fileID: 1529288903}
   battleDialogBox: {fileID: 1257568886}
-  sceneMusicIntro: {fileID: 8300000, guid: b5373601505befc429a0600ff447cbc8, type: 3}
-  sceneMusicLoop: {fileID: 8300000, guid: e967ee42f42f25047883cb4a03e23e99, type: 3}
 --- !u!1 &1529288902
 GameObject:
   m_ObjectHideFlags: 0
@@ -11659,7 +11659,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 269733546}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
