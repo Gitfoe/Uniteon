@@ -24,7 +24,7 @@ public class UniteonHud : MonoBehaviour
         levelText.text = $"Lv.{uniteon.Level}";
         if (healthText != null) // Only assign health text if there is place for it (only for the gamer, not for the foe)
             healthText.text = $"{uniteon.HealthPoints}/{uniteon.MaxHealthPoints}";
-        healthBar.SetHealthBar((float)uniteon.HealthPoints / uniteon.MaxHealthPoints); // Normalize health points
+        healthBar.SetHealthBar((float)uniteon.HealthPoints / uniteon.MaxHealthPoints, isGamer); // Normalize health points
     }
 
     /// <summary>

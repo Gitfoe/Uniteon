@@ -36,16 +36,19 @@ public class HealthBar : MonoBehaviour
         var healthTransform = health.transform;
         healthTransform.localScale = new Vector3(normalizedHealthPoints, 1f);
         healthBorder.color = _startFlashColour;
+        Debug.Log($"{normalizedHealthPoints}, {sfx}");
         // Change colour of health bar depending on HP
         if (normalizedHealthPoints <= 0.2)
         {
             health.color = healthColourLow;
-            CalculateFlashHealthBorder(normalizedHealthPoints, sfx);
         }
         else if (normalizedHealthPoints <= 0.5)
             health.color = healthColourHalf;
         else
+        {
             health.color = _originalHealthColor;
+        }
+        CalculateFlashHealthBorder(normalizedHealthPoints, sfx);
     }
 
     /// <summary>
@@ -137,6 +140,7 @@ public class HealthBar : MonoBehaviour
                 if (!AudioManager.Instance.IsPlayingSfx(lowHealth) && sfx)
                     AudioManager.Instance.PlaySfx(lowHealth, true, 2);
                 break;
+            // Any other HP, disable flashing and stop audio if it is playing
             default:
                 SetFlashingHealthBorder(false);
                 if (sfx) AudioManager.Instance.StopSfx(2, lowHealth);
