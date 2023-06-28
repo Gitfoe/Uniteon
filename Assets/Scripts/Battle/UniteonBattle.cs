@@ -177,10 +177,10 @@ public class UniteonBattle : MonoBehaviour
     /// <returns>Coroutine.</returns>
     private IEnumerator ExecuteGamerMove()
     {
-        // Set the battle state
+        // Set the battle state, get the selected move and deduct PP
         _battleState = BattleState.Attacking;
-        // Get the selected move
         var move = uniteonUnitGamer.Uniteon.Moves[_moveSelection];
+        move.PowerPoints--;
         // Write move to the dialog box
         yield return battleDialogBox.TypeOutDialog($"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} used {move.MoveBase.MoveName}!");
         // Play Uniteon attack animation and sfx
@@ -222,6 +222,7 @@ public class UniteonBattle : MonoBehaviour
         // Quite simple battle AI - but get a random move of the foe
         int randomMoveIndex = Random.Range(0, uniteonUnitFoe.Uniteon.Moves.Count);
         Move move = uniteonUnitFoe.Uniteon.Moves[randomMoveIndex];
+        move.PowerPoints--;
         yield return battleDialogBox.TypeOutDialog($"{uniteonUnitFoe.Uniteon.UniteonBase.UniteonName} used {move.MoveBase.MoveName}!");
         AudioManager.Instance.PlaySfx(tackle, panning: 0.72f);
         yield return uniteonUnitFoe.PlayAttackAnimations();

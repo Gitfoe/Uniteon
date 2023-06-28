@@ -65,13 +65,15 @@ public class Uniteon
         {
             MoveCategory.Physical => attacker.Attack,
             MoveCategory.Special => attacker.SpecialAttack,
-            _ => 0 // Status moves
+            MoveCategory.Status => 0, // Status moves, temporarily set to 0 until we implement status moves
+            _ => throw new ArgumentOutOfRangeException()
         };
         float defense = move.MoveBase.MoveCategory switch
         {
             MoveCategory.Physical => Defense,
             MoveCategory.Special => SpecialDefense,
-            _ => 0
+            MoveCategory.Status => Defense, // Temporarily default to defense for status moves
+            _ => throw new ArgumentOutOfRangeException()
         };
         // Calculate damage
         float randomizeDamageModifier = Random.Range(0.85f, 1f) * criticalHitModifier * totalEffectivenessModifier; // Randomize move's damage between 85% and 100%
