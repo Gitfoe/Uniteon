@@ -5,17 +5,19 @@ using UnityEngine;
 
 public class UniteonParty : MonoBehaviour
 {
+    // Fields
     [SerializeField] private List<Uniteon> uniteons;
     
+    // Properties
+    public List<Uniteon> Uniteons => uniteons;
+
     /// <summary>
     /// Initialise gamer's party.
     /// </summary>
-    void Start()
+    private void Start()
     {
         foreach (var uniteon in uniteons)
-        {
             uniteon.InitialiseUniteon();
-        }
     }
 
     /// <summary>
@@ -23,10 +25,4 @@ public class UniteonParty : MonoBehaviour
     /// </summary>
     /// <returns>First healthy Uniteon.</returns>
     public Uniteon GetHealthyUniteon() => uniteons.FirstOrDefault(u => u.HealthPoints > 0);
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

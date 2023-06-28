@@ -19,6 +19,7 @@ public class UniteonBattle : MonoBehaviour
     [SerializeField] private AudioClip tackle;
     [SerializeField] private AudioClip aButton;
     [SerializeField] private AudioClip run;
+    [SerializeField] private PartyScreen partyScreen;
     private BattleState _battleState;
     private int _actionSelection;
     private int _moveSelection;
@@ -51,6 +52,8 @@ public class UniteonBattle : MonoBehaviour
         uniteonHudGamer.SetGamerData(uniteonUnitGamer.Uniteon);
         uniteonHudFoe.SetGamerData(uniteonUnitFoe.Uniteon);
         battleDialogBox.SetMoveNames(uniteonUnitGamer.Uniteon.Moves);
+        // Initialise party screen
+        partyScreen.InitialisePartyScreen();
         // Wait until wild encounter text has printed out
         yield return StartCoroutine(battleDialogBox.TypeOutDialog($"A wild {uniteonUnitFoe.Uniteon.UniteonBase.UniteonName} appeared!"));
         // Wait an additional second after the text is done printing
@@ -70,7 +73,8 @@ public class UniteonBattle : MonoBehaviour
     
     private void OpenPartyScreen()
     {
-        print("Debug: Party Screen");
+        partyScreen.gameObject.SetActive(true);
+        partyScreen.AddUniteonsToPartySlots(_gamerParty.Uniteons);
     }
     
     /// <summary>
