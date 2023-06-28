@@ -10,11 +10,16 @@ public class Uniteon
     // Fields
     [SerializeField] private UniteonBase uniteonBase;
     [SerializeField] private int level;
+    [SerializeField] private int healthPoints;
     
     // Properties
     public UniteonBase UniteonBase => uniteonBase;
     public int Level => level;
-    public int HealthPoints { get; set; }
+    public int HealthPoints
+    {
+        get => healthPoints;
+        set => healthPoints = value;
+    }
     public List<Move> Moves { get; set; }
 
     // Constructor

@@ -127,8 +127,9 @@ public class UniteonBattle : MonoBehaviour
             else if (_actionSelection == 1) // Run
             {
                 AudioManager.Instance.StopMusic();
+                AudioManager.Instance.StopSfx(2);
                 AudioManager.Instance.PlaySfx(run);
-                OnBattleOver?.Invoke(false); // Just end the battle
+                OnBattleOver?.Invoke(false); // Just end the battle for now
             }
         }
     }
@@ -248,7 +249,25 @@ public class UniteonBattle : MonoBehaviour
             yield return uniteonUnitGamer.Uniteon.PlayCry(-0.72f, true);
             AudioManager.Instance.PlaySfx(faint, panning: -0.72f);
             yield return uniteonUnitGamer.PlayFaintAnimation();
-            OnBattleOver?.Invoke(false);
+            // Check if gamer has more Uniteon in it's party
+            Uniteon nextUniteon = _gamerParty.GetHealthyUniteon();
+            if (nextUniteon != null)
+            {
+                // Initialise next uniteon
+                uniteonUnitGamer.InitialiseUniteon(nextUniteon);
+                // Initialise the gamer size of battlefield
+                uniteonHudGamer.SetGamerData(nextUniteon);
+                battleDialogBox.SetMoveNames(nextUniteon.Moves);
+                // Play cry
+                StartCoroutine(nextUniteon.PlayCry(-0.72f));
+                // Wait until motivational text has printed out
+                yield return StartCoroutine(battleDialogBox.TypeOutDialog($"You got it, {nextUniteon.UniteonBase.UniteonName}!"));
+                // Wait an additional second after the text is done printing
+                yield return new WaitForSeconds(1f);
+                TransitionToAction();
+            }
+            else
+                OnBattleOver?.Invoke(false);
         }
         else
             TransitionToAction();
@@ -282,7 +301,7 @@ public class UniteonBattle : MonoBehaviour
     /// </summary>
     /// <param name="damageData">The damage data of the Uniteon.</param>
     /// <returns></returns>
-    public IEnumerator WriteDamageData(DamageData damageData)
+    private IEnumerator WriteDamageData(DamageData damageData)
     {
         if (damageData.CriticalHitModifier > 1f)
             yield return battleDialogBox.TypeOutDialog("It's a critical hit!");

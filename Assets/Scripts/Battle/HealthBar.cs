@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
@@ -13,6 +12,7 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private Color healthColourLow;
     [SerializeField] private Color endFlashColour;
     [SerializeField] private float flashDuration;
+    [SerializeField] private AudioClip lowHealth;
     private Coroutine _flashCoroutine;
     private Color _originalHealthColor;
     private Color _startFlashColour;
@@ -32,9 +32,19 @@ public class HealthBar : MonoBehaviour
     /// <param name="normalizedHealthPoints">The normalized value of HP.</param>
     public void SetHealthBar(float normalizedHealthPoints)
     {
-        health.transform.localScale = new Vector3(normalizedHealthPoints, 1f);
-        health.color = _originalHealthColor;
+        var healthTransform = health.transform;
+        healthTransform.localScale = new Vector3(normalizedHealthPoints, 1f);
         healthBorder.color = _startFlashColour;
+        // Change colour of health bar depending on HP
+        if (normalizedHealthPoints <= 0.2)
+        {
+            health.color = healthColourLow;
+            CalculateFlashHealthBorder(normalizedHealthPoints);
+        }
+        else if (normalizedHealthPoints <= 0.5)
+            health.color = healthColourHalf;
+        else
+            health.color = _originalHealthColor;
     }
 
     /// <summary>
@@ -90,17 +100,40 @@ public class HealthBar : MonoBehaviour
     /// Enables or disables the flashing of the health border.
     /// </summary>
     /// <param name="start">True for on and false for off.</param>
-    public void SetFlashingHealthBorder(bool start)
+    private void SetFlashingHealthBorder(bool start)
     {
-        switch (start)
+        if (_flashCoroutine != null)
         {
-            case true when _flashCoroutine == null:
-                _flashCoroutine = StartCoroutine(FlashHealthBorder());
+            StopCoroutine(_flashCoroutine);
+            _flashCoroutine = null;
+        }
+        if (start)
+            _flashCoroutine = StartCoroutine(FlashHealthBorder());
+        else
+        {
+            healthBorder.color = _startFlashColour;
+            _flashCoroutine = null;
+        }
+    }
+
+    /// <summary>
+    /// Calculate if the health border needs to be flashed, and if so, flash it and play sfx.
+    /// </summary>
+    /// <param name="normalizedHealthPoints">The normalized health points of the Uniteon.</param>
+    public void CalculateFlashHealthBorder(float normalizedHealthPoints)
+    {
+        switch (normalizedHealthPoints)
+        {
+            // Flash health border between 0% and 20% HP and play low health sfx
+            case <= 0f:
+                SetFlashingHealthBorder(false);
+                AudioManager.Instance.StopSfx(2, lowHealth);
                 break;
-            case false when _flashCoroutine != null:
-                StopCoroutine(_flashCoroutine);
-                healthBorder.color = _startFlashColour;
-                _flashCoroutine = null;
+            case <= 0.2f:
+                SetFlashingHealthBorder(true);
+                // Only start playing low health sfx if it's not already playing
+                if (!AudioManager.Instance.IsPlayingSfx(lowHealth))
+                    AudioManager.Instance.PlaySfx(lowHealth, true, 2);
                 break;
         }
     }

@@ -636,6 +636,7 @@ MonoBehaviour:
   healthColourLow: {r: 0.8862745, g: 0.49019608, b: 0.5058824, a: 1}
   endFlashColour: {r: 0, g: 0, b: 0, a: 0}
   flashDuration: 0
+  lowHealth: {fileID: 0}
 --- !u!1 &330237994
 GameObject:
   m_ObjectHideFlags: 0
@@ -8299,7 +8300,6 @@ MonoBehaviour:
   levelText: {fileID: 671872685}
   healthText: {fileID: 110933602}
   healthBar: {fileID: 1262974487}
-  lowHealth: {fileID: 8300000, guid: ef3c0715f5656d74e866e736366e8983, type: 3}
   isGamer: 1
 --- !u!1 &780902371
 GameObject:
@@ -9188,6 +9188,7 @@ MonoBehaviour:
   healthColourLow: {r: 0.8867924, g: 0.4908033, b: 0.50426316, a: 1}
   endFlashColour: {r: 0.9433962, g: 0.23733231, b: 0.23733231, a: 1}
   flashDuration: 0.72
+  lowHealth: {fileID: 8300000, guid: ef3c0715f5656d74e866e736366e8983, type: 3}
 --- !u!1 &1287313353
 GameObject:
   m_ObjectHideFlags: 0
@@ -9624,8 +9625,10 @@ MonoBehaviour:
   uniteons:
   - uniteonBase: {fileID: 11400000, guid: 14e8cc068eb8177498bf6c3f49e6df63, type: 2}
     level: 7
+    healthPoints: 0
   - uniteonBase: {fileID: 11400000, guid: ed448f7f717f704489c1532755724c75, type: 2}
     level: 5
+    healthPoints: 0
 --- !u!1 &1495501003
 GameObject:
   m_ObjectHideFlags: 0
@@ -9719,7 +9722,6 @@ MonoBehaviour:
   levelText: {fileID: 1610956681}
   healthText: {fileID: 0}
   healthBar: {fileID: 303561743}
-  lowHealth: {fileID: 0}
   isGamer: 0
 --- !u!224 &1529288904
 RectTransform:
@@ -11785,8 +11787,10 @@ MonoBehaviour:
   wildUniteons:
   - uniteonBase: {fileID: 11400000, guid: 6dbd16654a5094f4ab1fd566e9d95b00, type: 2}
     level: 3
+    healthPoints: 0
   - uniteonBase: {fileID: 11400000, guid: ed448f7f717f704489c1532755724c75, type: 2}
-    level: 4
+    level: 7
+    healthPoints: 0
 --- !u!1 &2075463851
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,6 +12,7 @@ public class UniteonUnit : MonoBehaviour
     private Image _sprite;
     private Vector3 _originalPosSprite;
     private Color _originalColorSprite;
+    private Coroutine _spriteAnimation;
 
     // Properties
     public Uniteon Uniteon { get; set; }
@@ -32,7 +33,9 @@ public class UniteonUnit : MonoBehaviour
     public void InitialiseUniteon(Uniteon uniteon)
     {
         Uniteon = uniteon;
-        StartCoroutine(isGamerUniteon
+        if (_spriteAnimation != null)
+            StopCoroutine(_spriteAnimation);
+        _spriteAnimation = StartCoroutine(isGamerUniteon
             ? PlaySpriteAnimation(Uniteon.UniteonBase.BackSprite)
             : PlaySpriteAnimation(Uniteon.UniteonBase.FrontSprite));
         PlayBattleEnterAnimation();
@@ -58,6 +61,8 @@ public class UniteonUnit : MonoBehaviour
             yield return new WaitForSeconds(spriteFramerate);
         }
     }
+    
+    
 
     /// <summary>
     /// Plays the battle enter animation.
