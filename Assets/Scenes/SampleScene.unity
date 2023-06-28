@@ -10478,8 +10478,17 @@ MonoBehaviour:
   - uniteonBase: {fileID: 11400000, guid: 14e8cc068eb8177498bf6c3f49e6df63, type: 2}
     level: 7
     healthPoints: 0
-  - uniteonBase: {fileID: 11400000, guid: ed448f7f717f704489c1532755724c75, type: 2}
-    level: 5
+  - uniteonBase: {fileID: 11400000, guid: 6aff78bd22906c546901e6f1ec7cf710, type: 2}
+    level: 15
+    healthPoints: 0
+  - uniteonBase: {fileID: 11400000, guid: 004a74598f3d5854cb376999c15c89a1, type: 2}
+    level: 12
+    healthPoints: 0
+  - uniteonBase: {fileID: 11400000, guid: c1a4a01995a150646a9945ee467a9285, type: 2}
+    level: 47
+    healthPoints: 0
+  - uniteonBase: {fileID: 11400000, guid: 88b273f333a13c343a952472ed3bf99e, type: 2}
+    level: 39
     healthPoints: 0
 --- !u!1 &1495501003
 GameObject:
@@ -12844,10 +12853,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wildUniteons:
   - uniteonBase: {fileID: 11400000, guid: 6dbd16654a5094f4ab1fd566e9d95b00, type: 2}
-    level: 3
-    healthPoints: 0
-  - uniteonBase: {fileID: 11400000, guid: ed448f7f717f704489c1532755724c75, type: 2}
     level: 7
+    healthPoints: 0
+  - uniteonBase: {fileID: 11400000, guid: e7ef14892e478264c98c3fd9dc87a4e5, type: 2}
+    level: 37
+    healthPoints: 0
+  - uniteonBase: {fileID: 11400000, guid: 30229852b8d53474a96bd47973dbb568, type: 2}
+    level: 17
+    healthPoints: 0
+  - uniteonBase: {fileID: 11400000, guid: 9d0e52104d630a2409a8d35a44432f27, type: 2}
+    level: 57
+    healthPoints: 0
+  - uniteonBase: {fileID: 11400000, guid: 14e8cc068eb8177498bf6c3f49e6df63, type: 2}
+    level: 4
+    healthPoints: 0
+  - uniteonBase: {fileID: 11400000, guid: 3f6101762fd5ec34996d2032de5f34c0, type: 2}
+    level: 28
     healthPoints: 0
 --- !u!1 &2075463851
 GameObject:

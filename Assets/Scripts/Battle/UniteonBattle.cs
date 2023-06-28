@@ -57,6 +57,7 @@ public class UniteonBattle : MonoBehaviour
         // Initialise party screen
         partyScreen.InitialisePartyScreen();
         // Wait until wild encounter text has printed out
+        StartCoroutine(uniteonUnitFoe.Uniteon.PlayCry(0.72f));
         yield return StartCoroutine(battleDialogBox.TypeOutDialog($"A wild {uniteonUnitFoe.Uniteon.UniteonBase.UniteonName} appeared!"));
         // Wait an additional second after the text is done printing
         yield return new WaitForSeconds(1f);
@@ -73,9 +74,9 @@ public class UniteonBattle : MonoBehaviour
         battleDialogBox.EnableActionSelector(true);
     }
     
-    private void OpenPartyScreen()
+    private void OpenPartyScreen(BattleSequenceState state)
     {
-        _battleSequenceState = BattleSequenceState.PartyScreen;
+        _battleSequenceState = state;
         partyScreen.gameObject.SetActive(true);
         partyScreen.AddUniteonsToPartySlots(_gamerParty.Uniteons);
     }
@@ -96,17 +97,17 @@ public class UniteonBattle : MonoBehaviour
     /// </summary>
     public void ControllerUpdate()
     {
-        if (_battleSequenceState == BattleSequenceState.GamerAction)
+        switch (_battleSequenceState)
         {
-            HandleActionSelection();
-        }
-        else if (_battleSequenceState == BattleSequenceState.GamerMove)
-        {
-            HandleMoveSelection();
-        }
-        else if (_battleSequenceState == BattleSequenceState.PartyScreen)
-        {
-            HandlePartyScreenSelection();
+            case BattleSequenceState.GamerAction:
+                HandleActionSelection();
+                break;
+            case BattleSequenceState.GamerMove:
+                HandleMoveSelection();
+                break;
+            case BattleSequenceState.PartySelect or BattleSequenceState.PartyFaint:
+                HandlePartyScreenSelection();
+                break;
         }
     }
 
@@ -157,7 +158,7 @@ public class UniteonBattle : MonoBehaviour
             else if (_actionSelection == 1) // Switch
             {
                 AudioManager.Instance.PlaySfx(aButton);
-                OpenPartyScreen();
+                OpenPartyScreen(BattleSequenceState.PartySelect);
             }
             else if (_actionSelection == 2) // Pack
             {
@@ -217,7 +218,6 @@ public class UniteonBattle : MonoBehaviour
                 return;
             }
             partyScreen.gameObject.SetActive(false);
-            _battleSequenceState = BattleSequenceState.Busy;
             StartCoroutine(SwitchUniteon(selectedMember));
         }
         // Enable going back to the action screen
@@ -233,10 +233,15 @@ public class UniteonBattle : MonoBehaviour
     /// Send out new Uniteon into the battlefield.
     /// </summary>
     /// <param name="uniteon">The Uniteon that needs to be sent out.</param>
+    /// <param name="fainted">If the gamer's Uniteon fainted in the last turn, set to true.</param>
     /// <returns>Coroutine.</returns>
     private IEnumerator SwitchUniteon(Uniteon uniteon)
     {
-        if (uniteonUnitGamer.Uniteon.HealthPoints > 0) // Only call back Uniteon if Uniteon didn't faint
+        // Obtain if Uniteon fainted before switching and then set state to busy
+        bool fainted = (_battleSequenceState == BattleSequenceState.PartyFaint);
+        _battleSequenceState = BattleSequenceState.Busy;
+        // Only call back Uniteon if Uniteon didn't faint
+        if (uniteonUnitGamer.Uniteon.HealthPoints > 0)
         {
             battleDialogBox.EnableActionSelector(false);
             // Call back Uniteon
@@ -248,8 +253,11 @@ public class UniteonBattle : MonoBehaviour
         }
         // Send out new Uniteon
         yield return SendOutUniteon(uniteon);
-        // Give turn to foe
-        StartCoroutine(ExecuteFoeMove());
+        // Depending if Uniteon fainted in the last turn
+        if (fainted)
+            TransitionToAction(); // Go back to player action
+        else
+            StartCoroutine(ExecuteFoeMove()); // Give turn to foe
     }
 
     /// <summary>
@@ -277,7 +285,7 @@ public class UniteonBattle : MonoBehaviour
         yield return uniteonHudFoe.UpdateHealthPoints(previousHealthPoints);
         // Write effectiveness/critical hit to the dialog box
         yield return WriteDamageData(damageData);
-        // If Uniteon fainted, write to dialog box, play faint animation and cry, and end battle
+        // If Uniteon fainted, write to dialog box, play faint animation and cry
         if (damageData.Fainted)
         {
             AudioManager.Instance.StopSfx(2); // Stop low health sfx
@@ -323,7 +331,7 @@ public class UniteonBattle : MonoBehaviour
             // Check if gamer has more Uniteon in it's party
             Uniteon nextUniteon = _gamerParty.GetHealthyUniteon();
             if (nextUniteon != null)
-                OpenPartyScreen();
+                OpenPartyScreen(BattleSequenceState.PartyFaint);
             else
                 OnBattleOver?.Invoke(false);
         }
@@ -408,5 +416,6 @@ public enum BattleSequenceState
     GamerMove,
     FoeMove,
     Busy,
-    PartyScreen
+    PartySelect,
+    PartyFaint
 }

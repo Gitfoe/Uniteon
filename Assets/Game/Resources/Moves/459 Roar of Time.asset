@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1c3c3bf392619847971b6dd32d35618, type: 3}
+  m_Name: 459 Roar of Time
+  m_EditorClassIdentifier: 
+  moveID: 459
+  moveName: Roar of Time
+  description: The user blasts the target with power that distorts even time. The
+    user can't move on the next turn.
+  moveType: 15
+  moveCategory: 1
+  powerPoints: 5
+  power: 150
+  accuracy: 90

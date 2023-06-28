@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1c3c3bf392619847971b6dd32d35618, type: 3}
+  m_Name: 45 Growl
+  m_EditorClassIdentifier: 
+  moveID: 45
+  moveName: Growl
+  description: 'The user growls in an endearing way, making opposing Uniteons less
+    wary. This lowers their Attack stats. '
+  moveType: 1
+  moveCategory: 2
+  powerPoints: 40
+  power: 0
+  accuracy: 400
