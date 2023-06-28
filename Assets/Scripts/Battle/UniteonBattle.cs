@@ -68,6 +68,11 @@ public class UniteonBattle : MonoBehaviour
         battleDialogBox.EnableActionSelector(true);
     }
     
+    private void OpenPartyScreen()
+    {
+        print("Debug: Party Screen");
+    }
+    
     /// <summary>
     /// Transitions the scene state to move.
     /// </summary>
@@ -95,26 +100,36 @@ public class UniteonBattle : MonoBehaviour
     }
 
     /// <summary>
+    /// Handles the selection of 4 buttons.
+    /// </summary>
+    /// <param name="selection">The selection parameter you want to modify.</param>
+    /// <param name="upperBound">The maximum value of selectable buttons.</param>
+    /// <returns>The current selection.</returns>
+    private int HandleSelectionButtons(int selection, int upperBound)
+    {
+        int direction = 0;
+        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+            direction = 1;
+        else if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
+            direction = -1;
+        else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+            direction = 2;
+        else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+            direction = -2;
+        if (direction != 0)
+        {
+            selection += direction;
+            AudioManager.Instance.PlaySfx(aButton);
+        }
+        return Mathf.Clamp(selection, 0, upperBound);
+    }
+    
+    /// <summary>
     /// Watches for input of the player and changes the graphics accordingly in the action selection state.
     /// </summary>
     private void HandleActionSelection()
     {
-        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
-        {
-            if (_actionSelection < 1)
-            {
-                _actionSelection++;
-                AudioManager.Instance.PlaySfx(aButton);
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
-        {
-            if (_actionSelection > 0)
-            {
-                _actionSelection--;
-                AudioManager.Instance.PlaySfx(aButton);
-            }
-        }
+        _actionSelection = HandleSelectionButtons(_actionSelection, 3);
         battleDialogBox.UpdateActionSelection(_actionSelection);
         // Transition to the next state if an action has been selected
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
@@ -124,7 +139,15 @@ public class UniteonBattle : MonoBehaviour
                 AudioManager.Instance.PlaySfx(aButton);
                 TransitionToMove();
             }
-            else if (_actionSelection == 1) // Run
+            else if (_actionSelection == 1) // Switch
+            {
+                OpenPartyScreen();
+            }
+            else if (_actionSelection == 2) // Pack
+            {
+                throw new NotImplementedException();
+            }
+            else if (_actionSelection == 3) // Run
             {
                 AudioManager.Instance.StopMusic();
                 AudioManager.Instance.StopSfx(2);
@@ -133,44 +156,13 @@ public class UniteonBattle : MonoBehaviour
             }
         }
     }
-    
+
     /// <summary>
     /// Watches for input of the player and changes the graphics accordingly in the move selection state.
     /// </summary>
     private void HandleMoveSelection()
     {
-        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
-        {
-            if (_moveSelection < uniteonUnitGamer.Uniteon.Moves.Count - 1)
-            {
-                _moveSelection++;
-                AudioManager.Instance.PlaySfx(aButton);
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) 
-        {
-            if (_moveSelection > 0)
-            {
-                _moveSelection--;
-                AudioManager.Instance.PlaySfx(aButton);
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
-        {
-            if (_moveSelection < uniteonUnitGamer.Uniteon.Moves.Count - 2)
-            {
-                _moveSelection += 2;
-                AudioManager.Instance.PlaySfx(aButton);
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
-        {
-            if (_moveSelection > 0)
-            {
-                _moveSelection -= 2;
-                AudioManager.Instance.PlaySfx(aButton);
-            }
-        }
+        _moveSelection = HandleSelectionButtons(_moveSelection, uniteonUnitGamer.Uniteon.Moves.Count - 1);
         battleDialogBox.UpdateMoveSelection(_moveSelection, uniteonUnitGamer.Uniteon.Moves[_moveSelection]);
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
         {
@@ -178,6 +170,12 @@ public class UniteonBattle : MonoBehaviour
             battleDialogBox.EnableMoveSelector(false);
             battleDialogBox.EnableDialogText(true);
             StartCoroutine(ExecuteGamerMove());
+        }
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Backspace))
+        {
+            battleDialogBox.EnableMoveSelector(false);
+            battleDialogBox.EnableDialogText(true);
+            TransitionToAction();
         }
     }
 
