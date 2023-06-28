@@ -229,15 +229,23 @@ public class UniteonBattle : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Send out new Uniteon into the battlefield.
+    /// </summary>
+    /// <param name="uniteon">The Uniteon that needs to be sent out.</param>
+    /// <returns>Coroutine.</returns>
     private IEnumerator SwitchUniteon(Uniteon uniteon)
     {
-        battleDialogBox.EnableActionSelector(false);
-        // Call back Uniteon
-        yield return battleDialogBox.TypeOutDialog(
-            $"You've done well, {uniteonUnitGamer.Uniteon.UniteonBase.UniteonName}!");
-        AudioManager.Instance.PlaySfx(switchOut);
-        uniteonUnitGamer.PlayBattleLeaveAnimation();
-        yield return new WaitForSeconds(2f);
+        if (uniteonUnitGamer.Uniteon.HealthPoints > 0) // Only call back Uniteon if Uniteon didn't faint
+        {
+            battleDialogBox.EnableActionSelector(false);
+            // Call back Uniteon
+            yield return battleDialogBox.TypeOutDialog(
+                $"You've done well, {uniteonUnitGamer.Uniteon.UniteonBase.UniteonName}!");
+            AudioManager.Instance.PlaySfx(switchOut);
+            uniteonUnitGamer.PlayBattleLeaveAnimation();
+            yield return new WaitForSeconds(2f);
+        }
         // Send out new Uniteon
         yield return SendOutUniteon(uniteon);
         // Give turn to foe
@@ -315,10 +323,7 @@ public class UniteonBattle : MonoBehaviour
             // Check if gamer has more Uniteon in it's party
             Uniteon nextUniteon = _gamerParty.GetHealthyUniteon();
             if (nextUniteon != null)
-            {
-                yield return SendOutUniteon(nextUniteon);
-                TransitionToAction();
-            }
+                OpenPartyScreen();
             else
                 OnBattleOver?.Invoke(false);
         }

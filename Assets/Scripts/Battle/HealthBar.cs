@@ -36,7 +36,6 @@ public class HealthBar : MonoBehaviour
         var healthTransform = health.transform;
         healthTransform.localScale = new Vector3(normalizedHealthPoints, 1f);
         healthBorder.color = _startFlashColour;
-        Debug.Log($"{normalizedHealthPoints}, {sfx}");
         // Change colour of health bar depending on HP
         if (normalizedHealthPoints <= 0.2)
         {
