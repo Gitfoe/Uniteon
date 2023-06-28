@@ -10,6 +10,8 @@ public class PartyMemberUI : MonoBehaviour
     [SerializeField] private Text levelText;
     [SerializeField] private Text healthText;
     [SerializeField] private HealthBar healthBar;
+    [SerializeField] private Color selectedColour;
+    [SerializeField] private Color deselectedColour;
     private Uniteon _uniteon;
 
     /// <summary>
@@ -23,5 +25,10 @@ public class PartyMemberUI : MonoBehaviour
         levelText.text = $"Lv.{uniteon.Level}";
         healthText.text = $"{uniteon.HealthPoints}/{uniteon.MaxHealthPoints}";
         healthBar.SetHealthBar((float)uniteon.HealthPoints / uniteon.MaxHealthPoints); // Normalize health points
+    }
+
+    public void HighlightSelected(bool selected)
+    {
+        nameText.color = selected ? selectedColour : deselectedColour;
     }
 }

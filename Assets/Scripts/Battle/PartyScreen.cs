@@ -8,6 +8,7 @@ public class PartyScreen : MonoBehaviour
     // Fields
     [SerializeField] private Text messageText;
     private PartyMemberUI[] _partyMemberSlots;
+    private List<Uniteon> _uniteons;
 
     public void InitialisePartyScreen() => _partyMemberSlots = GetComponentsInChildren<PartyMemberUI>();
 
@@ -17,6 +18,7 @@ public class PartyScreen : MonoBehaviour
     /// <param name="uniteons">List of gamer Uniteon's.</param>
     public void AddUniteonsToPartySlots(List<Uniteon> uniteons)
     {
+        _uniteons = uniteons;
         for (int i = 0; i < _partyMemberSlots.Length; i++)
         {
             if (i < uniteons.Count)
@@ -25,5 +27,13 @@ public class PartyScreen : MonoBehaviour
                 _partyMemberSlots[i].gameObject.SetActive(false);
         }
         messageText.text = "Choose a Uniteon";
+    }
+
+    public void UpdateMemberSelection(int selectedMember)
+    {
+        for (int i = 0; i < _uniteons.Count; i++)
+        {
+            _partyMemberSlots[i].HighlightSelected(i == selectedMember);
+        }
     }
 }

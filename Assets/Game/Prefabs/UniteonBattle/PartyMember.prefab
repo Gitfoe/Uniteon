@@ -204,6 +204,8 @@ MonoBehaviour:
   levelText: {fileID: 5152682298230081278}
   healthText: {fileID: 7365171542328369054}
   healthBar: {fileID: 4882322598912292859}
+  selectedColour: {r: 0.2784314, g: 0.6039216, b: 0.5803922, a: 1}
+  deselectedColour: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
 --- !u!1 &3885547598089364100
 GameObject:
   m_ObjectHideFlags: 0

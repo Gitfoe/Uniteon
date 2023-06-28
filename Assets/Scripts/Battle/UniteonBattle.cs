@@ -20,9 +20,10 @@ public class UniteonBattle : MonoBehaviour
     [SerializeField] private AudioClip aButton;
     [SerializeField] private AudioClip run;
     [SerializeField] private PartyScreen partyScreen;
-    private BattleState _battleState;
+    private BattleState _gameState;
     private int _actionSelection;
     private int _moveSelection;
+    private int _memberSelection;
     private UniteonParty _gamerParty;
     private Uniteon _wildUniteon;
     
@@ -66,13 +67,14 @@ public class UniteonBattle : MonoBehaviour
     /// </summary>
     private void TransitionToAction()
     {
-        _battleState = BattleState.GamerAction;
+        _gameState = BattleState.GamerAction;
         battleDialogBox.SetDialogText("Choose a strategic move...");
         battleDialogBox.EnableActionSelector(true);
     }
     
     private void OpenPartyScreen()
     {
+        _gameState = BattleState.PartyScreen;
         partyScreen.gameObject.SetActive(true);
         partyScreen.AddUniteonsToPartySlots(_gamerParty.Uniteons);
     }
@@ -82,7 +84,7 @@ public class UniteonBattle : MonoBehaviour
     /// </summary>
     private void TransitionToMove()
     {
-        _battleState = BattleState.GamerMove;
+        _gameState = BattleState.GamerMove;
         battleDialogBox.EnableActionSelector(false);
         battleDialogBox.EnableDialogText(false);
         battleDialogBox.EnableMoveSelector(true);
@@ -93,13 +95,17 @@ public class UniteonBattle : MonoBehaviour
     /// </summary>
     public void ControllerUpdate()
     {
-        if (_battleState == BattleState.GamerAction)
+        if (_gameState == BattleState.GamerAction)
         {
             HandleActionSelection();
         }
-        else if (_battleState == BattleState.GamerMove)
+        else if (_gameState == BattleState.GamerMove)
         {
             HandleMoveSelection();
+        }
+        else if (_gameState == BattleState.PartyScreen)
+        {
+            HandlePartyScreenSelection();
         }
     }
 
@@ -122,8 +128,12 @@ public class UniteonBattle : MonoBehaviour
             direction = -2;
         if (direction != 0)
         {
-            selection += direction;
-            AudioManager.Instance.PlaySfx(aButton);
+            int newSelection = selection + direction;
+            if (newSelection >= 0 && newSelection <= upperBound)
+            {
+                selection = newSelection;
+                AudioManager.Instance.PlaySfx(aButton);
+            }
         }
         return Mathf.Clamp(selection, 0, upperBound);
     }
@@ -182,6 +192,12 @@ public class UniteonBattle : MonoBehaviour
             TransitionToAction();
         }
     }
+    
+    private void HandlePartyScreenSelection()
+    {
+        _memberSelection = HandleSelectionButtons(_memberSelection, _gamerParty.Uniteons.Count - 1);
+        partyScreen.UpdateMemberSelection(_memberSelection);
+    }
 
     /// <summary>
     /// The sequence for when the gamer attacks the foe.
@@ -190,7 +206,7 @@ public class UniteonBattle : MonoBehaviour
     private IEnumerator ExecuteGamerMove()
     {
         // Set the battle state, get the selected move and deduct PP
-        _battleState = BattleState.Attacking;
+        _gameState = BattleState.Attacking;
         var move = uniteonUnitGamer.Uniteon.Moves[_moveSelection];
         move.PowerPoints--;
         // Write move to the dialog box
@@ -203,7 +219,7 @@ public class UniteonBattle : MonoBehaviour
         DamageData damageData = uniteonUnitFoe.Uniteon.TakeDamage(move, uniteonUnitGamer.Uniteon);
         // Play Uniteon damage animation and sfx
         uniteonUnitFoe.PlayHitAnimation();
-        PlayHitSfx(damageData, _battleState);
+        PlayHitSfx(damageData, _gameState);
         // Show damage decay on health bar
         yield return uniteonHudFoe.UpdateHealthPoints(previousHealthPoints);
         // Write effectiveness/critical hit to the dialog box
@@ -230,7 +246,7 @@ public class UniteonBattle : MonoBehaviour
     /// <returns>Coroutine.</returns>
     private IEnumerator ExecuteFoeMove()
     {
-        _battleState = BattleState.FoeMove;
+        _gameState = BattleState.FoeMove;
         // Quite simple battle AI - but get a random move of the foe
         int randomMoveIndex = Random.Range(0, uniteonUnitFoe.Uniteon.Moves.Count);
         Move move = uniteonUnitFoe.Uniteon.Moves[randomMoveIndex];
@@ -241,7 +257,7 @@ public class UniteonBattle : MonoBehaviour
         int previousHealthPoints = uniteonUnitGamer.Uniteon.HealthPoints;
         DamageData damageData = uniteonUnitGamer.Uniteon.TakeDamage(move, uniteonUnitFoe.Uniteon);
         uniteonUnitGamer.PlayHitAnimation();
-        PlayHitSfx(damageData, _battleState);
+        PlayHitSfx(damageData, _gameState);
         yield return uniteonHudGamer.UpdateHealthPoints(previousHealthPoints);
         yield return WriteDamageData(damageData);
         if (damageData.Fainted)
@@ -331,5 +347,6 @@ public enum BattleState
     GamerAction,
     GamerMove,
     FoeMove,
-    Attacking
+    Attacking,
+    PartyScreen
 }

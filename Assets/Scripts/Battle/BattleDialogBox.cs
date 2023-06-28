@@ -57,7 +57,7 @@ public class BattleDialogBox : MonoBehaviour
     /// </summary>
     /// <param name="selectedText">The selected text.</param>
     /// <param name="textsList">The list that the selection has to take place in.</param>
-    private void UpdateSelection(int selectedText, List<Text> textsList)
+    private void HighlightSelectionInList(int selectedText, List<Text> textsList)
     {
         for (var i = 0; i < textsList.Count; i++)
         {
@@ -69,7 +69,7 @@ public class BattleDialogBox : MonoBehaviour
     /// Highlights the correct action selection.
     /// </summary>
     /// <param name="selectedAction">The currently selected action.</param>
-    public void UpdateActionSelection(int selectedAction) => UpdateSelection(selectedAction, actionTexts);
+    public void UpdateActionSelection(int selectedAction) => HighlightSelectionInList(selectedAction, actionTexts);
 
     /// <summary>
     /// Highlights the correct move selection.
@@ -80,7 +80,7 @@ public class BattleDialogBox : MonoBehaviour
     {
         powerPointsText.text = $"PP {uniteonMove.PowerPoints}/{uniteonMove.MoveBase.PowerPoints}";
         typeText.text = uniteonMove.MoveBase.MoveType.ToString();
-        UpdateSelection(selectedMove, moveTexts);
+        HighlightSelectionInList(selectedMove, moveTexts);
     }
 
     /// <summary>
