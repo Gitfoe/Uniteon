@@ -22,24 +22,33 @@ public class UniteonBattle : MonoBehaviour
     private BattleState _battleState;
     private int _actionSelection;
     private int _moveSelection;
+    private UniteonParty _gamerParty;
+    private Uniteon _wildUniteon;
     
     // Events
     public event Action<bool> OnBattleOver;
-    
+
     /// <summary>
     /// Starts a wild Uniteon battle.
     /// </summary>
-    public void InitiateBattle() => StartCoroutine(InitialiseBattle());
+    public void InitiateBattle(UniteonParty gamerParty, Uniteon wildUniteon )
+    {
+        _gamerParty = gamerParty;
+        _wildUniteon = wildUniteon;
+        StartCoroutine(InitialiseBattle());
+    }
+   
 
     /// <summary>
     /// Initializes the battle scene.
     /// </summary>
     private IEnumerator InitialiseBattle()
     {
-        // Initialise battle field and Uniteons
-        uniteonUnitGamer.InitialiseUniteon();
+        // Initialise Uniteons
+        uniteonUnitGamer.InitialiseUniteon(_gamerParty.GetHealthyUniteon());
+        uniteonUnitFoe.InitialiseUniteon(_wildUniteon);
+        // Initialise battlefield
         uniteonHudGamer.SetGamerData(uniteonUnitGamer.Uniteon);
-        uniteonUnitFoe.InitialiseUniteon();
         uniteonHudFoe.SetGamerData(uniteonUnitFoe.Uniteon);
         battleDialogBox.SetMoveNames(uniteonUnitGamer.Uniteon.Moves);
         // Wait until wild encounter text has printed out

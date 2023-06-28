@@ -8,8 +8,6 @@ using TMPro;
 public class UniteonUnit : MonoBehaviour
 {
     // Fields
-    [SerializeField] private UniteonBase uniteonBase;
-    [SerializeField] private int level;
     [SerializeField] private bool isGamerUniteon; // To determine if the Uniteon is the gamer's or the foe's
     private Image _sprite;
     private Vector3 _originalPosSprite;
@@ -31,9 +29,9 @@ public class UniteonUnit : MonoBehaviour
     /// <summary>
     /// Creates a new Uniteon object and sets the correct image.
     /// </summary>
-    public void InitialiseUniteon()
+    public void InitialiseUniteon(Uniteon uniteon)
     {
-        Uniteon = new Uniteon(uniteonBase, level);
+        Uniteon = uniteon;
         StartCoroutine(isGamerUniteon
             ? PlaySpriteAnimation(Uniteon.UniteonBase.BackSprite)
             : PlaySpriteAnimation(Uniteon.UniteonBase.FrontSprite));

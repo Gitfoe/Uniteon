@@ -5,7 +5,7 @@ using UnityEngine.Diagnostics;
 
 public class GameController : MonoBehaviour
 {
-    // fields
+    // Fields
     [SerializeField] private GamerController gamerController;
     [SerializeField] private UniteonBattle uniteonBattle;
     [SerializeField] private Camera worldCamera;
@@ -23,7 +23,9 @@ public class GameController : MonoBehaviour
         _gameState = GameState.Battle;
         uniteonBattle.gameObject.SetActive(true);
         worldCamera.gameObject.SetActive(false);
-        uniteonBattle.InitiateBattle();
+        UniteonParty gamerParty = gamerController.GetComponent<UniteonParty>();
+        Uniteon wildUniteon = FindObjectOfType<WorldArea>().GetComponent<WorldArea>().GetWildUniteon();
+        uniteonBattle.InitiateBattle(gamerParty, wildUniteon);
     }
     
     private void EndBattle(bool won)

@@ -4,19 +4,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+[Serializable]
 public class Uniteon
 {
+    // Fields
+    [SerializeField] private UniteonBase uniteonBase;
+    [SerializeField] private int level;
+    
     // Properties
-    public UniteonBase UniteonBase { get; set; }
-    public int Level { get; set; }
+    public UniteonBase UniteonBase => uniteonBase;
+    public int Level => level;
     public int HealthPoints { get; set; }
     public List<Move> Moves { get; set; }
 
     // Constructor
-    public Uniteon(UniteonBase uniteonBase, int level)
+    public void InitialiseUniteon()
     {
-        UniteonBase = uniteonBase;
-        Level = level;
+        // Set Uniteon HP to max
         HealthPoints = MaxHealthPoints;
         // Add moves to Uniteon
         Moves = new List<Move>();
