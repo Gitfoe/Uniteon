@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Uniteon
 {
@@ -58,10 +60,23 @@ public class Uniteon
             EffectivenessModifier = totalEffectivenessModifier,
             CriticalHitModifier = criticalHitModifier
         };
+        // Find move category and assign attacking power and defense points
+        float attack = move.MoveBase.MoveCategory switch
+        {
+            MoveCategory.Physical => attacker.Attack,
+            MoveCategory.Special => attacker.SpecialAttack,
+            _ => 0 // Status moves
+        };
+        float defense = move.MoveBase.MoveCategory switch
+        {
+            MoveCategory.Physical => Defense,
+            MoveCategory.Special => SpecialDefense,
+            _ => 0
+        };
         // Calculate damage
         float randomizeDamageModifier = Random.Range(0.85f, 1f) * criticalHitModifier * totalEffectivenessModifier; // Randomize move's damage between 85% and 100%
         float a = (2 * attacker.Level + 10) / 250f;
-        float d = a * move.MoveBase.Power * ((float)attacker.Attack / Defense) + 2;
+        float d = a * move.MoveBase.Power * ((float)attack / defense) + 2;
         int damage = Mathf.FloorToInt(d * randomizeDamageModifier);
         HealthPoints -= damage;
         if (HealthPoints <= 0)
