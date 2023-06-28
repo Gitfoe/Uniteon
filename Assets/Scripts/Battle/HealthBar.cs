@@ -30,7 +30,8 @@ public class HealthBar : MonoBehaviour
     /// Sets the health bar to a new value and (re)sets the colors.
     /// </summary>
     /// <param name="normalizedHealthPoints">The normalized value of HP.</param>
-    public void SetHealthBar(float normalizedHealthPoints)
+    /// <param name="sfx">If low health sfx need to be played or not.</param>
+    public void SetHealthBar(float normalizedHealthPoints, bool sfx = true)
     {
         var healthTransform = health.transform;
         healthTransform.localScale = new Vector3(normalizedHealthPoints, 1f);
@@ -39,7 +40,7 @@ public class HealthBar : MonoBehaviour
         if (normalizedHealthPoints <= 0.2)
         {
             health.color = healthColourLow;
-            CalculateFlashHealthBorder(normalizedHealthPoints);
+            CalculateFlashHealthBorder(normalizedHealthPoints, sfx);
         }
         else if (normalizedHealthPoints <= 0.5)
             health.color = healthColourHalf;
@@ -120,20 +121,25 @@ public class HealthBar : MonoBehaviour
     /// Calculate if the health border needs to be flashed, and if so, flash it and play sfx.
     /// </summary>
     /// <param name="normalizedHealthPoints">The normalized health points of the Uniteon.</param>
-    public void CalculateFlashHealthBorder(float normalizedHealthPoints)
+    /// <param name="sfx">If low health sfx need to be played or not.</param>
+    public void CalculateFlashHealthBorder(float normalizedHealthPoints, bool sfx = true)
     {
         switch (normalizedHealthPoints)
         {
             // Flash health border between 0% and 20% HP and play low health sfx
             case <= 0f:
                 SetFlashingHealthBorder(false);
-                AudioManager.Instance.StopSfx(2, lowHealth);
+                if (sfx) AudioManager.Instance.StopSfx(2, lowHealth);
                 break;
             case <= 0.2f:
                 SetFlashingHealthBorder(true);
                 // Only start playing low health sfx if it's not already playing
-                if (!AudioManager.Instance.IsPlayingSfx(lowHealth))
+                if (!AudioManager.Instance.IsPlayingSfx(lowHealth) && sfx)
                     AudioManager.Instance.PlaySfx(lowHealth, true, 2);
+                break;
+            default:
+                SetFlashingHealthBorder(false);
+                if (sfx) AudioManager.Instance.StopSfx(2, lowHealth);
                 break;
         }
     }

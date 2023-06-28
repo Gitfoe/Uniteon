@@ -32,8 +32,8 @@ public class PartyScreen : MonoBehaviour
     public void UpdateMemberSelection(int selectedMember)
     {
         for (int i = 0; i < _uniteons.Count; i++)
-        {
             _partyMemberSlots[i].HighlightSelected(i == selectedMember);
-        }
     }
+
+    public void SetMessageText(string text) => messageText.text = text;
 }

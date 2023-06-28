@@ -50,7 +50,22 @@ public class BattleDialogBox : MonoBehaviour
 
     public void EnableDialogText(bool enabled) => dialogText.enabled = enabled;
 
-    public void EnableActionSelector(bool enabled) => actionSelector.SetActive(enabled);
+    public void EnableActionSelector(bool enabled)
+    {
+        // Make dialog text box narrower and set selection active
+        ThinDialogBox(enabled);
+        actionSelector.SetActive(enabled);
+    }
+
+    /// <summary>
+    /// Thins the dialog box to allow room for action selector..
+    /// </summary>
+    /// <param name="thin">To thin (true) or to widen (false).</param>
+    private void ThinDialogBox(bool thin)
+    {
+        dialogText.rectTransform.offsetMax = thin ? new Vector2(-300f, dialogText.rectTransform.offsetMax.y) : new Vector2(-25f, dialogText.rectTransform.offsetMax.y);
+    }
+
 
     /// <summary>
     /// Highlights the correct selection in some texts list.

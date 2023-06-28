@@ -67,13 +67,21 @@ public class UniteonUnit : MonoBehaviour
     /// <summary>
     /// Plays the battle enter animation.
     /// </summary>
-    private void PlayBattleEnterAnimation()
+    public void PlayBattleEnterAnimation()
+    {
+        _sprite.rectTransform.localPosition = isGamerUniteon ? new Vector3(-500f, _originalPosSprite.y) : new Vector3( 500f, _originalPosSprite.y);
+        _sprite.rectTransform.DOLocalMoveX(_originalPosSprite.x, 1.27f);
+    }
+    
+    /// <summary>
+    /// Plays the battle leave animation.
+    /// </summary>
+    public void PlayBattleLeaveAnimation()
     {
         if (isGamerUniteon)
-            _sprite.rectTransform.localPosition = new Vector3(-500f, _originalPosSprite.y);
+            _sprite.rectTransform.DOLocalMoveX(_originalPosSprite.x - 500f, 1.27f);
         else
-            _sprite.rectTransform.localPosition = new Vector3( 500f, _originalPosSprite.y);
-        _sprite.rectTransform.DOLocalMoveX(_originalPosSprite.x, 1.27f);
+            _sprite.rectTransform.DOLocalMoveX(_originalPosSprite.x + 500f, 1.27f);
     }
 
     /// <summary>

@@ -24,7 +24,7 @@ public class PartyMemberUI : MonoBehaviour
         nameText.text = uniteon.UniteonBase.UniteonName;
         levelText.text = $"Lv.{uniteon.Level}";
         healthText.text = $"{uniteon.HealthPoints}/{uniteon.MaxHealthPoints}";
-        healthBar.SetHealthBar((float)uniteon.HealthPoints / uniteon.MaxHealthPoints); // Normalize health points
+        healthBar.SetHealthBar((float)uniteon.HealthPoints / uniteon.MaxHealthPoints, false); // Normalize health points
     }
 
     public void HighlightSelected(bool selected)
