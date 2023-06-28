@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class HealthBar : MonoBehaviour
 {
     // Fields
-    [SerializeField] private bool isGamer;
     [SerializeField] private Image health;
     [SerializeField] private Image healthBorder;
     [SerializeField] private Color healthColourHalf;
@@ -93,7 +92,6 @@ public class HealthBar : MonoBehaviour
     /// <param name="start">True for on and false for off.</param>
     public void SetFlashingHealthBorder(bool start)
     {
-        if (!isGamer) return;
         switch (start)
         {
             case true when _flashCoroutine == null:

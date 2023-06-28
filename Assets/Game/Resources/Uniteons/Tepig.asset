@@ -161,3 +161,4 @@ MonoBehaviour:
     level: 4
   - moveBase: {fileID: 11400000, guid: ced3c55f4fedfd14db387b1a0542ea27, type: 2}
     level: 7
+  cry: {fileID: 8300000, guid: 72bf9ea71ce8e5c41b0cbc27ff112e18, type: 3}

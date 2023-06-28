@@ -71,6 +71,21 @@ public class Uniteon
         }
         return damageData;
     }
+
+    /// <summary>
+    /// Plays the cry of this Uniteon and waits until the cry has been completed to continue.
+    /// </summary>
+    /// <param name="panning">Float for panning left to right (-1 is left, 1 is right, 0 is center).</param>
+    /// <param name="fainted">If the Uniteon has fainted to slow down the pitch of the audio clip.</param>
+    /// <returns>Coroutine.</returns>
+    public IEnumerator PlayCry(float panning, bool fainted = false)
+    {
+        if (fainted)
+            AudioManager.Instance.PlaySfx(UniteonBase.Cry, panning: panning, pitch: 0.72f);
+        else
+            AudioManager.Instance.PlaySfx(UniteonBase.Cry, panning: panning);
+        yield return new WaitForSeconds(UniteonBase.Cry.length);
+    }
 }
 
 /// <summary>

@@ -14,7 +14,7 @@ public class UniteonBase : ScriptableObject
     [SerializeField] private string description;
     [SerializeField] private Sprite[] frontSprite;
     [SerializeField] private Sprite[] backSprite;
-    [SerializeField] private UniteonType uniteonType1; // Temporarily one sprite
+    [SerializeField] private UniteonType uniteonType1;
     [SerializeField] private UniteonType uniteonType2;
     [SerializeField] private int maxHealthPoints;
     [SerializeField] private int attack;
@@ -23,6 +23,7 @@ public class UniteonBase : ScriptableObject
     [SerializeField] private int specialDefense;
     [SerializeField] private int speed;
     [SerializeField] private List<LearnableMove> learnableMoves;
+    [SerializeField] private AudioClip cry;
     
     // Properties
     public int UniteonID => uniteonID;
@@ -39,6 +40,7 @@ public class UniteonBase : ScriptableObject
     public int SpecialDefense => specialDefense;
     public int Speed => speed;
     public List<LearnableMove> LearnableMoves => learnableMoves;
+    public AudioClip Cry => cry;
 }
 
 /// <summary>

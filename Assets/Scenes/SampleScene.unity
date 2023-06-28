@@ -529,7 +529,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniteonBase: {fileID: 11400000, guid: 14e8cc068eb8177498bf6c3f49e6df63, type: 2}
-  level: 15
+  level: 7
   isGamerUniteon: 1
 --- !u!1 &269733544
 GameObject:
@@ -561,7 +561,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   musicPlayer: {fileID: 1023418548}
-  sfxPlayer: {fileID: 1745574582}
+  sfxPlayer1: {fileID: 1745574582}
+  sfxPlayer2: {fileID: 1050717743}
 --- !u!4 &269733546
 Transform:
   m_ObjectHideFlags: 0
@@ -576,6 +577,7 @@ Transform:
   m_Children:
   - {fileID: 1023418549}
   - {fileID: 1745574583}
+  - {fileID: 1050717742}
   m_Father: {fileID: 2075463853}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -630,7 +632,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 800f2d7d37c56a24e901c20326ca55d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isGamer: 0
   health: {fileID: 488951583}
   healthBorder: {fileID: 1767096189}
   healthColourHalf: {r: 1, g: 0.7529412, b: 0.3647059, a: 1}
@@ -8300,6 +8301,8 @@ MonoBehaviour:
   levelText: {fileID: 671872685}
   healthText: {fileID: 110933602}
   healthBar: {fileID: 1262974487}
+  lowHealth: {fileID: 8300000, guid: ef3c0715f5656d74e866e736366e8983, type: 3}
+  isGamer: 1
 --- !u!1 &780902371
 GameObject:
   m_ObjectHideFlags: 0
@@ -8854,6 +8857,134 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Some Move 3
+--- !u!1 &1050717741
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1050717742}
+  - component: {fileID: 1050717743}
+  m_Layer: 0
+  m_Name: SfxPlayer2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1050717742
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1050717741}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 269733546}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &1050717743
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1050717741}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1173801670
 GameObject:
   m_ObjectHideFlags: 0
@@ -9053,7 +9184,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 800f2d7d37c56a24e901c20326ca55d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isGamer: 1
   health: {fileID: 84603085}
   healthBorder: {fileID: 763315263}
   healthColourHalf: {r: 1, g: 0.75297, b: 0.36477983, a: 1}
@@ -9268,7 +9398,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniteonBase: {fileID: 11400000, guid: 6dbd16654a5094f4ab1fd566e9d95b00, type: 2}
-  level: 27
+  level: 5
   isGamerUniteon: 0
 --- !u!1 &1379196423
 GameObject:
@@ -9533,6 +9663,13 @@ MonoBehaviour:
   uniteonHudGamer: {fileID: 769407660}
   uniteonHudFoe: {fileID: 1529288903}
   battleDialogBox: {fileID: 1257568886}
+  hitNormalEffectiveness: {fileID: 8300000, guid: 1f2d439fa94034c4a8299ce8252ce59d, type: 3}
+  hitNotVeryEffective: {fileID: 8300000, guid: 3b00a101858a9aa43a4614c62b73a079, type: 3}
+  hitSuperEffective: {fileID: 8300000, guid: 2f76c7719de9e084c995f482be7f74c2, type: 3}
+  faint: {fileID: 8300000, guid: 5345de975d6b05042b45c6fee1e7a46a, type: 3}
+  tackle: {fileID: 8300000, guid: c0c4692a4a98e8e469df5d7021bcd01d, type: 3}
+  aButton: {fileID: 8300000, guid: 86a76c5481126c34aa4c958b22b09905, type: 3}
+  run: {fileID: 8300000, guid: 356ef6cac628ae145bca62aa48b19d30, type: 3}
 --- !u!1 &1529288902
 GameObject:
   m_ObjectHideFlags: 0
@@ -9568,6 +9705,8 @@ MonoBehaviour:
   levelText: {fileID: 1610956681}
   healthText: {fileID: 0}
   healthBar: {fileID: 303561743}
+  lowHealth: {fileID: 0}
+  isGamer: 0
 --- !u!224 &1529288904
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9932,7 +10071,7 @@ GameObject:
   - component: {fileID: 1745574583}
   - component: {fileID: 1745574582}
   m_Layer: 0
-  m_Name: SfxPlayer
+  m_Name: SfxPlayer1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

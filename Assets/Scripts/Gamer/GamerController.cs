@@ -37,7 +37,7 @@ public class GamerController : MonoBehaviour
         _animator = GetComponent<Animator>();
         _cameraSize = mainCamera.orthographicSize;
         _inTransition = false;
-        AudioManager.i.PlayMusic(sceneMusic);
+        AudioManager.Instance.PlayMusic(sceneMusic);
     }
 
     /// <summary>
@@ -48,7 +48,7 @@ public class GamerController : MonoBehaviour
         transitionBlock.color = new Color(1f, 1f, 1f, 0f);
         mainCamera.orthographicSize = _cameraSize;
         _inTransition = false;
-        AudioManager.i.PlayMusic(sceneMusic);
+        AudioManager.Instance.PlayMusic(sceneMusic);
     }
 
     /// <summary>
@@ -129,11 +129,11 @@ public class GamerController : MonoBehaviour
             _inTransition = true;
             _animator.SetBool(IsMoving, false);
             // Start battle transition
-            AudioManager.i.PlayMusic(wildMusicIntro, wildMusicLoop);
+            AudioManager.Instance.PlayMusic(wildMusicIntro, wildMusicLoop);
             var sequence = DOTween.Sequence();
-            sequence.Append(mainCamera.DOOrthoSize(_cameraSize + 2.5f, 1.5f));
-            sequence.Append(mainCamera.DOOrthoSize(_cameraSize - 3.5f, 1.5f).SetEase(Ease.InSine));
-            sequence.Join(transitionBlock.DOFade(1f, 1.5f).SetEase(Ease.InSine));
+            sequence.Append(mainCamera.DOOrthoSize(_cameraSize + 2.5f, 1.35f));
+            sequence.Append(mainCamera.DOOrthoSize(_cameraSize - 3.5f, 1.35f).SetEase(Ease.InSine));
+            sequence.Join(transitionBlock.DOFade(1f, 1.35f).SetEase(Ease.InSine));
             sequence.OnComplete(() => OnEncountered?.Invoke());
         }
     }

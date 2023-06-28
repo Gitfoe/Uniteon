@@ -10,6 +10,8 @@ public class UniteonHud : MonoBehaviour
     [SerializeField] private Text levelText;
     [SerializeField] private Text healthText;
     [SerializeField] private HealthBar healthBar;
+    [SerializeField] private AudioClip lowHealth;
+    [SerializeField] private bool isGamer;
     private Uniteon _uniteon;
 
     /// <summary>
@@ -41,15 +43,19 @@ public class UniteonHud : MonoBehaviour
         {
             yield return coroutine;
         }
-
+        if (!isGamer) yield break;
         switch ((float)_uniteon.HealthPoints / _uniteon.MaxHealthPoints)
         {
-            // Flash health border between 0% and 20% HP
+            // Flash health border between 0% and 20% HP and play low health sfx
             case <= 0f:
                 healthBar.SetFlashingHealthBorder(false);
+                AudioManager.Instance.StopSfx(2, lowHealth);
                 break;
             case <= 0.2f:
                 healthBar.SetFlashingHealthBorder(true);
+                // Only start playing low health sfx if it's not already playing
+                if (!AudioManager.Instance.IsPlayingSfx(lowHealth))
+                    AudioManager.Instance.PlaySfx(lowHealth, true, 2);
                 break;
         }
     }
@@ -59,7 +65,7 @@ public class UniteonHud : MonoBehaviour
     /// </summary>
     /// <param name="currentHealthPoints">The health points the Uniteon had before taking damage.</param>
     /// <returns>Coroutine.</returns>
-    public IEnumerator UpdateHealthText(float currentHealthPoints)
+    private IEnumerator UpdateHealthText(float currentHealthPoints)
     {
         if (healthText != null) // Only assign health text if there is place for it (only for the gamer, not for the foe)
         {
@@ -78,7 +84,7 @@ public class UniteonHud : MonoBehaviour
     /// Updates the health bar in a smooth manner.
     /// </summary>
     /// <returns>Coroutine.</returns>
-    public IEnumerator UpdateHealthBar()
+    private IEnumerator UpdateHealthBar()
     {
         yield return healthBar.SetHealthBarSmoothly((float)_uniteon.HealthPoints / _uniteon.MaxHealthPoints); // Normalize health points
     }
