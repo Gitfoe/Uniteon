@@ -9831,12 +9831,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialog:
     dialogLines:
-    - If you run into this grass, you might encounter something!
-    - A Uniteon!
+    - Walking is my passion!
   movementPattern:
-  - {x: 10, y: 0}
-  - {x: -10, y: 0}
-  timeBetweenMove: 2
+  - {x: 0, y: 4}
+  - {x: 15, y: 0}
+  - {x: 0, y: -7}
+  - {x: -5, y: 0}
+  - {x: 0, y: -5}
+  - {x: -12, y: 0}
+  - {x: 0, y: 3}
+  - {x: -4, y: 0}
+  - {x: 0, y: 5}
+  - {x: 6, y: 0}
+  timeBetweenMove: 1
 --- !u!61 &1147297210
 BoxCollider2D:
   m_ObjectHideFlags: 0
