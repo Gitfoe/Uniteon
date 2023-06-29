@@ -74,4 +74,21 @@ public class Character : MonoBehaviour
         return !Physics2D.BoxCast(position, new Vector2(0.2f, 0.2f), 0f, direction, difference.magnitude - 1,
             UnityLayers.Instance.ObjectsLayer | UnityLayers.Instance.InteractableLayer | UnityLayers.Instance.PlayerLayer); // True if collider found in area
     }
+
+    /// <summary>
+    /// Faces an NPC towards a target direction.
+    /// </summary>
+    /// <param name="targetDirection">The position the character needs to point towards.</param>
+    /// <returns></returns>
+    public void LookTowards(Vector3 targetDirection)
+    {
+        var position = transform.position;
+        var xDifference = Mathf.Floor(targetDirection.x) - Mathf.Floor(position.x);
+        var yDifference = Mathf.Floor(targetDirection.y) - Mathf.Floor(position.y);
+        if (xDifference == 0 || yDifference == 0) // Only check cardinal directions, not diagonal
+        {
+            _animator.MoveX = Mathf.Clamp(xDifference, -1f, 1f); // Pass variables through to animator
+            _animator.MoveY = Mathf.Clamp(yDifference, -1f, 1f);
+        }
+    }
 }

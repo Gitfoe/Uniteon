@@ -7,5 +7,5 @@ using UnityEngine;
 /// </summary>
 public interface Interactable
 {
-    public void Interact();
+    public void Interact(Transform initiator);
 }
