@@ -84,7 +84,10 @@ public enum Statistic
     Defense,
     SpecialAttack,
     SpecialDefense,
-    Speed
+    Speed,
+    // Not actual stats, but used for checking move accuracy
+    Accuracy,
+    Evasion
 }
 
 /// <summary>

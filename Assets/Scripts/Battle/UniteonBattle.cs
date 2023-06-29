@@ -240,7 +240,7 @@ public class UniteonBattle : MonoBehaviour
         // Enable going back to the action screen
         else if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Backspace))
         {
-            AudioManager.Instance.PlaySfx(_audioClips["thud"]);
+            AudioManager.Instance.PlaySfx(_audioClips["aButton"]);
             partyScreen.gameObject.SetActive(false);
             ActionSelection(); 
         }
@@ -297,35 +297,44 @@ public class UniteonBattle : MonoBehaviour
         // Play Uniteon attack animation and sfx
         AudioManager.Instance.PlaySfx(_audioClips["tackle"], panning: panning);
         yield return attackingUnit.PlayAttackAnimations();
-        // Save health points before taking any damage
-        int previousHealthPoints = defendingUnit.Uniteon.HealthPoints;
-        // Check if move is a status move
-        if (move.MoveBase.MoveCategory == MoveCategory.Status)
+        // Check if the move missed
+        if (!CheckMoveHits(move, attackingUnit.Uniteon, defendingUnit.Uniteon))
+            yield return battleDialogBox.TypeOutDialog(
+                $"{attackingUnit.Uniteon.UniteonBase.UniteonName}'s attack missed!");
+        else // If the move hits
         {
-            yield return MoveEffects(attackingUnit, defendingUnit, move, panning);
+            // Save health points before taking any damage
+            int previousHealthPoints = defendingUnit.Uniteon.HealthPoints;
+            // Check if move is a status move
+            if (move.MoveBase.MoveCategory == MoveCategory.Status)
+            {
+                yield return MoveEffects(attackingUnit, defendingUnit, move, panning);
+            }
+            // If not status move, calculate damage
+            else
+            {
+                DamageData damageData = defendingUnit.Uniteon.TakeDamage(move, attackingUnit.Uniteon);
+                // Play Uniteon damage animation and sfx
+                defendingUnit.PlayHitAnimation();
+                PlayHitSfx(damageData, _battleSequenceState);
+                // Show damage decay on health bar
+                yield return defendingUnit.UniteonHud.UpdateHealthPoints(previousHealthPoints);
+                // Write effectiveness/critical hit to the dialog box
+                yield return WriteDamageData(damageData);
+            }
+
+            // If Uniteon fainted, write to dialog box, play faint animation and cry
+            if (defendingUnit.Uniteon.HealthPoints <= 0)
+            {
+                AudioManager.Instance.StopSfx(2); // Stop low health sfx
+                yield return battleDialogBox.TypeOutDialog(
+                    $"{defendingUnit.Uniteon.UniteonBase.UniteonName} fainted!");
+                yield return defendingUnit.Uniteon.PlayCry(panning: -panning, fainted: true);
+                AudioManager.Instance.PlaySfx(_audioClips["faint"], panning: -panning);
+                yield return defendingUnit.PlayFaintAnimation();
+                CheckBattleOver(defendingUnit);
+            }
         }
-        // If not status move, calculate damage
-        else
-        {
-            DamageData damageData = defendingUnit.Uniteon.TakeDamage(move, attackingUnit.Uniteon);
-            // Play Uniteon damage animation and sfx
-            defendingUnit.PlayHitAnimation();
-            PlayHitSfx(damageData, _battleSequenceState);
-            // Show damage decay on health bar
-            yield return defendingUnit.UniteonHud.UpdateHealthPoints(previousHealthPoints);
-            // Write effectiveness/critical hit to the dialog box
-            yield return WriteDamageData(damageData);
-        }
-        // If Uniteon fainted, write to dialog box, play faint animation and cry
-        if (defendingUnit.Uniteon.HealthPoints <= 0)
-        {
-            AudioManager.Instance.StopSfx(2); // Stop low health sfx
-            yield return battleDialogBox.TypeOutDialog($"{defendingUnit.Uniteon.UniteonBase.UniteonName} has fainted!");
-            yield return defendingUnit.Uniteon.PlayCry(panning: -panning, fainted: true);
-            AudioManager.Instance.PlaySfx(_audioClips["faint"], panning: -panning);
-            yield return defendingUnit.PlayFaintAnimation();
-            CheckBattleOver(defendingUnit);
-        } 
     }
 
     /// <summary>
@@ -341,36 +350,14 @@ public class UniteonBattle : MonoBehaviour
         MoveEffects effects = move.MoveBase.MoveEffects;
         if (effects != null)
         {
-            bool statsRaised;
-            if (move.MoveBase.MoveTarget == MoveTarget.Gamer)
-            {
-                statsRaised = attackingUnit.Uniteon.ApplyBoosts(effects.Boosts);
-                if (statsRaised)
-                {
-                    attackingUnit.PlayStatRaisedAnimation(true);
-                    AudioManager.Instance.PlaySfx(_audioClips["statRaised"], panning: panning);
-                }
-                else
-                {
-                    attackingUnit.PlayStatRaisedAnimation(false);
-                    AudioManager.Instance.PlaySfx(_audioClips["statFell"], panning: panning);
-                }
-            }
-            else
-            {
-                statsRaised = defendingUnit.Uniteon.ApplyBoosts(effects.Boosts);
-                if (statsRaised)
-                {
-                    defendingUnit.PlayStatRaisedAnimation(true);
-                    AudioManager.Instance.PlaySfx(_audioClips["statRaised"], panning: -panning);
-                }
-                else
-                {
-                    defendingUnit.PlayStatRaisedAnimation(false);
-                    AudioManager.Instance.PlaySfx(_audioClips["statFell"], panning: -panning);
-                }
-            }
-            yield return new WaitForSeconds(_audioClips["statRaised"].length); // It doesn't matter which one we use since they're the same length
+            bool statsRaised = false;
+            UniteonUnit targetUnit = (move.MoveBase.MoveTarget == MoveTarget.Gamer) ? attackingUnit : defendingUnit;
+            statsRaised = targetUnit.Uniteon.ApplyBoosts(effects.Boosts);
+            targetUnit.PlayStatRaisedAnimation(statsRaised);
+            string sfxClip = (statsRaised) ? "statRaised" : "statFell";
+            float audioPanning = (move.MoveBase.MoveTarget == MoveTarget.Gamer) ? panning : -panning;
+            AudioManager.Instance.PlaySfx(_audioClips[sfxClip], panning: audioPanning);
+            yield return new WaitForSeconds(_audioClips[sfxClip].length);
         }
         yield return WriteStatusMessages(attackingUnit.Uniteon);
         yield return WriteStatusMessages(defendingUnit.Uniteon);
@@ -406,6 +393,32 @@ public class UniteonBattle : MonoBehaviour
             ActionSelection();
         else
             StartCoroutine(ExecuteFoeMove());
+    }
+
+    /// <summary>
+    /// Checks if a move hits by checking the accuracy and the modifiers.
+    /// </summary>
+    /// <param name="move">The move that got executed.</param>
+    /// <param name="attacker">The attacking Uniteon to check its accuracy.</param>
+    /// <param name="defender">The defending Uniteon to check its evasiveness.</param>
+    /// <returns>True if hit and false if miss.</returns>
+    private bool CheckMoveHits(Move move, Uniteon attacker, Uniteon defender)
+    {
+        if (move.MoveBase.NeverMisses)
+            return true;
+        float moveAccuracy = move.MoveBase.Accuracy;
+        int accuracy = attacker.StatBoosts[Statistic.Accuracy];
+        int evasion = defender.StatBoosts[Statistic.Evasion];
+        float[] boostValues = new float[] { 1f, 4f / 3f, 3f, 5f / 3f, 2f, 7f / 3f, 8f / 3f, 3f }; // Multiplication amounts for each boost
+        if (accuracy > 0)
+            moveAccuracy *= boostValues[accuracy];
+        else
+            moveAccuracy /= boostValues[-accuracy];
+        if (evasion > 0)
+            moveAccuracy *= boostValues[evasion];
+        else
+            moveAccuracy /= boostValues[-evasion];
+        return Random.Range(1, 101) <= moveAccuracy;
     }
     
     /// <summary>

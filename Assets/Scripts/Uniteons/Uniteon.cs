@@ -127,6 +127,8 @@ public class Uniteon
             { Statistic.SpecialAttack, 0 },
             { Statistic.SpecialDefense, 0 },
             { Statistic.Speed, 0 },
+            { Statistic.Accuracy, 0 },
+            { Statistic.Evasion, 0 }
         };
     }
 
