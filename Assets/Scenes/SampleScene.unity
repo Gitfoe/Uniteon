@@ -9790,6 +9790,8 @@ MonoBehaviour:
   typeText: {fileID: 959780316}
   selectedColour: {r: 0.2772042, g: 0.6037736, b: 0.58200234, a: 1}
   deselectedColour: {r: 0.19607845, g: 0.19607845, b: 0.19607845, a: 1}
+  lowPPColour: {r: 0.8207547, g: 0.6046685, b: 0.113563456, a: 0}
+  noPPColour: {r: 0.8962264, g: 0.12400607, b: 0.12400607, a: 0}
 --- !u!1 &1262974485
 GameObject:
   m_ObjectHideFlags: 0
@@ -10477,8 +10479,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniteons:
+  - uniteonBase: {fileID: 11400000, guid: 6dbd16654a5094f4ab1fd566e9d95b00, type: 2}
+    level: 1
+    healthPoints: 0
   - uniteonBase: {fileID: 11400000, guid: 14e8cc068eb8177498bf6c3f49e6df63, type: 2}
-    level: 100
+    level: 7
     healthPoints: 0
   - uniteonBase: {fileID: 11400000, guid: 6aff78bd22906c546901e6f1ec7cf710, type: 2}
     level: 15
@@ -10565,6 +10570,7 @@ MonoBehaviour:
   - clipName: statFell
     clip: {fileID: 8300000, guid: 72ac76b0e33cc2646bd54b2b56e735b8, type: 3}
   partyScreen: {fileID: 1316574871}
+  defaultMove: {fileID: 11400000, guid: 7fc6fbc6efe38be4a92df4c9be06d3ac, type: 2}
 --- !u!1 &1529288902
 GameObject:
   m_ObjectHideFlags: 0

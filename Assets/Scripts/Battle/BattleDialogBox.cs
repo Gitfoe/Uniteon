@@ -16,6 +16,8 @@ public class BattleDialogBox : MonoBehaviour
     [SerializeField] private Text typeText;
     [SerializeField] private Color selectedColour;
     [SerializeField] private Color deselectedColour;
+    [SerializeField] private Color lowPPColour;
+    [SerializeField] private Color noPPColour;
 
     /// <summary>
     /// Sets dialog text immediately.
@@ -61,25 +63,9 @@ public class BattleDialogBox : MonoBehaviour
     /// Thins the dialog box to allow room for action selector..
     /// </summary>
     /// <param name="thin">To thin (true) or to widen (false).</param>
-    private void ThinDialogBox(bool thin)
-    {
+    private void ThinDialogBox(bool thin) =>
         dialogText.rectTransform.offsetMax = thin ? new Vector2(-300f, dialogText.rectTransform.offsetMax.y) : new Vector2(-25f, dialogText.rectTransform.offsetMax.y);
-    }
 
-
-    /// <summary>
-    /// Highlights the correct selection in some texts list.
-    /// </summary>
-    /// <param name="selectedText">The selected text.</param>
-    /// <param name="textsList">The list that the selection has to take place in.</param>
-    private void HighlightSelectionInList(int selectedText, List<Text> textsList)
-    {
-        for (var i = 0; i < textsList.Count; i++)
-        {
-            textsList[i].color = i == selectedText ? selectedColour : deselectedColour;
-        }
-    }
-    
     /// <summary>
     /// Highlights the correct action selection.
     /// </summary>
@@ -96,6 +82,24 @@ public class BattleDialogBox : MonoBehaviour
         powerPointsText.text = $"PP {uniteonMove.PowerPoints}/{uniteonMove.MoveBase.PowerPoints}";
         typeText.text = uniteonMove.MoveBase.MoveType.ToString();
         HighlightSelectionInList(selectedMove, moveTexts);
+        // Change colour of PP text depending on PP amount
+        if (uniteonMove.PowerPoints <= 0)
+            powerPointsText.color = noPPColour;
+        else if ((float)uniteonMove.PowerPoints / uniteonMove.MoveBase.PowerPoints <= 0.5)
+            powerPointsText.color = lowPPColour;
+    }
+    
+    /// <summary>
+    /// Highlights the correct selection in some texts list.
+    /// </summary>
+    /// <param name="selectedText">The selected text.</param>
+    /// <param name="textsList">The list that the selection has to take place in.</param>
+    private void HighlightSelectionInList(int selectedText, List<Text> textsList)
+    {
+        for (var i = 0; i < textsList.Count; i++)
+        {
+            textsList[i].color = i == selectedText ? selectedColour : deselectedColour;
+        }
     }
 
     /// <summary>

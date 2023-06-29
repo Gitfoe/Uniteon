@@ -15,10 +15,6 @@ public class Move
     // Constructor
     public Move(MoveBase moveBase)
     {
-        if (moveBase == null) // Debug
-        {
-            throw new ArgumentNullException("moveBase", "MoveBase cannot be null");
-        }
         MoveBase = moveBase;
         PowerPoints = moveBase.PowerPoints;
     }

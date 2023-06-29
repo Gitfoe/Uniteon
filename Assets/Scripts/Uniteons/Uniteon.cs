@@ -12,10 +12,11 @@ public class Uniteon
     [SerializeField] private UniteonBase uniteonBase;
     [SerializeField] private int level;
     [SerializeField] private int healthPoints;
-    
+
     // Properties
     public UniteonBase UniteonBase => uniteonBase;
     public int Level => level;
+
     public int HealthPoints
     {
         get => healthPoints;
@@ -66,7 +67,7 @@ public class Uniteon
             { Statistic.SpecialDefense, Mathf.FloorToInt((UniteonBase.SpecialDefense * Level) / 100f) + 5 },
             { Statistic.Speed, Mathf.FloorToInt((UniteonBase.Speed  * Level) / 100f) + 5 } 
         };
-        MaxHealthPoints = Mathf.FloorToInt((UniteonBase.MaxHealthPoints * Level) / 100f) + 10;
+        MaxHealthPoints = Mathf.FloorToInt((UniteonBase.MaxHealthPoints * Level) / 100f) + 10 + Level;
     }
 
     /// <summary>
@@ -82,6 +83,18 @@ public class Uniteon
         float[] boostValues = new float[] { 1f, 1.5f, 2f, 2.5f, 3f, 3.5f, 4f }; // Multiplication amounts for each boost
         originalStat = boost >= 0 ? Mathf.FloorToInt(originalStat * boostValues[boost]) : Mathf.FloorToInt(originalStat / boostValues[-boost]);
         return originalStat;
+    }
+
+    /// <summary>
+    /// Gets a random move with available PP.
+    /// </summary>
+    /// <returns>Random move, or if none available, null.</returns>
+    public Move GetRandomMove()
+    {
+        List<Move> movesWithPP = new List<Move>();
+        movesWithPP = Moves.Where(x => x.PowerPoints > 0).ToList();
+        int randomMove = Random.Range(0, movesWithPP.Count);
+        return movesWithPP.Count > 0 ? movesWithPP[randomMove] : null;
     }
 
     /// <summary>

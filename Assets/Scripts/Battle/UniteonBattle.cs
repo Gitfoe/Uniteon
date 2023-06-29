@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class UniteonBattle : MonoBehaviour
@@ -14,6 +13,7 @@ public class UniteonBattle : MonoBehaviour
     [SerializeField] private BattleDialogBox battleDialogBox;
     [SerializeField] private List<UniteonSfx> audioClips;
     [SerializeField] private PartyScreen partyScreen;
+    [SerializeField] private MoveBase defaultMove;
     private BattleSequenceState _battleSequenceState;
     private int _actionSelection;
     private int _moveSelection;
@@ -63,7 +63,7 @@ public class UniteonBattle : MonoBehaviour
     
     #region Selection
     /// <summary>
-    /// Every frame, check for a change in action selection, if set active by the GameController.
+    /// Every frame, check for a change in state, and then handle accordingly by the GameController.
     /// </summary>
     public void ControllerUpdate()
     {
@@ -74,6 +74,9 @@ public class UniteonBattle : MonoBehaviour
                 break;
             case BattleSequenceState.MoveSelection:
                 HandleMoveSelection();
+                break;
+            case BattleSequenceState.NoMoveSelection:
+                HandleNoMovesLeft();
                 break;
             case BattleSequenceState.PartyScreenSelect or BattleSequenceState.PartyScreenFaint:
                 HandlePartyScreenSelection();
@@ -96,12 +99,17 @@ public class UniteonBattle : MonoBehaviour
     /// </summary>
     private void MoveSelection()
     {
-        _battleSequenceState = BattleSequenceState.MoveSelection;
+        if (uniteonUnitGamer.Uniteon.GetRandomMove() == null)
+            _battleSequenceState = BattleSequenceState.NoMoveSelection;
+        else
+        {
+            _battleSequenceState = BattleSequenceState.MoveSelection;
+            battleDialogBox.EnableDialogText(false);
+            battleDialogBox.EnableMoveSelector(true);
+        }
         battleDialogBox.EnableActionSelector(false);
-        battleDialogBox.EnableDialogText(false);
-        battleDialogBox.EnableMoveSelector(true);
     }
-    
+
     /// <summary>
     /// Opens the party screen.
     /// </summary>
@@ -198,10 +206,16 @@ public class UniteonBattle : MonoBehaviour
         battleDialogBox.UpdateMoveSelection(_moveSelection, uniteonUnitGamer.Uniteon.Moves[_moveSelection]);
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
         {
-            AudioManager.Instance.PlaySfx(_audioClips["aButton"]);
-            battleDialogBox.EnableMoveSelector(false);
-            battleDialogBox.EnableDialogText(true);
-            StartCoroutine(ExecuteBattleTurns(BattleAction.Move));
+            var move = uniteonUnitGamer.Uniteon.Moves[_moveSelection];
+            if (move.PowerPoints == 0) 
+                AudioManager.Instance.PlaySfx(_audioClips["aButton"]);
+            else
+            {
+                AudioManager.Instance.PlaySfx(_audioClips["aButton"]);
+                battleDialogBox.EnableMoveSelector(false);
+                battleDialogBox.EnableDialogText(true);
+                StartCoroutine(ExecuteBattleTurns(BattleAction.Move));
+            }
         }
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Backspace))
         {
@@ -255,25 +269,46 @@ public class UniteonBattle : MonoBehaviour
             ActionSelection(); 
         }
     }
+    
+    /// <summary>
+    /// Handles when the gamer clicked on Attack without any usable moves left.
+    /// </summary>
+    /// <returns>Coroutine.</returns>
+    private void HandleNoMovesLeft()
+    {
+        StartCoroutine(ExecuteBattleTurns(BattleAction.Move));
+    }
     #endregion
 
     #region Move Sequences
     private IEnumerator ExecuteBattleTurns(BattleAction gamerAction) // Only gamer's action as foe cannot perform any other action than move
     {
+        var prevBattleSequenceState = _battleSequenceState;
         _battleSequenceState = BattleSequenceState.ExecutingTurn;
         if (gamerAction == BattleAction.Move)
         {
-            // Get the selected move for the gamer
-            uniteonUnitGamer.Uniteon.ExecutingMove = uniteonUnitGamer.Uniteon.Moves[_moveSelection];
-            // Quite simple battle AI - but get a random move of the foe
-            uniteonUnitFoe.Uniteon.ExecutingMove = uniteonUnitFoe.Uniteon.Moves[Random.Range(0, uniteonUnitFoe.Uniteon.Moves.Count)];
+            // Get the selected move for the gamer, or if none available, get Struggle
+            if (prevBattleSequenceState == BattleSequenceState.NoMoveSelection)
+                uniteonUnitGamer.Uniteon.ExecutingMove = new Move(defaultMove);
+            else
+                uniteonUnitGamer.Uniteon.ExecutingMove = uniteonUnitGamer.Uniteon.Moves[_moveSelection];
+            // Quite simple battle AI - but get a random move of the foe, and if no move is available, struggle
+            uniteonUnitFoe.Uniteon.ExecutingMove = uniteonUnitFoe.Uniteon.GetRandomMove() ?? new Move(defaultMove);
             // Check who goes first
+            int gamerMovePriority = uniteonUnitGamer.Uniteon.ExecutingMove.MoveBase.Priority;
+            int foeMovePriority = uniteonUnitFoe.Uniteon.ExecutingMove.MoveBase.Priority;
             bool gamerFirst = false;
-            if (uniteonUnitGamer.Uniteon.Speed == uniteonUnitFoe.Uniteon.Speed) // If speeds are tied, randomize who goes first
-                gamerFirst = (Random.Range(0, 2) == 0);
-            if (uniteonUnitGamer.Uniteon.Speed > uniteonUnitFoe.Uniteon.Speed || gamerFirst)
+            if (gamerMovePriority > foeMovePriority)
                 gamerFirst = true;
-            // Assign first unit to the unit who moves first
+            else if (gamerMovePriority == foeMovePriority)
+            {
+                if (uniteonUnitGamer.Uniteon.Speed ==
+                    uniteonUnitFoe.Uniteon.Speed) // If speeds are tied, randomize who goes first
+                    gamerFirst = (Random.Range(0, 2) == 0);
+                if (uniteonUnitGamer.Uniteon.Speed > uniteonUnitFoe.Uniteon.Speed || gamerFirst)
+                    gamerFirst = true;
+            }
+            // Assign first unit var to the unit who is allowed to move first
             UniteonUnit firstUnit = (gamerFirst) ? uniteonUnitGamer : uniteonUnitFoe;
             UniteonUnit secondUnit = (gamerFirst) ? uniteonUnitFoe : uniteonUnitGamer;
             Uniteon secondUniteon = secondUnit.Uniteon;
@@ -312,8 +347,10 @@ public class UniteonBattle : MonoBehaviour
     {
         // Determine the audio channel panning depending on who is attacking
         float panning = attackingUnit.IsGamerUniteon ? -0.72f : 0.72f;
-        // Deduct PP for the executed move
-        move.PowerPoints--;
+        if (move.MoveBase.PowerPoints < 0) // Only Struggle has -1 PP by default, so if the move is Struggle, no moves are left
+            yield return battleDialogBox.TypeOutDialog($"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} has no moves left!");
+        else
+            move.PowerPoints--; // Deduct PP for the executed move
         // Write move to the dialog box
         yield return battleDialogBox.TypeOutDialog($"{attackingUnit.Uniteon.UniteonBase.UniteonName} used {move.MoveBase.MoveName}!");
         // Play Uniteon attack animation and sfx
@@ -362,8 +399,8 @@ public class UniteonBattle : MonoBehaviour
     /// <summary>
     /// Applies move effects to the battlefield.
     /// </summary>
-    /// <param name="attacking">The attacking Uniteon.</param>
-    /// <param name="defending">The defending Uniteon.</param>
+    /// <param name="attackingUnit">The attacking Uniteon unit.</param>
+    /// <param name="defendingUnit">The defending Uniteon unit.</param>
     /// <param name="move">The executed move.</param>
     /// <param name="panning">The audio balance value for the sfx.</param>
     /// <returns>Coroutine.</returns>
@@ -527,6 +564,7 @@ public enum BattleSequenceState
     Start,
     ActionSelection,
     MoveSelection,
+    NoMoveSelection, // If there are no remaining moves
     ExecutingTurn,
     Busy,
     PartyScreenSelect,

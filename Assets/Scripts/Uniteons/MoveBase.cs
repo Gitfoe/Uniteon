@@ -17,6 +17,7 @@ public class MoveBase : ScriptableObject
     [SerializeField] private int powerPoints;
     [SerializeField] private int power;
     [SerializeField] private int accuracy;
+    [SerializeField] private int priority;
     [SerializeField] private bool neverMisses;
     [SerializeField] private MoveEffects moveEffects;
     [SerializeField] private MoveTarget moveTarget;
@@ -30,6 +31,7 @@ public class MoveBase : ScriptableObject
     public int PowerPoints => powerPoints;
     public int Power => power;
     public int Accuracy => accuracy;
+    public int Priority => priority;
     public bool NeverMisses => neverMisses;
     public MoveEffects MoveEffects => moveEffects;
     public MoveTarget MoveTarget => moveTarget;
