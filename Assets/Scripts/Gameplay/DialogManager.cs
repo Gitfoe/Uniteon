@@ -21,6 +21,7 @@ public class DialogManager : MonoBehaviour
 
     // Properties
     public static DialogManager Instance { get; private set; }
+    public bool IsOpen { get; private set; }
 
     /// <summary>
     /// Makes this instance publicly available.
@@ -36,6 +37,7 @@ public class DialogManager : MonoBehaviour
     {
         yield return new WaitForEndOfFrame(); // Wait 1 frame because GetKeyDown is still active in the same frame
         OnShowDialog?.Invoke();
+        IsOpen = true;
         AudioManager.Instance.PlaySfx(aButton);
         _dialog = dialog;
         dialogBox.SetActive(true);
@@ -57,6 +59,7 @@ public class DialogManager : MonoBehaviour
             }
             else
             {
+                IsOpen = false;
                 _currentDialogLine = 0;
                 dialogBox.SetActive(false);
                 OnCloseDialog?.Invoke();
