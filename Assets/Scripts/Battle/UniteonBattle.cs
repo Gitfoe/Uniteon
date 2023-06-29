@@ -300,18 +300,34 @@ public class UniteonBattle : MonoBehaviour
         // Play Uniteon attack animation and sfx
         AudioManager.Instance.PlaySfx(tackle, panning: panning);
         yield return attackingUnit.PlayAttackAnimations();
-        // Calculate damage
+        // Save health points before taking any damage
         int previousHealthPoints = defendingUnit.Uniteon.HealthPoints;
-        DamageData damageData = defendingUnit.Uniteon.TakeDamage(move, attackingUnit.Uniteon);
-        // Play Uniteon damage animation and sfx
-        defendingUnit.PlayHitAnimation();
-        PlayHitSfx(damageData, _battleSequenceState);
-        // Show damage decay on health bar
-        yield return defendingUnit.UniteonHud.UpdateHealthPoints(previousHealthPoints);
-        // Write effectiveness/critical hit to the dialog box
-        yield return WriteDamageData(damageData);
+        // Check if move is a status move
+        if (move.MoveBase.MoveCategory == MoveCategory.Status)
+        {
+            MoveEffects effects = move.MoveBase.MoveEffects;
+            if (effects != null)
+            {
+                if (move.MoveBase.MoveMoveTarget == MoveTarget.Gamer)
+                    attackingUnit.Uniteon.ApplyBoosts(effects.Boosts);
+                else
+                    defendingUnit.Uniteon.ApplyBoosts(effects.Boosts);
+            }
+        }
+        // If not status move, calculate damage
+        else
+        {
+            DamageData damageData = defendingUnit.Uniteon.TakeDamage(move, attackingUnit.Uniteon);
+            // Play Uniteon damage animation and sfx
+            defendingUnit.PlayHitAnimation();
+            PlayHitSfx(damageData, _battleSequenceState);
+            // Show damage decay on health bar
+            yield return defendingUnit.UniteonHud.UpdateHealthPoints(previousHealthPoints);
+            // Write effectiveness/critical hit to the dialog box
+            yield return WriteDamageData(damageData);
+        }
         // If Uniteon fainted, write to dialog box, play faint animation and cry
-        if (damageData.Fainted)
+        if (defendingUnit.Uniteon.HealthPoints <= 0)
         {
             AudioManager.Instance.StopSfx(2); // Stop low health sfx
             yield return battleDialogBox.TypeOutDialog($"{defendingUnit.Uniteon.UniteonBase.UniteonName} has fainted!");

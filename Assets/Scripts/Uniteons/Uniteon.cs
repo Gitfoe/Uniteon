@@ -21,12 +21,20 @@ public class Uniteon
         set => healthPoints = value;
     }
     public List<Move> Moves { get; set; }
+    public Dictionary<Statistic, int> Stats { get; private set; }
+    public Dictionary<Statistic, int> StatBoosts { get; private set; } // Boost up to 6x
+    
+    // Statistic properties
+    public int MaxHealthPoints { get; private set; }
+    public int Attack => GetBattleStat(Statistic.Attack);
+    public int Defense => GetBattleStat(Statistic.Defense);
+    public int SpecialAttack => GetBattleStat(Statistic.SpecialAttack);
+    public int SpecialDefense => GetBattleStat(Statistic.SpecialDefense);
+    public int Speed => GetBattleStat(Statistic.Speed);
 
     // Constructor
     public void InitialiseUniteon()
     {
-        // Set Uniteon HP to max
-        HealthPoints = MaxHealthPoints;
         // Add moves to Uniteon
         Moves = new List<Move>();
         foreach (var move in UniteonBase.LearnableMoves)
@@ -36,17 +44,65 @@ public class Uniteon
             if (Moves.Count >= 4)
                 break; // After the Uniteon already knows 4 moves, don't learn more moves
         }
+        CalculateStats();
+        HealthPoints = MaxHealthPoints; // Set Uniteon HP to max when launching the game
+        StatBoosts = new Dictionary<Statistic, int>() // Default to 0x boosts
+        {
+            { Statistic.Attack, 0 },
+            { Statistic.Defense, 0 },
+            { Statistic.SpecialAttack, 0 },
+            { Statistic.SpecialDefense, 0 },
+            { Statistic.Speed, 0 },
+        };
     }
 
-    // Formula's from Pokemon to calculate stats based on the current Uniteon's level
-    // https://bulbapedia.bulbagarden.net/wiki/Stat#Generation_III_onward
-    public int MaxHealthPoints => Mathf.FloorToInt((UniteonBase.MaxHealthPoints * Level) / 100f) + 10;
-    public int Attack => Mathf.FloorToInt((UniteonBase.Attack * Level) / 100f) + 5;
-    public int Defense => Mathf.FloorToInt((UniteonBase.Defense * Level) / 100f) + 5;
-    public int SpecialAttack => Mathf.FloorToInt((UniteonBase.SpecialAttack * Level) / 100f) + 5;
-    public int SpecialDefense => Mathf.FloorToInt((UniteonBase.SpecialDefense * Level) / 100f) + 5;
-    public int Speed => Mathf.FloorToInt((UniteonBase.Speed * Level) / 100f) + 5;
+    /// <summary>
+    /// Calculate stats based on formula from Pokemon to calculate stats based on the current Uniteon's level
+    /// https://bulbapedia.bulbagarden.net/wiki/Stat#Generation_III_onward
+    /// </summary>
+    private void CalculateStats()
+    {
+        Stats = new Dictionary<Statistic, int>
+        {
+            { Statistic.Attack, Mathf.FloorToInt((UniteonBase.Attack * Level) / 100f) + 5 },
+            { Statistic.Defense, Mathf.FloorToInt((UniteonBase.Defense * Level) / 100f) + 5 },
+            { Statistic.SpecialAttack, Mathf.FloorToInt((UniteonBase.SpecialAttack * Level) / 100f) + 5 },
+            { Statistic.SpecialDefense, Mathf.FloorToInt((UniteonBase.SpecialDefense * Level) / 100f) + 5 },
+            { Statistic.Speed, Mathf.FloorToInt((UniteonBase.Speed  * Level) / 100f) + 5 } 
+        };
+        MaxHealthPoints = Mathf.FloorToInt((UniteonBase.MaxHealthPoints * Level) / 100f) + 10;
+    }
 
+    /// <summary>
+    /// Retrieves the battle statistic of this Uniteon with all stat changing metrics applied.
+    /// </summary>
+    /// <param name="stat"></param>
+    /// <returns></returns>
+    private int GetBattleStat(Statistic stat)
+    {
+        int originalStat = Stats[stat];
+        // Calculate any in-battle stat boosts
+        int boost = StatBoosts[stat];
+        float[] boostValues = new float[] { 1f, 1.5f, 2f, 2.5f, 3f, 3.5f, 4f }; // Multiplication amounts for each boost
+        originalStat = boost >= 0 ? Mathf.FloorToInt(originalStat * boostValues[boost]) : Mathf.FloorToInt(originalStat / boostValues[-boost]);
+        return originalStat;
+    }
+
+    /// <summary>
+    /// Applys a statistic boost or reduction by, for instance, an item or a move.
+    /// </summary>
+    /// <param name="statBoosts"></param>
+    public void ApplyBoosts(List<StatBoost> statBoosts)
+    {
+        foreach (var statBoost in statBoosts)
+        {
+            Statistic stat = statBoost.Stat;
+            int boost = statBoost.Boost;
+            StatBoosts[stat] = Mathf.Clamp(StatBoosts[stat] + boost, -6, 6);
+            Debug.Log($"{stat} was successfully boosted to {StatBoosts[stat]}");
+        }
+    }
+    
     /// <summary>
     /// Take damage according to the official Pokemon algorithm at https://bulbapedia.bulbagarden.net/wiki/Damage
     /// </summary>

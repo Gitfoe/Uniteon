@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-[CreateAssetMenu(fileName = "Uniteon", menuName = "Uniteon/Create new Uniteon")]
+[CreateAssetMenu(fileName = "Uniteon", menuName = "Create new Uniteon")]
 public class UniteonBase : ScriptableObject
 {
     // Fields
@@ -76,6 +76,15 @@ public enum UniteonType
     Shadoweon,
     Ironeon,
     Faerieon
+}
+
+public enum Statistic
+{
+    Attack,
+    Defense,
+    SpecialAttack,
+    SpecialDefense,
+    Speed
 }
 
 /// <summary>
