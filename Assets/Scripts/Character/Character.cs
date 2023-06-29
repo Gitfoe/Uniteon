@@ -30,7 +30,7 @@ public class Character : MonoBehaviour
         var nextPos = transform.position; // transport.position = current position 
         nextPos.x += moveVector.x; // Save new position in temporary variable
         nextPos.y += moveVector.y;
-        if (!IsWalkable(nextPos))
+        if (!IsPathWalkable(nextPos))
             yield break;
         IsMoving = true;
         // Check if characters's target position & current position is greater than a very small value (Epsilon)
@@ -53,10 +53,25 @@ public class Character : MonoBehaviour
     /// </summary>
     /// <param name="nextPos">The next position the player wants to move to.</param>
     /// <returns>True if walkable and false if not.</returns>
-    private bool IsWalkable(Vector3 nextPos)
+    private bool IsTileWalkable(Vector3 nextPos)
     {
         nextPos.y -= 0.5f; // move from head to foot of player to look more natural in-game
         var getNextObject = Physics2D.OverlapCircle(nextPos, 0.2f, UnityLayers.Instance.ObjectsLayer | UnityLayers.Instance.InteractableLayer);
         return ReferenceEquals(getNextObject, null);
+    }
+
+    /// <summary>
+    /// Box cast to determine if entire walking path is clear.
+    /// </summary>
+    /// <param name="nextPos"></param>
+    /// <returns></returns>
+    private bool IsPathWalkable(Vector3 nextPos)
+    {
+        Vector3 currentPosition = transform.position;
+        Vector3 difference = nextPos - currentPosition; // Difference between target and current pos
+        Vector3 direction = difference.normalized; // Length & direction, get direction by getting normalized (same direction with length 1)
+        Vector3 position = currentPosition + direction; // Add 1 unit
+        return !Physics2D.BoxCast(position, new Vector2(0.2f, 0.2f), 0f, direction, difference.magnitude - 1,
+            UnityLayers.Instance.ObjectsLayer | UnityLayers.Instance.InteractableLayer | UnityLayers.Instance.PlayerLayer); // True if collider found in area
     }
 }

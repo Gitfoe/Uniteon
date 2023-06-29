@@ -47,12 +47,12 @@ public class SpriteAnimator
 
     public void StartAnimation()
     {
-        _currentFrame = 0;
+        _currentFrame = 1;
         _timer = 0f;
         if (_image == null)
-            _spriteRenderer.sprite = _sprites[0];
+            _spriteRenderer.sprite = _sprites[1];
         else
-            _image.sprite = _sprites[0];
+            _image.sprite = _sprites[1];
     }
 
     public void HandleUpdate()

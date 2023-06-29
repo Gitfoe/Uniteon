@@ -18,10 +18,10 @@ public class DialogManager : MonoBehaviour
     // Events
     public event Action OnShowDialog;
     public event Action OnCloseDialog;
+    public event Action OnDialogFinished;
 
     // Properties
     public static DialogManager Instance { get; private set; }
-    public bool IsOpen { get; private set; }
 
     /// <summary>
     /// Makes this instance publicly available.
@@ -32,14 +32,15 @@ public class DialogManager : MonoBehaviour
     /// Prints NPC dialog to the dialog box in the world UI.
     /// </summary>
     /// <param name="dialog">The dialog that needs to be printed.</param>
+    /// <param name="OnFinished">Method that gets ran once a dialog finished.</param>
     /// <returns>Coroutine.</returns>
-    public IEnumerator PrintDialog(Dialog dialog)
+    public IEnumerator PrintDialog(Dialog dialog, Action OnFinished = null)
     {
         yield return new WaitForEndOfFrame(); // Wait 1 frame because GetKeyDown is still active in the same frame
         OnShowDialog?.Invoke();
-        IsOpen = true;
         AudioManager.Instance.PlaySfx(aButton);
         _dialog = dialog;
+        OnDialogFinished = OnFinished;
         dialogBox.SetActive(true);
         StartCoroutine(TypeOutDialog(dialog.Lines[0]));
     }
@@ -59,9 +60,9 @@ public class DialogManager : MonoBehaviour
             }
             else
             {
-                IsOpen = false;
                 _currentDialogLine = 0;
                 dialogBox.SetActive(false);
+                OnDialogFinished?.Invoke();
                 OnCloseDialog?.Invoke();
             }
         }

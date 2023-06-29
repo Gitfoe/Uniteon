@@ -14,7 +14,7 @@ public class CharacterAnimator : MonoBehaviour
     [SerializeField] private Sprite[] walkRightSprites;
     private SpriteRenderer _spriteRenderer;
     private SpriteAnimator _currentAnimation;
-    private bool _wasPreviouslMoving;
+    private bool _wasPreviouslyMoving;
     
     // Properties
     public float MoveX { get; set; }
@@ -42,7 +42,7 @@ public class CharacterAnimator : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        var previousAnimtion = _currentAnimation;
+        var previousAnimation = _currentAnimation;
         if (MoveX == 1)
             _currentAnimation = _walkRightAnimation;
         else if (MoveX == -1)
@@ -51,12 +51,12 @@ public class CharacterAnimator : MonoBehaviour
             _currentAnimation = _walkUpAnimation;
         else if (MoveY == -1)
             _currentAnimation = _walkDownAnimation;
-        if (_currentAnimation != previousAnimtion || IsMoving != _wasPreviouslMoving)
+        if (_currentAnimation != previousAnimation || IsMoving != _wasPreviouslyMoving)
             _currentAnimation.StartAnimation();
         if (IsMoving)
             _currentAnimation.HandleUpdate();
         else
             _spriteRenderer.sprite = _currentAnimation.Sprites[0];
-        _wasPreviouslMoving = IsMoving; // Fix for sliding NPCs with short input
+        _wasPreviouslyMoving = IsMoving; // Fix for sliding NPCs with short input
     }
 }

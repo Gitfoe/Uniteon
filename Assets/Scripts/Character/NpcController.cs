@@ -24,7 +24,6 @@ public class NpcController : MonoBehaviour, Interactable
     /// </summary>
     private void Update()
     {
-        if (DialogManager.Instance.IsOpen) return; // Don't walk when dialog is open
         if (_npcState == NpcState.Idling)
         {
             _idleTimer += Time.deltaTime;
@@ -45,8 +44,10 @@ public class NpcController : MonoBehaviour, Interactable
     private IEnumerator Walk()
     {
         _npcState = NpcState.Walking;
+        Vector3 oldPosition = transform.position;
         yield return _character.Move(movementPattern[_currentPattern]);
-        _currentPattern = (_currentPattern + 1) % movementPattern.Count;
+        if (transform.position != oldPosition) // Only increment pattern count if NPC walked
+            _currentPattern = (_currentPattern + 1) % movementPattern.Count;
         _npcState = NpcState.Idling;
     }
 
@@ -56,12 +57,20 @@ public class NpcController : MonoBehaviour, Interactable
     public void Interact()
     {
         if (_npcState == NpcState.Idling)
-            StartCoroutine(DialogManager.Instance.PrintDialog(dialog));
+        {
+            _npcState = NpcState.Dialog;
+            StartCoroutine(DialogManager.Instance.PrintDialog(dialog, () =>
+            { // Go back to the idling state once the dialog is over
+                _idleTimer = 0f;
+                _npcState = NpcState.Idling;
+            }));
+        }
     }
 }
 
 public enum NpcState
 {
     Idling,
-    Walking 
+    Walking,
+    Dialog
 }
