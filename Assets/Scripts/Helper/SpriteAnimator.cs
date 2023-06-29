@@ -8,12 +8,16 @@ using UnityEngine.UI;
 /// </summary>
 public class SpriteAnimator
 {
-    private Sprite[] _sprites;
-    private SpriteRenderer _spriteRenderer;
-    private Image _image;
-    private float _framerate;
+    // Fields
+    private readonly Sprite[] _sprites;
+    private readonly SpriteRenderer _spriteRenderer;
+    private readonly Image _image;
+    private readonly float _framerate;
     private int _currentFrame;
     private float _timer;
+    
+    // Properties
+    public Sprite[] Sprites => _sprites;
 
     /// <summary>
     /// Animates multiple frames of a sprite.

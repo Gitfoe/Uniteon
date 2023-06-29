@@ -17,13 +17,10 @@ public class GamerController : MonoBehaviour
     [SerializeField] private AudioClip sceneMusic;
     [SerializeField] private AudioClip wildMusicIntro;
     [SerializeField] private AudioClip wildMusicLoop;
-    private Animator _animator;
+    private CharacterAnimator _animator;
     private bool _isMoving;
     private Vector2 _gamerInput;
     private Vector2 _previousGamerInput;
-    private static readonly int MoveX = Animator.StringToHash("moveX");
-    private static readonly int MoveY = Animator.StringToHash("moveY");
-    private static readonly int IsMoving = Animator.StringToHash("isMoving");
     private float _cameraSize;
     private bool _inTransition;
     
@@ -35,7 +32,7 @@ public class GamerController : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        _animator = GetComponent<Animator>();
+        _animator = GetComponent<CharacterAnimator>();
         _cameraSize = mainCamera.orthographicSize;
         _inTransition = false;
         AudioManager.Instance.PlayMusic(sceneMusic);
@@ -71,15 +68,15 @@ public class GamerController : MonoBehaviour
                 }
                 else
                     _previousGamerInput = _gamerInput; // Save previous gamer input to know what to do with diagonal movements
-                _animator.SetFloat(MoveX, _gamerInput.x); // Pass variables through to animator
-                _animator.SetFloat(MoveY, _gamerInput.y);
+                _animator.MoveX = _gamerInput.x; // Pass variables through to animator
+                _animator.MoveY = _gamerInput.y;
                 var nextPos = transform.position; // transport.position = current position 
                 nextPos.x += _gamerInput.x; // Save new position in temporary variable
                 nextPos.y += _gamerInput.y;
                 if (IsWalkable(nextPos))
                     StartCoroutine(Move(nextPos));
             }
-            _animator.SetBool(IsMoving, _isMoving);
+            _animator.IsMoving = _isMoving;
             if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
                 Interact();
         }
@@ -130,7 +127,7 @@ public class GamerController : MonoBehaviour
         if (Random.Range(1, 101) <= 10)
         {
             _inTransition = true;
-            _animator.SetBool(IsMoving, false);
+            _animator.IsMoving = false;
             // Start battle transition
             AudioManager.Instance.PlayMusic(wildMusicIntro, wildMusicLoop);
             var sequence = DOTween.Sequence();
@@ -143,7 +140,7 @@ public class GamerController : MonoBehaviour
 
     private void Interact()
     {
-        Vector3 faceDir = new Vector3(_animator.GetFloat(MoveX), _animator.GetFloat(MoveY));
+        Vector3 faceDir = new Vector3(_animator.MoveX, _animator.MoveY);
         Vector3 interactPos = transform.position + faceDir;
         Collider2D collider = Physics2D.OverlapCircle(interactPos, 0.3f, interactableLayer);
         if (collider != null)

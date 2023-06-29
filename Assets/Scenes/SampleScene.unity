@@ -10600,8 +10600,8 @@ GameObject:
   - component: {fileID: 1477238025}
   - component: {fileID: 1477238024}
   - component: {fileID: 1477238026}
-  - component: {fileID: 1477238027}
   - component: {fileID: 1477238028}
+  - component: {fileID: 1477238029}
   m_Layer: 0
   m_Name: Gamer
   m_TagString: Untagged
@@ -10705,26 +10705,6 @@ MonoBehaviour:
   sceneMusic: {fileID: 8300000, guid: 0d21a5938f3449a4faaa7ef9503e5c33, type: 3}
   wildMusicIntro: {fileID: 8300000, guid: b5373601505befc429a0600ff447cbc8, type: 3}
   wildMusicLoop: {fileID: 8300000, guid: e967ee42f42f25047883cb4a03e23e99, type: 3}
---- !u!95 &1477238027
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1477238023}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 1b8af7ab91a49774fb6fdee2ca121cc0, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &1477238028
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10756,6 +10736,38 @@ MonoBehaviour:
   - uniteonBase: {fileID: 11400000, guid: 6dbd16654a5094f4ab1fd566e9d95b00, type: 2}
     level: 1
     healthPoints: 0
+--- !u!114 &1477238029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1477238023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb5f5259f36276046b244c0dd3d9bc1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  walkUpSprites:
+  - {fileID: -983864492, guid: 6c6e91935e8baa644acf7bb2af3f6121, type: 3}
+  - {fileID: 2098900242, guid: 6c6e91935e8baa644acf7bb2af3f6121, type: 3}
+  - {fileID: -1692901976, guid: 6c6e91935e8baa644acf7bb2af3f6121, type: 3}
+  - {fileID: -1275842782, guid: 6c6e91935e8baa644acf7bb2af3f6121, type: 3}
+  walkDownSprites:
+  - {fileID: -1432089511, guid: 6c6e91935e8baa644acf7bb2af3f6121, type: 3}
+  - {fileID: 484105547, guid: 6c6e91935e8baa644acf7bb2af3f6121, type: 3}
+  - {fileID: 1858852351, guid: 6c6e91935e8baa644acf7bb2af3f6121, type: 3}
+  - {fileID: -1769397312, guid: 6c6e91935e8baa644acf7bb2af3f6121, type: 3}
+  walkLeftSprites:
+  - {fileID: -1824411386, guid: 6c6e91935e8baa644acf7bb2af3f6121, type: 3}
+  - {fileID: -159079509, guid: 6c6e91935e8baa644acf7bb2af3f6121, type: 3}
+  - {fileID: 384949871, guid: 6c6e91935e8baa644acf7bb2af3f6121, type: 3}
+  - {fileID: -1782702825, guid: 6c6e91935e8baa644acf7bb2af3f6121, type: 3}
+  walkRightSprites:
+  - {fileID: 2042785769, guid: 6c6e91935e8baa644acf7bb2af3f6121, type: 3}
+  - {fileID: 1381729114, guid: 6c6e91935e8baa644acf7bb2af3f6121, type: 3}
+  - {fileID: 990805954, guid: 6c6e91935e8baa644acf7bb2af3f6121, type: 3}
+  - {fileID: -44566078, guid: 6c6e91935e8baa644acf7bb2af3f6121, type: 3}
 --- !u!1 &1495501003
 GameObject:
   m_ObjectHideFlags: 0
