@@ -7,22 +7,24 @@ public class NpcController : MonoBehaviour, Interactable
 {
     // Fields
     [SerializeField] private Dialog dialog;
-    [SerializeField] private Sprite[] sprites;
-    private SpriteAnimator _spriteAnimator;
+    private Character _character;
 
     private void Start()
     {
-        _spriteAnimator = new SpriteAnimator(sprites, GetComponent<SpriteRenderer>());
-        _spriteAnimator.StartAnimation();
+        _character = GetComponent<Character>();
     }
 
     private void Update()
     {
-        _spriteAnimator.HandleUpdate();
+        _character.HandleUpdate();
     }
 
     /// <summary>
     /// As the NPC, speak to the dialog box.
     /// </summary>
-    public void Interact() => StartCoroutine(DialogManager.Instance.PrintDialog(dialog));
+    public void Interact()
+    {
+        // StartCoroutine(DialogManager.Instance.PrintDialog(dialog));
+        StartCoroutine(_character.Move(new Vector2(0, 4)));
+    }
 }

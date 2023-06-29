@@ -25,8 +25,8 @@ public class Character : MonoBehaviour
     /// <returns>Coroutine.</returns>
     public IEnumerator Move(Vector2 moveVector, Action OnMoveOver = null)
     {
-        _animator.MoveX = moveVector.x; // Pass variables through to animator
-        _animator.MoveY = moveVector.y;
+        _animator.MoveX = Mathf.Clamp(moveVector.x, -1f, 1f); // Pass variables through to animator
+        _animator.MoveY = Mathf.Clamp(moveVector.y, -1f, 1f);
         var nextPos = transform.position; // transport.position = current position 
         nextPos.x += moveVector.x; // Save new position in temporary variable
         nextPos.y += moveVector.y;
