@@ -273,6 +273,11 @@ MonoBehaviour:
     dialogLines:
     - Hello world! Welcome to Uniteon! The game where you can fight to be the best!
     - I hope you have fun and feel free to leave me some feedback.
+  sprites:
+  - {fileID: 2090183428, guid: 8550a8adebf5cbe4dbabcd4dc4079a57, type: 3}
+  - {fileID: 255277780, guid: 8550a8adebf5cbe4dbabcd4dc4079a57, type: 3}
+  - {fileID: 1118943381, guid: 8550a8adebf5cbe4dbabcd4dc4079a57, type: 3}
+  - {fileID: -1772216399, guid: 8550a8adebf5cbe4dbabcd4dc4079a57, type: 3}
 --- !u!1 &35999352
 GameObject:
   m_ObjectHideFlags: 0
