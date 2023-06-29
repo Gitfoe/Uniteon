@@ -105,12 +105,20 @@ public class UniteonUnit : MonoBehaviour
     /// <summary>
     /// Plays the Uniteon hit animation.
     /// </summary>
-    public void PlayHitAnimation()
+    /// <param name="effectiveness">The higher the effectiveness, the more the hit animation flashes</param>
+    public void PlayHitAnimation(float effectiveness)
     {
+        int loops = effectiveness switch
+        {
+            > 2f => 4,
+            > 1f => 3,
+            < 1f => 1,
+            _ => 2
+        };
         Sequence sequence = DOTween.Sequence();
         sequence.Append(_sprite.DOColor(Color.gray, 0.07f));
         sequence.Append(_sprite.DOColor(_originalColorSprite, 0.07f));
-        sequence.SetLoops(2);
+        sequence.SetLoops(loops);
     }
 
     /// <summary>

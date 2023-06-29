@@ -22,6 +22,7 @@ public class Uniteon
         set => healthPoints = value;
     }
     public List<Move> Moves { get; set; }
+    public Move ExecutingMove { get; set; }
     public Dictionary<Statistic, int> Stats { get; private set; }
     public Dictionary<Statistic, int> StatBoosts { get; private set; } // Boost up to 6x
     public Queue<string> StatusMessages { get; private set; } // Status messages
