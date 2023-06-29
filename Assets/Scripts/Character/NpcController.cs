@@ -4,20 +4,10 @@ using UnityEngine;
 
 public class NpcController : MonoBehaviour, Interactable
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private Dialog dialog;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void Interact()
-    {
-        throw new System.NotImplementedException();
-    }
+    /// <summary>
+    /// As the NPC, speak to the dialog box.
+    /// </summary>
+    public void Interact() => StartCoroutine(DialogManager.Instance.PrintDialog(dialog));
 }

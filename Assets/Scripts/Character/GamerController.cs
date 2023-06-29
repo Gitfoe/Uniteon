@@ -144,11 +144,11 @@ public class GamerController : MonoBehaviour
     private void Interact()
     {
         Vector3 faceDir = new Vector3(_animator.GetFloat(MoveX), _animator.GetFloat(MoveY));
-        Vector3 interactPos = transform.position += faceDir;
-        Collider2D collodier = Physics2D.OverlapCircle(interactPos, 0.3f, interactableLayer);
-        if (collodier != null)
+        Vector3 interactPos = transform.position + faceDir;
+        Collider2D collider = Physics2D.OverlapCircle(interactPos, 0.3f, interactableLayer);
+        if (collider != null)
         {
-            collodier.GetComponent<Interactable>()?.Interact();
+            collider.GetComponent<Interactable>()?.Interact();
         }
     }
 }

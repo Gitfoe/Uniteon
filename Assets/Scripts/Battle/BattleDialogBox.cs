@@ -28,7 +28,7 @@ public class BattleDialogBox : MonoBehaviour
     /// <summary>
     /// Types out text based on a certain interval.
     /// </summary>
-    /// <param name="text">Text that hast o be set.</param>
+    /// <param name="text">Text that has to be set.</param>
     /// <returns>Coroutine.</returns>
     public IEnumerator TypeOutDialog(string text)
     {

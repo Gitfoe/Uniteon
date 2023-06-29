@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Diagnostics;
 
+/// <summary>
+/// The Game Controller class is responsible for giving controller access to different parts of the code.
+/// </summary>
 public class GameController : MonoBehaviour
 {
     // Fields
@@ -16,6 +19,15 @@ public class GameController : MonoBehaviour
     {
         gamerController.OnEncountered += InitiateBattle;
         uniteonBattle.OnBattleOver += EndBattle;
+        DialogManager.Instance.OnShowDialog += () =>
+        {
+            _gameState = GameState.Dialog;
+        };
+        DialogManager.Instance.OnCloseDialog += () =>
+        {
+            if (_gameState == GameState.Dialog)
+                _gameState = GameState.World;
+        };
     }
 
     private void InitiateBattle()
@@ -39,13 +51,17 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_gameState == GameState.World)
+        switch (_gameState)
         {
-            gamerController.ControllerUpdate();
-        }
-        else if (_gameState == GameState.Battle)
-        {
-            uniteonBattle.ControllerUpdate();
+            case GameState.World:
+                gamerController.ControllerUpdate();
+                break;
+            case GameState.Battle:
+                uniteonBattle.ControllerUpdate();
+                break;
+            case GameState.Dialog:
+                DialogManager.Instance.ControllerUpdate();
+                break;
         }
     }
 }
@@ -53,5 +69,6 @@ public class GameController : MonoBehaviour
 public enum GameState
 {
     World,
-    Battle
+    Battle,
+    Dialog
 }
