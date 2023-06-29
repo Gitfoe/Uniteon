@@ -25,7 +25,7 @@ public class GameController : MonoBehaviour
         worldCamera.gameObject.SetActive(false);
         UniteonParty gamerParty = gamerController.GetComponent<UniteonParty>();
         Uniteon wildUniteon = FindObjectOfType<WorldArea>().GetComponent<WorldArea>().GetWildUniteon();
-        uniteonBattle.InitiateBattle(gamerParty, wildUniteon);
+        uniteonBattle.StartBattle(gamerParty, wildUniteon);
     }
     
     private void EndBattle(bool won)

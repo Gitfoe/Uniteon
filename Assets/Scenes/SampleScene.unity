@@ -529,6 +529,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isGamerUniteon: 1
+  uniteonHud: {fileID: 769407660}
 --- !u!1 &269733544
 GameObject:
   m_ObjectHideFlags: 0
@@ -10147,6 +10148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isGamerUniteon: 0
+  uniteonHud: {fileID: 1529288903}
 --- !u!1 &1379196423
 GameObject:
   m_ObjectHideFlags: 0
@@ -10538,8 +10540,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uniteonUnitGamer: {fileID: 162767278}
   uniteonUnitFoe: {fileID: 1333168449}
-  uniteonHudGamer: {fileID: 769407660}
-  uniteonHudFoe: {fileID: 1529288903}
   battleDialogBox: {fileID: 1257568886}
   hitNormalEffectiveness: {fileID: 8300000, guid: 1f2d439fa94034c4a8299ce8252ce59d, type: 3}
   hitNotVeryEffective: {fileID: 8300000, guid: 3b00a101858a9aa43a4614c62b73a079, type: 3}
@@ -10549,6 +10549,7 @@ MonoBehaviour:
   aButton: {fileID: 8300000, guid: 86a76c5481126c34aa4c958b22b09905, type: 3}
   run: {fileID: 8300000, guid: 5f8e77ab3a7752f4bab3708638cf195f, type: 3}
   switchOut: {fileID: 8300000, guid: 0e7baec5ffb203643858c28af27acbcb, type: 3}
+  thud: {fileID: 8300000, guid: f6fae0b243bab4b40a69862b009094a3, type: 3}
   partyScreen: {fileID: 1316574871}
 --- !u!1 &1529288902
 GameObject:

@@ -4,11 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
+using UnityEngine.Serialization;
 
 public class UniteonUnit : MonoBehaviour
 {
     // Fields
     [SerializeField] private bool isGamerUniteon; // To determine if the Uniteon is the gamer's or the foe's
+    [SerializeField] private UniteonHud uniteonHud;
     private Image _sprite;
     private Vector3 _originalPosSprite;
     private Color _originalColorSprite;
@@ -16,6 +18,8 @@ public class UniteonUnit : MonoBehaviour
 
     // Properties
     public Uniteon Uniteon { get; set; }
+    public bool IsGamerUniteon => isGamerUniteon;
+    public UniteonHud UniteonHud => uniteonHud;
     
     /// <summary>
     /// Initialise variables.
@@ -30,7 +34,7 @@ public class UniteonUnit : MonoBehaviour
     /// <summary>
     /// Creates a new Uniteon object and sets the correct image.
     /// </summary>
-    public void InitialiseUniteon(Uniteon uniteon)
+    public void InitialiseUniteonUnit(Uniteon uniteon)
     {
         Uniteon = uniteon;
         if (_spriteAnimation != null)
@@ -38,8 +42,9 @@ public class UniteonUnit : MonoBehaviour
         _spriteAnimation = StartCoroutine(isGamerUniteon
             ? PlaySpriteAnimation(Uniteon.UniteonBase.BackSprite)
             : PlaySpriteAnimation(Uniteon.UniteonBase.FrontSprite));
-        PlayBattleEnterAnimation();
+        uniteonHud.SetGamerData(uniteon);
         _sprite.color = _originalColorSprite;
+        PlayBattleEnterAnimation();
     }
     
     /// <summary>
