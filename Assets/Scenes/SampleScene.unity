@@ -10478,7 +10478,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uniteons:
   - uniteonBase: {fileID: 11400000, guid: 14e8cc068eb8177498bf6c3f49e6df63, type: 2}
-    level: 7
+    level: 100
     healthPoints: 0
   - uniteonBase: {fileID: 11400000, guid: 6aff78bd22906c546901e6f1ec7cf710, type: 2}
     level: 15
@@ -10541,15 +10541,29 @@ MonoBehaviour:
   uniteonUnitGamer: {fileID: 162767278}
   uniteonUnitFoe: {fileID: 1333168449}
   battleDialogBox: {fileID: 1257568886}
-  hitNormalEffectiveness: {fileID: 8300000, guid: 1f2d439fa94034c4a8299ce8252ce59d, type: 3}
-  hitNotVeryEffective: {fileID: 8300000, guid: 3b00a101858a9aa43a4614c62b73a079, type: 3}
-  hitSuperEffective: {fileID: 8300000, guid: 2f76c7719de9e084c995f482be7f74c2, type: 3}
-  faint: {fileID: 8300000, guid: 5345de975d6b05042b45c6fee1e7a46a, type: 3}
-  tackle: {fileID: 8300000, guid: c0c4692a4a98e8e469df5d7021bcd01d, type: 3}
-  aButton: {fileID: 8300000, guid: 86a76c5481126c34aa4c958b22b09905, type: 3}
-  run: {fileID: 8300000, guid: 5f8e77ab3a7752f4bab3708638cf195f, type: 3}
-  switchOut: {fileID: 8300000, guid: 0e7baec5ffb203643858c28af27acbcb, type: 3}
-  thud: {fileID: 8300000, guid: f6fae0b243bab4b40a69862b009094a3, type: 3}
+  audioClips:
+  - clipName: aButton
+    clip: {fileID: 8300000, guid: 86a76c5481126c34aa4c958b22b09905, type: 3}
+  - clipName: hitNormalEffectiveness
+    clip: {fileID: 8300000, guid: 1f2d439fa94034c4a8299ce8252ce59d, type: 3}
+  - clipName: hitNotVeryEffective
+    clip: {fileID: 8300000, guid: 3b00a101858a9aa43a4614c62b73a079, type: 3}
+  - clipName: hitSuperEffective
+    clip: {fileID: 8300000, guid: 2f76c7719de9e084c995f482be7f74c2, type: 3}
+  - clipName: faint
+    clip: {fileID: 8300000, guid: 5345de975d6b05042b45c6fee1e7a46a, type: 3}
+  - clipName: run
+    clip: {fileID: 8300000, guid: 5f8e77ab3a7752f4bab3708638cf195f, type: 3}
+  - clipName: switchOut
+    clip: {fileID: 8300000, guid: 0e7baec5ffb203643858c28af27acbcb, type: 3}
+  - clipName: thud
+    clip: {fileID: 8300000, guid: f6fae0b243bab4b40a69862b009094a3, type: 3}
+  - clipName: tackle
+    clip: {fileID: 8300000, guid: c0c4692a4a98e8e469df5d7021bcd01d, type: 3}
+  - clipName: statRaised
+    clip: {fileID: 8300000, guid: 2dfbb954e17b5dc4b9b465200a46a869, type: 3}
+  - clipName: statFell
+    clip: {fileID: 8300000, guid: 72ac76b0e33cc2646bd54b2b56e735b8, type: 3}
   partyScreen: {fileID: 1316574871}
 --- !u!1 &1529288902
 GameObject:

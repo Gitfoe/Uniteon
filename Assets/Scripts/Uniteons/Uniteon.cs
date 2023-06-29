@@ -87,7 +87,8 @@ public class Uniteon
     /// Applies a statistic boost or reduction by, for instance, an item or a move.
     /// </summary>
     /// <param name="statBoosts"></param>
-    public void ApplyBoosts(List<StatBoost> statBoosts)
+    /// <returns>True if stats were raised and false if lowered.</returns>
+    public bool ApplyBoosts(List<StatBoost> statBoosts)
     {
         foreach (var statBoost in statBoosts)
         {
@@ -109,7 +110,9 @@ public class Uniteon
                     StatusMessages.Enqueue($"{uniteonBase.UniteonName}'s {stat} fell!");
                     break;
             }
+            return boost > 0;
         }
+        return false;
     }
 
     /// <summary>

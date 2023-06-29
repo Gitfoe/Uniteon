@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class UniteonBattle : MonoBehaviour
@@ -10,15 +12,7 @@ public class UniteonBattle : MonoBehaviour
     [SerializeField] private UniteonUnit uniteonUnitGamer;
     [SerializeField] private UniteonUnit uniteonUnitFoe;
     [SerializeField] private BattleDialogBox battleDialogBox;
-    [SerializeField] private AudioClip hitNormalEffectiveness;
-    [SerializeField] private AudioClip hitNotVeryEffective;
-    [SerializeField] private AudioClip hitSuperEffective;
-    [SerializeField] private AudioClip faint;
-    [SerializeField] private AudioClip tackle;
-    [SerializeField] private AudioClip aButton;
-    [SerializeField] private AudioClip run;
-    [SerializeField] private AudioClip switchOut;
-    [SerializeField] private AudioClip thud;
+    [SerializeField] private List<UniteonSfx> audioClips;
     [SerializeField] private PartyScreen partyScreen;
     private BattleSequenceState _battleSequenceState;
     private int _actionSelection;
@@ -26,6 +20,7 @@ public class UniteonBattle : MonoBehaviour
     private int _memberSelection;
     private UniteonParty _gamerParty;
     private Uniteon _wildUniteon;
+    private Dictionary<string, AudioClip> _audioClips;
     #endregion
     
     #region Events
@@ -40,6 +35,7 @@ public class UniteonBattle : MonoBehaviour
     {
         _gamerParty = gamerParty;
         _wildUniteon = wildUniteon;
+        _audioClips = UniteonSfx.ConvertListToDictionary(audioClips);
         StartCoroutine(InitialiseBattle());
     }
    
@@ -153,7 +149,7 @@ public class UniteonBattle : MonoBehaviour
             if (newSelection >= 0 && newSelection <= upperBound)
             {
                 selection = newSelection;
-                AudioManager.Instance.PlaySfx(aButton);
+                AudioManager.Instance.PlaySfx(_audioClips["aButton"]);
             }
         }
         return Mathf.Clamp(selection, 0, upperBound);
@@ -171,12 +167,12 @@ public class UniteonBattle : MonoBehaviour
         {
             if (_actionSelection == 0) // Attack
             {
-                AudioManager.Instance.PlaySfx(aButton);
+                AudioManager.Instance.PlaySfx(_audioClips["aButton"]);
                 MoveSelection();
             }
             else if (_actionSelection == 1) // Switch
             {
-                AudioManager.Instance.PlaySfx(aButton);
+                AudioManager.Instance.PlaySfx(_audioClips["aButton"]);
                 OpenPartyScreen(BattleSequenceState.PartyScreenSelect);
             }
             else if (_actionSelection == 2) // Pack
@@ -187,7 +183,7 @@ public class UniteonBattle : MonoBehaviour
             {
                 AudioManager.Instance.StopMusic();
                 AudioManager.Instance.StopSfx(2);
-                AudioManager.Instance.PlaySfx(run);
+                AudioManager.Instance.PlaySfx(_audioClips["run"]);
                 OnBattleOver?.Invoke(false); // Just end the battle for now
             }
         }
@@ -202,14 +198,14 @@ public class UniteonBattle : MonoBehaviour
         battleDialogBox.UpdateMoveSelection(_moveSelection, uniteonUnitGamer.Uniteon.Moves[_moveSelection]);
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
         {
-            AudioManager.Instance.PlaySfx(aButton);
+            AudioManager.Instance.PlaySfx(_audioClips["aButton"]);
             battleDialogBox.EnableMoveSelector(false);
             battleDialogBox.EnableDialogText(true);
             StartCoroutine(ExecuteGamerMove());
         }
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Backspace))
         {
-            AudioManager.Instance.PlaySfx(aButton);
+            AudioManager.Instance.PlaySfx(_audioClips["aButton"]);
             battleDialogBox.EnableMoveSelector(false);
             battleDialogBox.EnableDialogText(true);
             ActionSelection();
@@ -228,13 +224,13 @@ public class UniteonBattle : MonoBehaviour
             Uniteon selectedMember = _gamerParty.Uniteons[_memberSelection];
             if (selectedMember.HealthPoints <= 0)
             {
-                AudioManager.Instance.PlaySfx(thud);
+                AudioManager.Instance.PlaySfx(_audioClips["thud"]);
                 partyScreen.SetMessageText($"{selectedMember.UniteonBase.UniteonName} can't battle right now!");
                 return;
             }
             if (selectedMember == uniteonUnitGamer.Uniteon)
             {
-                AudioManager.Instance.PlaySfx(thud);
+                AudioManager.Instance.PlaySfx(_audioClips["thud"]);
                 partyScreen.SetMessageText($"{selectedMember.UniteonBase.UniteonName} is already on the field!");
                 return;
             }
@@ -244,7 +240,7 @@ public class UniteonBattle : MonoBehaviour
         // Enable going back to the action screen
         else if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Backspace))
         {
-            AudioManager.Instance.PlaySfx(aButton);
+            AudioManager.Instance.PlaySfx(_audioClips["thud"]);
             partyScreen.gameObject.SetActive(false);
             ActionSelection(); 
         }
@@ -299,14 +295,14 @@ public class UniteonBattle : MonoBehaviour
         // Write move to the dialog box
         yield return battleDialogBox.TypeOutDialog($"{attackingUnit.Uniteon.UniteonBase.UniteonName} used {move.MoveBase.MoveName}!");
         // Play Uniteon attack animation and sfx
-        AudioManager.Instance.PlaySfx(tackle, panning: panning);
+        AudioManager.Instance.PlaySfx(_audioClips["tackle"], panning: panning);
         yield return attackingUnit.PlayAttackAnimations();
         // Save health points before taking any damage
         int previousHealthPoints = defendingUnit.Uniteon.HealthPoints;
         // Check if move is a status move
         if (move.MoveBase.MoveCategory == MoveCategory.Status)
         {
-            yield return MoveEffects(attackingUnit.Uniteon, defendingUnit.Uniteon, move);
+            yield return MoveEffects(attackingUnit, defendingUnit, move, panning);
         }
         // If not status move, calculate damage
         else
@@ -326,7 +322,7 @@ public class UniteonBattle : MonoBehaviour
             AudioManager.Instance.StopSfx(2); // Stop low health sfx
             yield return battleDialogBox.TypeOutDialog($"{defendingUnit.Uniteon.UniteonBase.UniteonName} has fainted!");
             yield return defendingUnit.Uniteon.PlayCry(panning: -panning, fainted: true);
-            AudioManager.Instance.PlaySfx(faint, panning: -panning);
+            AudioManager.Instance.PlaySfx(_audioClips["faint"], panning: -panning);
             yield return defendingUnit.PlayFaintAnimation();
             CheckBattleOver(defendingUnit);
         } 
@@ -338,19 +334,46 @@ public class UniteonBattle : MonoBehaviour
     /// <param name="attacking">The attacking Uniteon.</param>
     /// <param name="defending">The defending Uniteon.</param>
     /// <param name="move">The executed move.</param>
+    /// <param name="panning">The audio balance value for the sfx.</param>
     /// <returns>Coroutine.</returns>
-    private IEnumerator MoveEffects(Uniteon attacking, Uniteon defending, Move move)
+    private IEnumerator MoveEffects(UniteonUnit attackingUnit, UniteonUnit defendingUnit, Move move, float panning)
     {
         MoveEffects effects = move.MoveBase.MoveEffects;
         if (effects != null)
         {
+            bool statsRaised;
             if (move.MoveBase.MoveTarget == MoveTarget.Gamer)
-                attacking.ApplyBoosts(effects.Boosts);
+            {
+                statsRaised = attackingUnit.Uniteon.ApplyBoosts(effects.Boosts);
+                if (statsRaised)
+                {
+                    attackingUnit.PlayStatRaisedAnimation(true);
+                    AudioManager.Instance.PlaySfx(_audioClips["statRaised"], panning: panning);
+                }
+                else
+                {
+                    attackingUnit.PlayStatRaisedAnimation(false);
+                    AudioManager.Instance.PlaySfx(_audioClips["statFell"], panning: panning);
+                }
+            }
             else
-                defending.ApplyBoosts(effects.Boosts);
+            {
+                statsRaised = defendingUnit.Uniteon.ApplyBoosts(effects.Boosts);
+                if (statsRaised)
+                {
+                    defendingUnit.PlayStatRaisedAnimation(true);
+                    AudioManager.Instance.PlaySfx(_audioClips["statRaised"], panning: -panning);
+                }
+                else
+                {
+                    defendingUnit.PlayStatRaisedAnimation(false);
+                    AudioManager.Instance.PlaySfx(_audioClips["statFell"], panning: -panning);
+                }
+            }
+            yield return new WaitForSeconds(_audioClips["statRaised"].length); // It doesn't matter which one we use since they're the same length
         }
-        yield return WriteStatusMessages(attacking);
-        yield return WriteStatusMessages(defending);
+        yield return WriteStatusMessages(attackingUnit.Uniteon);
+        yield return WriteStatusMessages(defendingUnit.Uniteon);
     }
 
     /// <summary>
@@ -402,7 +425,7 @@ public class UniteonBattle : MonoBehaviour
             // Call back Uniteon
             yield return battleDialogBox.TypeOutDialog(
                 $"You've done well, {uniteonUnitGamer.Uniteon.UniteonBase.UniteonName}!");
-            AudioManager.Instance.PlaySfx(switchOut);
+            AudioManager.Instance.PlaySfx(_audioClips["switchOut"]);
             uniteonUnitGamer.PlayBattleLeaveAnimation();
             yield return new WaitForSeconds(2f);
         }
@@ -434,7 +457,7 @@ public class UniteonBattle : MonoBehaviour
         yield return new WaitForSeconds(1f);
     }
     #endregion
-
+    
     #region Move Helper Functions
     /// <summary>
     /// Plays the Uniteon hit sound effect.
@@ -452,9 +475,9 @@ public class UniteonBattle : MonoBehaviour
         };
         AudioClip sfxClip = damageData.EffectivenessModifier switch
         {
-            > 1f => hitSuperEffective,
-            < 1f => hitNotVeryEffective,
-            _ => hitNormalEffectiveness
+            > 1f => _audioClips["hitSuperEffective"],
+            < 1f => _audioClips["hitNotVeryEffective"],
+            _ => _audioClips["hitNormalEffectiveness"]
         };
         AudioManager.Instance.PlaySfx(sfxClip, panning: panning);
     }
@@ -512,4 +535,26 @@ public enum BattleSequenceState
     PartyScreenSelect,
     PartyScreenFaint,
     BattleOver
+}
+
+/// <summary>
+/// Holds the audio clip and their accompanying name.
+/// </summary>
+[Serializable]
+public struct UniteonSfx
+{
+    [SerializeField] private string clipName;
+    [SerializeField] private AudioClip clip;
+
+    public string ClipName => clipName;
+    public AudioClip Clip => clip;
+
+    /// <summary>
+    /// Converts a list of UniteonSfx structs to a dictionary, since they're functionally the same and easier to manage.
+    /// </summary>
+    /// <param name="uniteonSfxList">The sfx list full of UniteonSfx structs.</param>
+    /// <returns>The generated dictionary.</returns>
+    public static Dictionary<string, AudioClip> ConvertListToDictionary(List<UniteonSfx> uniteonSfxList) => 
+        uniteonSfxList.ToDictionary(sfx => sfx.ClipName, sfx => sfx.Clip);
+
 }

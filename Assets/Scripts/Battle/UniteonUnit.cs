@@ -47,6 +47,7 @@ public class UniteonUnit : MonoBehaviour
         PlayBattleEnterAnimation();
     }
     
+    #region Animations
     /// <summary>
     /// Starts playing the sprite of the Uniteon.
     /// </summary>
@@ -66,8 +67,6 @@ public class UniteonUnit : MonoBehaviour
             yield return new WaitForSeconds(spriteFramerate);
         }
     }
-    
-    
 
     /// <summary>
     /// Plays the battle enter animation.
@@ -124,4 +123,29 @@ public class UniteonUnit : MonoBehaviour
         sequence.Join(_sprite.DOFade(0f, 0.35f));
         yield return new WaitForSeconds(2f);
     }
+    
+    /// <summary>
+    /// Plays the Uniteon stat raised animation.
+    /// </summary>
+    /// <param name="raised">If it needs to show the raise (true) or fall (false) animation.</param>
+    public void PlayStatRaisedAnimation(bool raised)
+    {
+        Sequence sequence = DOTween.Sequence();
+        if (raised)
+        {
+            // Raise animation
+            sequence.Append(_sprite.DOColor(new Color(0, 1, 0), 1.25f));
+            sequence.Join(_sprite.transform.DOScale(new Vector3(1.1f, 1.1f, 1.1f), 1.25f));
+        }
+        else
+        {
+            // Fall animation
+            sequence.Append(_sprite.DOColor(new Color(0.5f, 0.5f, 0.5f), 1.25f));
+            sequence.Join(_sprite.transform.DOScale(new Vector3(0.9f, 0.9f, 0.9f), 1.25f));
+        }
+        // Restore color and scale
+        sequence.Append(_sprite.DOColor(_originalColorSprite, 0.25f));
+        sequence.Join(_sprite.transform.DOScale(Vector3.one, 0.25f));
+    }
+    #endregion
 }
