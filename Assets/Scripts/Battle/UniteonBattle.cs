@@ -61,7 +61,7 @@ public class UniteonBattle : MonoBehaviour
         yield return StartCoroutine(battleDialogBox.TypeOutDialog($"A wild {uniteonUnitFoe.Uniteon.UniteonBase.UniteonName} appeared!"));
         // Wait an additional second after the text is done printing
         yield return new WaitForSeconds(1f);
-        ActionSelection();
+        CheckFirstTurn();
     }
     #endregion
     
@@ -306,16 +306,7 @@ public class UniteonBattle : MonoBehaviour
         // Check if move is a status move
         if (move.MoveBase.MoveCategory == MoveCategory.Status)
         {
-            MoveEffects effects = move.MoveBase.MoveEffects;
-            if (effects != null)
-            {
-                if (move.MoveBase.MoveTarget == MoveTarget.Gamer)
-                    attackingUnit.Uniteon.ApplyBoosts(effects.Boosts);
-                else
-                    defendingUnit.Uniteon.ApplyBoosts(effects.Boosts);
-                yield return WriteStatusMessages(attackingUnit.Uniteon);
-                yield return WriteStatusMessages(defendingUnit.Uniteon);
-            }
+            yield return MoveEffects(attackingUnit.Uniteon, defendingUnit.Uniteon, move);
         }
         // If not status move, calculate damage
         else
@@ -342,6 +333,27 @@ public class UniteonBattle : MonoBehaviour
     }
 
     /// <summary>
+    /// Applies move effects to the battlefield.
+    /// </summary>
+    /// <param name="attacking">The attacking Uniteon.</param>
+    /// <param name="defending">The defending Uniteon.</param>
+    /// <param name="move">The executed move.</param>
+    /// <returns>Coroutine.</returns>
+    private IEnumerator MoveEffects(Uniteon attacking, Uniteon defending, Move move)
+    {
+        MoveEffects effects = move.MoveBase.MoveEffects;
+        if (effects != null)
+        {
+            if (move.MoveBase.MoveTarget == MoveTarget.Gamer)
+                attacking.ApplyBoosts(effects.Boosts);
+            else
+                defending.ApplyBoosts(effects.Boosts);
+        }
+        yield return WriteStatusMessages(attacking);
+        yield return WriteStatusMessages(defending);
+    }
+
+    /// <summary>
     /// Checks if the battle is over and either sends out a new Uniteon or ends the battle.
     /// </summary>
     /// <param name="faintedUnit"></param>
@@ -357,6 +369,20 @@ public class UniteonBattle : MonoBehaviour
         }
         else
             BattleOver(true);
+    }
+
+    /// <summary>
+    /// Checks who is allowed to move first.
+    /// </summary>
+    private void CheckFirstTurn()
+    {
+        bool gamerFirst = false;
+        if (uniteonUnitGamer.Uniteon.Speed == uniteonUnitFoe.Uniteon.Speed) // If speeds are tied, randomize who goes first
+            gamerFirst = (Random.Range(0, 2) == 0);
+        if (uniteonUnitGamer.Uniteon.Speed > uniteonUnitFoe.Uniteon.Speed || gamerFirst)
+            ActionSelection();
+        else
+            StartCoroutine(ExecuteFoeMove());
     }
     
     /// <summary>
@@ -384,7 +410,7 @@ public class UniteonBattle : MonoBehaviour
         yield return SendOutUniteon(uniteon);
         // Depending if Uniteon fainted in the last turn
         if (fainted)
-            ActionSelection(); // Go back to player action
+            CheckFirstTurn();
         else
             StartCoroutine(ExecuteFoeMove()); // Give turn to foe
     }
