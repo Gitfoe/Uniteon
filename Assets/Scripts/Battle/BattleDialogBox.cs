@@ -87,6 +87,8 @@ public class BattleDialogBox : MonoBehaviour
             powerPointsText.color = noPPColour;
         else if ((float)uniteonMove.PowerPoints / uniteonMove.MoveBase.PowerPoints <= 0.5)
             powerPointsText.color = lowPPColour;
+        else
+            powerPointsText.color = deselectedColour;
     }
     
     /// <summary>

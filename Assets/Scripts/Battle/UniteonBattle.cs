@@ -208,7 +208,7 @@ public class UniteonBattle : MonoBehaviour
         {
             var move = uniteonUnitGamer.Uniteon.Moves[_moveSelection];
             if (move.PowerPoints == 0) 
-                AudioManager.Instance.PlaySfx(_audioClips["aButton"]);
+                AudioManager.Instance.PlaySfx(_audioClips["thud"]);
             else
             {
                 AudioManager.Instance.PlaySfx(_audioClips["aButton"]);
@@ -348,7 +348,7 @@ public class UniteonBattle : MonoBehaviour
         // Determine the audio channel panning depending on who is attacking
         float panning = attackingUnit.IsGamerUniteon ? -0.72f : 0.72f;
         if (move.MoveBase.PowerPoints < 0) // Only Struggle has -1 PP by default, so if the move is Struggle, no moves are left
-            yield return battleDialogBox.TypeOutDialog($"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} has no moves left!");
+            yield return battleDialogBox.TypeOutDialog($"{attackingUnit.Uniteon.UniteonBase.UniteonName} has no moves left!");
         else
             move.PowerPoints--; // Deduct PP for the executed move
         // Write move to the dialog box

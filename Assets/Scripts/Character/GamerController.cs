@@ -11,6 +11,7 @@ public class GamerController : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private LayerMask objectsLayer;
     [SerializeField] private LayerMask wildGrassLayer;
+    [SerializeField] private LayerMask interactableLayer;
     [SerializeField] private Camera mainCamera;
     [SerializeField] private SpriteRenderer transitionBlock;
     [SerializeField] private AudioClip sceneMusic;
@@ -79,6 +80,8 @@ public class GamerController : MonoBehaviour
                     StartCoroutine(Move(nextPos));
             }
             _animator.SetBool(IsMoving, _isMoving);
+            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+                Interact();
         }
     }
 
@@ -111,7 +114,7 @@ public class GamerController : MonoBehaviour
     private bool IsWalkable(Vector3 nextPos)
     {
         nextPos.y -= 0.5f; // move from head to foot of player to look more natural in-game
-        var getNextObject = Physics2D.OverlapCircle(nextPos, 0.2f, objectsLayer);
+        var getNextObject = Physics2D.OverlapCircle(nextPos, 0.2f, objectsLayer | interactableLayer);
         return ReferenceEquals(getNextObject, null);
     }
 
@@ -120,9 +123,9 @@ public class GamerController : MonoBehaviour
     /// </summary>
     private void CheckWildGrass()
     {
-        var grassPosition = transform.position;
+        Vector3 grassPosition = transform.position;
         grassPosition.y -= 0.5f; // Move gamer down to make the game not think that you're touching grass when you're 1 grid below it
-        var getNextObject = Physics2D.OverlapCircle(grassPosition, 0.2f, wildGrassLayer);
+        Collider2D getNextObject = Physics2D.OverlapCircle(grassPosition, 0.2f, wildGrassLayer);
         if (ReferenceEquals(getNextObject, null)) return;
         if (Random.Range(1, 101) <= 10)
         {
@@ -135,6 +138,17 @@ public class GamerController : MonoBehaviour
             sequence.Append(mainCamera.DOOrthoSize(_cameraSize - 3.5f, 1.35f).SetEase(Ease.InSine));
             sequence.Join(transitionBlock.DOFade(1f, 1.35f).SetEase(Ease.InSine));
             sequence.OnComplete(() => OnEncountered?.Invoke());
+        }
+    }
+
+    private void Interact()
+    {
+        Vector3 faceDir = new Vector3(_animator.GetFloat(MoveX), _animator.GetFloat(MoveY));
+        Vector3 interactPos = transform.position += faceDir;
+        Collider2D collodier = Physics2D.OverlapCircle(interactPos, 0.3f, interactableLayer);
+        if (collodier != null)
+        {
+            collodier.GetComponent<Interactable>()?.Interact();
         }
     }
 }
