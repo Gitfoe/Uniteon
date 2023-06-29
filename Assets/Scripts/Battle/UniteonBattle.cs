@@ -124,6 +124,7 @@ public class UniteonBattle : MonoBehaviour
     private void BattleOver(bool won)
     {
         _battleSequenceState = BattleSequenceState.BattleOver;
+        _gamerParty.Uniteons.ForEach(u => u.OnBattleOver());
         OnBattleOver?.Invoke(won);
     }
     #endregion
@@ -308,10 +309,12 @@ public class UniteonBattle : MonoBehaviour
             MoveEffects effects = move.MoveBase.MoveEffects;
             if (effects != null)
             {
-                if (move.MoveBase.MoveMoveTarget == MoveTarget.Gamer)
+                if (move.MoveBase.MoveTarget == MoveTarget.Gamer)
                     attackingUnit.Uniteon.ApplyBoosts(effects.Boosts);
                 else
                     defendingUnit.Uniteon.ApplyBoosts(effects.Boosts);
+                yield return WriteStatusMessages(attackingUnit.Uniteon);
+                yield return WriteStatusMessages(defendingUnit.Uniteon);
             }
         }
         // If not status move, calculate damage
@@ -360,7 +363,6 @@ public class UniteonBattle : MonoBehaviour
     /// Send out new Uniteon into the battlefield.
     /// </summary>
     /// <param name="uniteon">The Uniteon that needs to be sent out.</param>
-    /// <param name="fainted">If the gamer's Uniteon fainted in the last turn, set to true.</param>
     /// <returns>Coroutine.</returns>
     private IEnumerator SwitchUniteon(Uniteon uniteon)
     {
@@ -451,6 +453,20 @@ public class UniteonBattle : MonoBehaviour
             case < 1f:
                 yield return battleDialogBox.TypeOutDialog("It's not very effective...");
                 break;
+        }
+    }
+
+    /// <summary>
+    /// Writes all the status messages in the queue.
+    /// </summary>
+    /// <param name="uniteon">The Uniteon that has status messages.</param>
+    /// <returns>Coroutine.</returns>
+    private IEnumerator WriteStatusMessages(Uniteon uniteon)
+    {
+        while (uniteon.StatusMessages.Count > 0)
+        {
+            string message = uniteon.StatusMessages.Dequeue();
+            yield return battleDialogBox.TypeOutDialog(message);
         }
     }
     #endregion

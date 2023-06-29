@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -23,6 +24,7 @@ public class Uniteon
     public List<Move> Moves { get; set; }
     public Dictionary<Statistic, int> Stats { get; private set; }
     public Dictionary<Statistic, int> StatBoosts { get; private set; } // Boost up to 6x
+    public Queue<string> StatusMessages { get; private set; } // Status messages
     
     // Statistic properties
     public int MaxHealthPoints { get; private set; }
@@ -35,8 +37,7 @@ public class Uniteon
     // Constructor
     public void InitialiseUniteon()
     {
-        // Add moves to Uniteon
-        Moves = new List<Move>();
+        Moves = new List<Move>(); // Add moves to Uniteon
         foreach (var move in UniteonBase.LearnableMoves)
         {
             if (move.Level <= level)
@@ -46,14 +47,8 @@ public class Uniteon
         }
         CalculateStats();
         HealthPoints = MaxHealthPoints; // Set Uniteon HP to max when launching the game
-        StatBoosts = new Dictionary<Statistic, int>() // Default to 0x boosts
-        {
-            { Statistic.Attack, 0 },
-            { Statistic.Defense, 0 },
-            { Statistic.SpecialAttack, 0 },
-            { Statistic.SpecialDefense, 0 },
-            { Statistic.Speed, 0 },
-        };
+        ResetBoosts();
+        StatusMessages = new Queue<string>(); // Init queue
     }
 
     /// <summary>
@@ -89,7 +84,7 @@ public class Uniteon
     }
 
     /// <summary>
-    /// Applys a statistic boost or reduction by, for instance, an item or a move.
+    /// Applies a statistic boost or reduction by, for instance, an item or a move.
     /// </summary>
     /// <param name="statBoosts"></param>
     public void ApplyBoosts(List<StatBoost> statBoosts)
@@ -99,9 +94,40 @@ public class Uniteon
             Statistic stat = statBoost.Stat;
             int boost = statBoost.Boost;
             StatBoosts[stat] = Mathf.Clamp(StatBoosts[stat] + boost, -6, 6);
-            Debug.Log($"{stat} was successfully boosted to {StatBoosts[stat]}");
+            switch (boost)
+            {
+                case > 1:
+                    StatusMessages.Enqueue($"{uniteonBase.UniteonName}'s {stat} rose sharply!");
+                    break;
+                case > 0:
+                    StatusMessages.Enqueue($"{uniteonBase.UniteonName}'s {stat} rose!");
+                    break;
+                case < -1:
+                    StatusMessages.Enqueue($"{uniteonBase.UniteonName}'s {stat} fell sharply!");
+                    break;
+                case < 0:
+                    StatusMessages.Enqueue($"{uniteonBase.UniteonName}'s {stat} fell!");
+                    break;
+            }
         }
     }
+
+    /// <summary>
+    /// Resets all the stat boosts to 0.
+    /// </summary>
+    private void ResetBoosts()
+    {
+        StatBoosts = new Dictionary<Statistic, int>()
+        {
+            { Statistic.Attack, 0 },
+            { Statistic.Defense, 0 },
+            { Statistic.SpecialAttack, 0 },
+            { Statistic.SpecialDefense, 0 },
+            { Statistic.Speed, 0 },
+        };
+    }
+
+    public void OnBattleOver() => ResetBoosts();
     
     /// <summary>
     /// Take damage according to the official Pokemon algorithm at https://bulbapedia.bulbagarden.net/wiki/Damage
@@ -166,7 +192,7 @@ public class Uniteon
             AudioManager.Instance.PlaySfx(UniteonBase.Cry, panning: panning, pitch: 0.72f);
         else
             AudioManager.Instance.PlaySfx(UniteonBase.Cry, panning: panning);
-        yield return new WaitForSeconds(UniteonBase.Cry.length);
+        yield return new WaitForSeconds(UniteonBase.Cry.length + 0.27f);
     }
 }
 

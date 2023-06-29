@@ -30,7 +30,7 @@ public class MoveBase : ScriptableObject
     public int Power => power;
     public int Accuracy => accuracy;
     public MoveEffects MoveEffects => moveEffects;
-    public MoveTarget MoveMoveTarget => moveTarget;
+    public MoveTarget MoveTarget => moveTarget;
 }
 
 /// <summary>
