@@ -126,9 +126,13 @@ public class GamerController : MonoBehaviour
             // Start battle transition
             DialogManager.Instance.OnCloseDialog += () =>
             {
-                Sequence sequence = DOTween.Sequence();
-                BattleTransition(mentorBattleIntro, mentorBattleLoop, sequence, 2.8f);
-                sequence.OnComplete(() => OnTransitionDone?.Invoke());
+                MentorController mentor = mentorCollider.GetComponentInParent<MentorController>();
+                if (mentor is { BattleLost: false }) // Only execute battle transition if mentor & battle available
+                {
+                    Sequence sequence = DOTween.Sequence();
+                    BattleTransition(mentorBattleIntro, mentorBattleLoop, sequence, 2.8f);
+                    sequence.OnComplete(() => OnTransitionDone?.Invoke());
+                }
             };
         }
     }

@@ -12,6 +12,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private UniteonBattle uniteonBattle;
     [SerializeField] private Camera worldCamera;
     private GameState _gameState;
+    private MentorController _mentor;
     
     // Singleton Design Pattern
     public static GameController Instance { get; private set; }
@@ -26,10 +27,10 @@ public class GameController : MonoBehaviour
         {
             MentorController mentor = mentorCollider.GetComponentInParent<MentorController>();
             gamerController.OnTransitionDone += mentor.InitiateMentorBattle;
-            if (!ReferenceEquals(mentor, null))
+            if (!mentor.BattleLost)
             {
                 _gameState = GameState.Cutscene;
-                StartCoroutine(mentor.TriggerMentorChat(gamerController));
+                StartCoroutine(mentor.TriggerMentorBattle(gamerController));
             }
         };
         uniteonBattle.OnBattleOver += EndBattle;
@@ -53,6 +54,7 @@ public class GameController : MonoBehaviour
         _gameState = GameState.Battle;
         uniteonBattle.gameObject.SetActive(true);
         worldCamera.gameObject.SetActive(false);
+        _mentor = mentor;
         UniteonParty gamerParty = gamerController.GetComponent<UniteonParty>();
         if (ReferenceEquals(mentor, null))
         {
@@ -68,6 +70,10 @@ public class GameController : MonoBehaviour
     
     private void EndBattle(bool won)
     {
+        if (!ReferenceEquals(_mentor, null) && won)
+        {
+            _mentor.HandleBattleLost();
+        }
         _gameState = GameState.World;
         gamerController.InitialiseWorld();
         uniteonBattle.gameObject.SetActive(false);

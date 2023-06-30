@@ -178,8 +178,9 @@ public class UniteonBattle : MonoBehaviour
     /// Sets the state to battle over.
     /// </summary>
     /// <param name="won"></param>
-    private void BattleOver(bool won)
+    private void HandleBattleOver(bool won)
     {
+        AudioManager.Instance.StopMusic();
         _battleState = BattleSequenceState.BattleOver;
         _gamerParty.Uniteons.ForEach(u => u.OnBattleOver());
         OnBattleOver?.Invoke(won);
@@ -243,7 +244,6 @@ public class UniteonBattle : MonoBehaviour
             }
             else if (_actionSelection == 3) // Run
             {
-                AudioManager.Instance.StopMusic();
                 AudioManager.Instance.StopSfx(2);
                 AudioManager.Instance.PlaySfx(_audioClips["run"]);
                 OnBattleOver?.Invoke(false); // Just end the battle for now
@@ -492,7 +492,7 @@ public class UniteonBattle : MonoBehaviour
             if (nextUniteon != null)
                 OpenPartyScreen();
             else // If not, lost
-                BattleOver(false);
+                HandleBattleOver(false);
         }
         else
         {
@@ -502,10 +502,10 @@ public class UniteonBattle : MonoBehaviour
                 if (!ReferenceEquals(nextUniteon, null))
                     StartCoroutine(SendOutMentorUniteon(nextUniteon));
                 else
-                    BattleOver(true);
+                    HandleBattleOver(true);
             }
             else
-                BattleOver(true);
+                HandleBattleOver(true);
         }
     }
 

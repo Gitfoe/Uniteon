@@ -382,6 +382,9 @@ MonoBehaviour:
   dialog:
     dialogLines:
     - You found me! Get ready to battle!
+  dialogAfterBattle:
+    dialogLines:
+    - Wow, you're so good!
   mentorName: Fokko
   sprite: {fileID: 20162132, guid: 641f8d5658ac9fe4a992a8a674ad9896, type: 3}
   exclamationMark: {fileID: 348691381}
@@ -12699,6 +12702,9 @@ MonoBehaviour:
     dialogLines:
     - Flash! Bet ya didn't see me!
     - You will get destroyed!
+  dialogAfterBattle:
+    dialogLines:
+    - I have no idea how you won, to be honest.
   mentorName: Gunther
   sprite: {fileID: 937628103, guid: 8bbbf57206c290748adf5c6055e11cde, type: 3}
   exclamationMark: {fileID: 373960005}

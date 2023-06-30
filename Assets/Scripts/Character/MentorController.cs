@@ -7,6 +7,7 @@ public class MentorController : MonoBehaviour, Interactable
 {
     // Fields
     [SerializeField] private Dialog dialog;
+    [SerializeField] private Dialog dialogAfterBattle;
     [SerializeField] private string mentorName;
     [SerializeField] private Sprite sprite;
     [SerializeField] private GameObject exclamationMark;
@@ -15,10 +16,12 @@ public class MentorController : MonoBehaviour, Interactable
     [SerializeField] private AudioClip eyesMeetLoop;
     private Character _character;
     private Collider2D _collider;
+    private bool _battleLost;
     
     // Properties
     public string MentorName => mentorName;
     public Sprite Sprite => sprite;
+    public bool BattleLost => _battleLost;
     
     private void Awake()
     {
@@ -36,7 +39,7 @@ public class MentorController : MonoBehaviour, Interactable
     /// </summary>
     /// <param name="gamer">The controller of the gamer that interacted with this mentor.</param>
     /// <returns>Coroutine.</returns>
-    public IEnumerator TriggerMentorChat(GamerController gamer = null)
+    public IEnumerator TriggerMentorBattle(GamerController gamer = null)
     {
         AudioManager.Instance.PlayMusic(eyesMeetIntro, eyesMeetLoop);
         yield return AnimateExclamationMark(0.5f, 0.27f);
@@ -48,6 +51,7 @@ public class MentorController : MonoBehaviour, Interactable
             moveVector = new Vector3(Mathf.Round(moveVector.x), Mathf.Round(moveVector.y));
             yield return _character.Move(moveVector);
         }
+
         // Open dialog
         StartCoroutine(DialogManager.Instance.PrintDialog(dialog));
     }
@@ -62,12 +66,20 @@ public class MentorController : MonoBehaviour, Interactable
         var facing = _character.GetFacingDirection(position);
         SetFovRotation(facing);
         _character.LookTowards(position);
+        if (_battleLost)
+            StartCoroutine(DialogManager.Instance.PrintDialog(dialogAfterBattle));
     }
     
     /// <summary>
     /// Gets fired once the transition animation is done by the gamer.
     /// </summary>
     public void InitiateMentorBattle() => GameController.Instance.InitiateBattle(this);
+
+    public void HandleBattleLost()
+    {
+        fov.gameObject.SetActive(false);
+        _battleLost = true;
+    }
 
     /// <summary>
     /// Animates the exclamation mark that shows when interacted with a mentor.
