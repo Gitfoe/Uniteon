@@ -111,7 +111,10 @@ public class GamerController : MonoBehaviour
     {
         Collider2D mentorCollider = Physics2D.OverlapCircle(transform.position, 0.2f, UnityLayers.Instance.FovLayer);
         if (!ReferenceEquals(mentorCollider, null))
+        {
+            _character.Animator.IsMoving = false;
             OnInMentorsView?.Invoke(mentorCollider);
+        }
     }
 
     /// <summary>

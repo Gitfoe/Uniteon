@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Diagnostics;
 
 /// <summary>
 /// The Game Controller class is responsible for giving controller access to different parts of the code.
@@ -22,7 +21,10 @@ public class GameController : MonoBehaviour
         {
             MentorController mentor = mentorCollider.GetComponentInParent<MentorController>();
             if (!ReferenceEquals(mentor, null))
+            {
+                _gameState = GameState.Cutscene;
                 StartCoroutine(mentor.TriggerMentorBattle(gamerController));
+            }
         };
         uniteonBattle.OnBattleOver += EndBattle;
         DialogManager.Instance.OnShowDialog += () =>
@@ -76,5 +78,6 @@ public enum GameState
 {
     World,
     Battle,
-    Dialog
+    Dialog,
+    Cutscene
 }

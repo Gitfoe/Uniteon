@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// This class is responsible for animating any character in the Uniteon game.
@@ -12,6 +14,7 @@ public class CharacterAnimator : MonoBehaviour
     [SerializeField] private Sprite[] walkDownSprites;
     [SerializeField] private Sprite[] walkLeftSprites;
     [SerializeField] private Sprite[] walkRightSprites;
+    [SerializeField] private FacingCardinal initialCardinal = FacingCardinal.South;
     private SpriteRenderer _spriteRenderer;
     private SpriteAnimator _currentAnimation;
     private bool _wasPreviouslyMoving;
@@ -20,6 +23,7 @@ public class CharacterAnimator : MonoBehaviour
     public float MoveX { get; set; }
     public float MoveY { get; set; }
     public bool IsMoving { get; set; }
+    public FacingCardinal InitialCardinal => initialCardinal;
     
     // States
     private SpriteAnimator _walkUpAnimation;
@@ -34,7 +38,7 @@ public class CharacterAnimator : MonoBehaviour
         _walkDownAnimation = new SpriteAnimator(walkDownSprites, _spriteRenderer);
         _walkLeftAnimation = new SpriteAnimator(walkLeftSprites, _spriteRenderer);
         _walkRightAnimation = new SpriteAnimator(walkRightSprites, _spriteRenderer);
-        _currentAnimation = _walkDownAnimation;
+        SetFacingCardinal(initialCardinal);
     }
 
     /// <summary>
@@ -59,4 +63,35 @@ public class CharacterAnimator : MonoBehaviour
             _spriteRenderer.sprite = _currentAnimation.Sprites[0];
         _wasPreviouslyMoving = IsMoving; // Fix for sliding NPCs with short input
     }
+
+    /// <summary>
+    /// Sets the MoveX and MoveY parameters depending on the facing cardinal.
+    /// </summary>
+    /// <param name="cardinal">Facing cardinal.</param>
+    public void SetFacingCardinal(FacingCardinal cardinal)
+    {
+        switch (cardinal)
+        {
+            case FacingCardinal.North:
+                MoveY = 1;
+                break;
+            case FacingCardinal.East:
+                MoveX = 1;
+                break;
+            case FacingCardinal.South:
+                MoveY = -1;
+                break;
+            case FacingCardinal.West:
+                MoveX = -1;
+                break;
+        }
+    }
+}
+
+public enum FacingCardinal
+{
+    North,
+    East,
+    South,
+    West
 }
