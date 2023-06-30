@@ -3069,7 +3069,7 @@ TextureImporter:
       objects_41: -2143651835
       objects_89: -1878312774
       objects_109: -1543782347
-      objects_20: 889075222
+      objects_128: -764270717
       objects_3: 2135177868
       objects_119: 376827917
       objects_18: -342242281
@@ -3114,11 +3114,11 @@ TextureImporter:
       objects_70: 488705989
       objects_106: -680789989
       objects_131: 1079908118
-      objects_87: -1627401307
       objects_104: 1153966917
       objects_107: -1419134258
-      objects_7: -1737413522
+      objects_87: -1627401307
       objects_80: -1092150248
+      objects_7: -1737413522
       objects_22: 191728295
       objects_47: 1672587665
       objects_42: 1686710697
@@ -3191,9 +3191,9 @@ TextureImporter:
       objects_111: -767499582
       objects_61: 2048583674
       objects_88: -1318958101
-      objects_4: 1701428922
       objects_127: 857459425
-      objects_128: -764270717
+      objects_4: 1701428922
+      objects_20: 889075222
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

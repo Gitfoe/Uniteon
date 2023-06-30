@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class UniteonBattle : MonoBehaviour
@@ -14,14 +15,20 @@ public class UniteonBattle : MonoBehaviour
     [SerializeField] private List<UniteonSfx> audioClips;
     [SerializeField] private PartyScreen partyScreen;
     [SerializeField] private MoveBase defaultMove;
+    [SerializeField] private Image gamerSprite; 
+    [SerializeField] private Image foeSprite; 
     private BattleSequenceState _battleState;
     private BattleSequenceState? _previousBattleState;
     private int _actionSelection;
     private int _moveSelection;
     private int _memberSelection;
-    private UniteonParty _gamerParty;
     private Uniteon _wildUniteon;
+    private UniteonParty _gamerParty;
+    private UniteonParty _mentorParty;
     private Dictionary<string, AudioClip> _audioClips;
+    private bool _isMentorBattle;
+    private GamerController _gamerController;
+    private MentorController _mentorController;
     #endregion
     
     #region Events
@@ -32,11 +39,23 @@ public class UniteonBattle : MonoBehaviour
     /// <summary>
     /// Starts a wild Uniteon battle.
     /// </summary>
-    public void StartBattle(UniteonParty gamerParty, Uniteon wildUniteon )
+    public void StartBattle(UniteonParty gamerParty, Uniteon wildUniteon)
     {
         _gamerParty = gamerParty;
         _wildUniteon = wildUniteon;
-        _audioClips = UniteonSfx.ConvertListToDictionary(audioClips);
+        StartCoroutine(InitialiseBattle());
+    }
+    
+    /// <summary>
+    /// Starts a Mentor battle.
+    /// </summary>
+    public void StartBattle(UniteonParty gamerParty, UniteonParty mentorParty)
+    {
+        _gamerParty = gamerParty;
+        _mentorParty = mentorParty;
+        _isMentorBattle = true;
+        _gamerController = gamerParty.GetComponent<GamerController>();
+        _mentorController = gamerParty.GetComponent<MentorController>();
         StartCoroutine(InitialiseBattle());
     }
    
@@ -46,18 +65,34 @@ public class UniteonBattle : MonoBehaviour
     /// </summary>
     private IEnumerator InitialiseBattle()
     {
-        // Initialise Uniteons
-        uniteonUnitGamer.InitialiseUniteonUnit(_gamerParty.GetHealthyUniteon());
-        uniteonUnitFoe.InitialiseUniteonUnit(_wildUniteon);
-        // Initialise battle dialog box
-        battleDialogBox.SetMoveNames(uniteonUnitGamer.Uniteon.Moves);
+        // Initialise sfx
+        _audioClips = UniteonSfx.ConvertListToDictionary(audioClips);
+
+        if (_isMentorBattle)
+        {
+            uniteonUnitGamer.gameObject.SetActive(false);
+            uniteonUnitFoe.gameObject.SetActive(false);
+            gamerSprite.gameObject.SetActive(true);
+            foeSprite.gameObject.SetActive(true);
+            gamerSprite.sprite = _gamerController.Sprite;
+            foeSprite.sprite = _mentorController.Sprite;
+            yield return battleDialogBox.TypeOutDialog($"{_mentorController.MentorName} wants to fight!");
+        }
+        else
+        {
+            // Initialise Uniteons
+            uniteonUnitGamer.InitialiseUniteonUnit(_gamerParty.GetHealthyUniteon());
+            uniteonUnitFoe.InitialiseUniteonUnit(_wildUniteon);
+            // Initialise battle dialog box
+            battleDialogBox.SetMoveNames(uniteonUnitGamer.Uniteon.Moves);
+            // Wait until wild encounter text has printed out
+            StartCoroutine(uniteonUnitFoe.Uniteon.PlayCry(0.72f));
+            yield return StartCoroutine(battleDialogBox.TypeOutDialog($"A wild {uniteonUnitFoe.Uniteon.UniteonBase.UniteonName} appeared!"));
+            // Wait an additional second after the text is done printing
+            yield return new WaitForSeconds(1f);
+        }
         // Initialise party screen
         partyScreen.InitialisePartyScreen();
-        // Wait until wild encounter text has printed out
-        StartCoroutine(uniteonUnitFoe.Uniteon.PlayCry(0.72f));
-        yield return StartCoroutine(battleDialogBox.TypeOutDialog($"A wild {uniteonUnitFoe.Uniteon.UniteonBase.UniteonName} appeared!"));
-        // Wait an additional second after the text is done printing
-        yield return new WaitForSeconds(1f);
         ActionSelection();
     }
     #endregion

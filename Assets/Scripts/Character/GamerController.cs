@@ -3,11 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class GamerController : MonoBehaviour
 {
     // Fields
+    [SerializeField] private string gamerName;
+    [SerializeField] private Sprite sprite;
     [SerializeField] private Camera mainCamera;
     [SerializeField] private SpriteRenderer transitionBlock;
     [SerializeField] private AudioClip sceneMusic;
@@ -18,19 +21,22 @@ public class GamerController : MonoBehaviour
     private Vector2 _previousGamerInput;
     private float _cameraSize;
     private bool _inTransition;
+
+    // Properties
+    public string GamerName => gamerName;
+    public Sprite Sprite => sprite;
     
     // Events
-    public event Action OnEncountered;
+    public event Action<MentorController> OnEncountered;
     public event Action<Collider2D> OnInMentorsView;
 
     /// <summary>
     /// Initialise variables.
     /// </summary>
     private void Awake()
-    { 
+    {
         _character = GetComponent<Character>();
         _cameraSize = mainCamera.orthographicSize;
-        _inTransition = false;
         AudioManager.Instance.PlayMusic(sceneMusic);
     }
 
@@ -100,7 +106,7 @@ public class GamerController : MonoBehaviour
             sequence.Append(mainCamera.DOOrthoSize(_cameraSize + 2.5f, 1.35f));
             sequence.Append(mainCamera.DOOrthoSize(_cameraSize - 3.5f, 1.35f).SetEase(Ease.InSine));
             sequence.Join(transitionBlock.DOFade(1f, 1.35f).SetEase(Ease.InSine));
-            sequence.OnComplete(() => OnEncountered?.Invoke());
+            sequence.OnComplete(() => OnEncountered?.Invoke(null));
         }
     }
 

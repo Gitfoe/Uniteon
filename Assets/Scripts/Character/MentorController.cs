@@ -2,15 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.Serialization;
 
 public class MentorController : MonoBehaviour
 {
+    // Fields
     [SerializeField] private Dialog dialog;
+    [SerializeField] private string mentorName;
+    [SerializeField] private Sprite sprite;
     [SerializeField] private GameObject exclamationMark;
     [SerializeField] private GameObject fov;
     [SerializeField] private AudioClip eyesMeetIntro;
     [SerializeField] private AudioClip eyesMeetLoop;
     private Character _character;
+    
+    // Properties
+    public string MentorName => mentorName;
+    public Sprite Sprite => sprite;
     
     private void Awake()
     {
@@ -39,8 +47,7 @@ public class MentorController : MonoBehaviour
         // Open dialog
         StartCoroutine(DialogManager.Instance.PrintDialog(dialog, () =>
         {
-            // Start battle
-            Debug.Log("start battle test");
+            GameController.Instance.InitiateBattle(this);
         }));
     }
     
