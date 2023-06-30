@@ -18,6 +18,12 @@ public class GameController : MonoBehaviour
     void Start()
     {
         gamerController.OnEncountered += InitiateBattle;
+        gamerController.OnInMentorsView += (Collider2D mentorCollider) =>
+        {
+            MentorController mentor = mentorCollider.GetComponentInParent<MentorController>();
+            if (!ReferenceEquals(mentor, null))
+                StartCoroutine(mentor.TriggerMentorBattle(gamerController));
+        };
         uniteonBattle.OnBattleOver += EndBattle;
         DialogManager.Instance.OnShowDialog += () =>
         {

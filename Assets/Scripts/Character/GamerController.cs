@@ -21,6 +21,7 @@ public class GamerController : MonoBehaviour
     
     // Events
     public event Action OnEncountered;
+    public event Action<Collider2D> OnInMentorsView;
 
     /// <summary>
     /// Initialise variables.
@@ -63,12 +64,21 @@ public class GamerController : MonoBehaviour
                 }
                 else 
                     _previousGamerInput = _gamerInput; // Save previous gamer input to know what to do with diagonal movements
-                StartCoroutine(_character.Move(_gamerInput, CheckWildGrass));
+                StartCoroutine(_character.Move(_gamerInput, HandleMoveOver));
             }
             _character.HandleUpdate();
             if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
                 Interact();
         }
+    }
+
+    /// <summary>
+    /// Encapsulates all the checking methods.
+    /// </summary>
+    private void HandleMoveOver()
+    {
+        CheckWildGrass();
+        CheckInMentorsView();
     }
 
     /// <summary>
@@ -94,6 +104,19 @@ public class GamerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Checks if a gamer is in the view of a mentor.
+    /// </summary>
+    private void CheckInMentorsView()
+    {
+        Collider2D mentorCollider = Physics2D.OverlapCircle(transform.position, 0.2f, UnityLayers.Instance.FovLayer);
+        if (!ReferenceEquals(mentorCollider, null))
+            OnInMentorsView?.Invoke(mentorCollider);
+    }
+
+    /// <summary>
+    /// Interacts with collider right in front of it.
+    /// </summary>
     private void Interact()
     {
         Vector3 faceDir = new Vector3(_character.Animator.MoveX, _character.Animator.MoveY);
