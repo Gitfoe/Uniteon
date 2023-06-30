@@ -14,7 +14,8 @@ public class UniteonBattle : MonoBehaviour
     [SerializeField] private List<UniteonSfx> audioClips;
     [SerializeField] private PartyScreen partyScreen;
     [SerializeField] private MoveBase defaultMove;
-    private BattleSequenceState _battleSequenceState;
+    private BattleSequenceState _battleState;
+    private BattleSequenceState? _previousBattleState;
     private int _actionSelection;
     private int _moveSelection;
     private int _memberSelection;
@@ -67,7 +68,7 @@ public class UniteonBattle : MonoBehaviour
     /// </summary>
     public void ControllerUpdate()
     {
-        switch (_battleSequenceState)
+        switch (_battleState)
         {
             case BattleSequenceState.ActionSelection:
                 HandleActionSelection();
@@ -78,7 +79,7 @@ public class UniteonBattle : MonoBehaviour
             case BattleSequenceState.NoMoveSelection:
                 HandleNoMovesLeft();
                 break;
-            case BattleSequenceState.PartyScreenSelect or BattleSequenceState.PartyScreenFaint:
+            case BattleSequenceState.PartyScreen:
                 HandlePartyScreenSelection();
                 break;
         }
@@ -89,7 +90,7 @@ public class UniteonBattle : MonoBehaviour
     /// </summary>
     private void ActionSelection()
     {
-        _battleSequenceState = BattleSequenceState.ActionSelection;
+        _battleState = BattleSequenceState.ActionSelection;
         battleDialogBox.SetDialogText("Choose a strategic move...");
         battleDialogBox.EnableActionSelector(true);
     }
@@ -100,10 +101,10 @@ public class UniteonBattle : MonoBehaviour
     private void MoveSelection()
     {
         if (uniteonUnitGamer.Uniteon.GetRandomMove() == null)
-            _battleSequenceState = BattleSequenceState.NoMoveSelection;
+            _battleState = BattleSequenceState.NoMoveSelection;
         else
         {
-            _battleSequenceState = BattleSequenceState.MoveSelection;
+            _battleState = BattleSequenceState.MoveSelection;
             battleDialogBox.EnableDialogText(false);
             battleDialogBox.EnableMoveSelector(true);
         }
@@ -116,7 +117,7 @@ public class UniteonBattle : MonoBehaviour
     /// <param name="state">The party screen state (either party screen from selection or from fainted Uniteon)</param>
     private void OpenPartyScreen(BattleSequenceState state)
     {
-        _battleSequenceState = state;
+        _battleState = state;
         partyScreen.gameObject.SetActive(true);
         partyScreen.AddUniteonsToPartySlots(_gamerParty.Uniteons);
     }
@@ -127,7 +128,7 @@ public class UniteonBattle : MonoBehaviour
     /// <param name="won"></param>
     private void BattleOver(bool won)
     {
-        _battleSequenceState = BattleSequenceState.BattleOver;
+        _battleState = BattleSequenceState.BattleOver;
         _gamerParty.Uniteons.ForEach(u => u.OnBattleOver());
         OnBattleOver?.Invoke(won);
     }
@@ -180,8 +181,9 @@ public class UniteonBattle : MonoBehaviour
             }
             else if (_actionSelection == 1) // Switch
             {
+                _previousBattleState = _battleState;
                 AudioManager.Instance.PlaySfx(_audioClips["aButton"]);
-                OpenPartyScreen(BattleSequenceState.PartyScreenSelect);
+                OpenPartyScreen(BattleSequenceState.PartyScreen);
             }
             else if (_actionSelection == 2) // Pack
             {
@@ -235,30 +237,30 @@ public class UniteonBattle : MonoBehaviour
         partyScreen.UpdateMemberSelection(_memberSelection);
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
         {
-            Uniteon selectedMember = _gamerParty.Uniteons[_memberSelection];
-            if (selectedMember.HealthPoints <= 0)
+            Uniteon selectedUniteon = _gamerParty.Uniteons[_memberSelection];
+            if (selectedUniteon.HealthPoints <= 0)
             {
                 AudioManager.Instance.PlaySfx(_audioClips["thud"]);
-                partyScreen.SetMessageText($"{selectedMember.UniteonBase.UniteonName} can't battle right now!");
+                partyScreen.SetMessageText($"{selectedUniteon.UniteonBase.UniteonName} can't battle right now!");
                 return;
             }
-            if (selectedMember == uniteonUnitGamer.Uniteon)
+            if (selectedUniteon == uniteonUnitGamer.Uniteon)
             {
                 AudioManager.Instance.PlaySfx(_audioClips["thud"]);
-                partyScreen.SetMessageText($"{selectedMember.UniteonBase.UniteonName} is already on the field!");
+                partyScreen.SetMessageText($"{selectedUniteon.UniteonBase.UniteonName} is already on the field!");
                 return;
             }
             // Check in which state the party selection screen was opened
             partyScreen.gameObject.SetActive(false);
-            switch (_battleSequenceState)
+            if (_previousBattleState == BattleSequenceState.ActionSelection)
             {
-                case BattleSequenceState.PartyScreenSelect:
-                    StartCoroutine(ExecuteBattleTurns(BattleAction.Switch));
-                    break;
-                case BattleSequenceState.PartyScreenFaint:
-                    _battleSequenceState = BattleSequenceState.Busy;
-                    StartCoroutine(SwitchUniteon(selectedMember));
-                    break;
+                _previousBattleState = null;
+                StartCoroutine(ExecuteBattleTurns(BattleAction.Switch));
+            }
+            else
+            {
+                _battleState = BattleSequenceState.Busy;
+                StartCoroutine(SwitchUniteon(selectedUniteon));
             }
         }
         // Enable going back to the action screen
@@ -283,8 +285,8 @@ public class UniteonBattle : MonoBehaviour
     #region Move Sequences
     private IEnumerator ExecuteBattleTurns(BattleAction gamerAction) // Only gamer's action as foe cannot perform any other action than move
     {
-        var prevBattleSequenceState = _battleSequenceState;
-        _battleSequenceState = BattleSequenceState.ExecutingTurn;
+        var prevBattleSequenceState = _battleState;
+        _battleState = BattleSequenceState.ExecutingTurn;
         if (gamerAction == BattleAction.Move)
         {
             // Get the selected move for the gamer, or if none available, get Struggle
@@ -314,8 +316,8 @@ public class UniteonBattle : MonoBehaviour
             Uniteon secondUniteon = secondUnit.Uniteon;
             // First turn
             yield return ExecuteMove(firstUnit, secondUnit, firstUnit.Uniteon.ExecutingMove);
-            yield return new WaitUntil(() => _battleSequenceState == BattleSequenceState.ExecutingTurn);
-            if (_battleSequenceState == BattleSequenceState.BattleOver) yield break;
+            yield return new WaitUntil(() => _battleState == BattleSequenceState.ExecutingTurn);
+            if (_battleState == BattleSequenceState.BattleOver) yield break;
             if (secondUniteon.HealthPoints > 0)
             {
                 // Second turn
@@ -326,13 +328,13 @@ public class UniteonBattle : MonoBehaviour
         {
             // Switch Uniteon
             Uniteon selectedUniteon = _gamerParty.Uniteons[_memberSelection];
-            _battleSequenceState = BattleSequenceState.Busy;
+            _battleState = BattleSequenceState.Busy;
             yield return SwitchUniteon(selectedUniteon);
             // Foe's turn
             uniteonUnitFoe.Uniteon.ExecutingMove = uniteonUnitFoe.Uniteon.Moves[Random.Range(0, uniteonUnitFoe.Uniteon.Moves.Count)];
             yield return ExecuteMove(uniteonUnitFoe, uniteonUnitGamer, uniteonUnitFoe.Uniteon.ExecutingMove);
         }
-        if (_battleSequenceState != BattleSequenceState.BattleOver)
+        if (_battleState != BattleSequenceState.BattleOver)
             ActionSelection();
     }
 
@@ -432,7 +434,7 @@ public class UniteonBattle : MonoBehaviour
         { // Check if gamer has more Uniteon in it's party
             Uniteon nextUniteon = _gamerParty.GetHealthyUniteon();
             if (nextUniteon != null)
-                OpenPartyScreen(BattleSequenceState.PartyScreenFaint);
+                OpenPartyScreen(BattleSequenceState.PartyScreen);
             else
                 BattleOver(false);
         }
@@ -473,7 +475,7 @@ public class UniteonBattle : MonoBehaviour
     /// <returns>Coroutine.</returns>
     private IEnumerator SwitchUniteon(Uniteon uniteon)
     {
-        _battleSequenceState = BattleSequenceState.Busy;
+        _battleState = BattleSequenceState.Busy;
         // Only call back Uniteon if Uniteon didn't faint
         if (uniteonUnitGamer.Uniteon.HealthPoints > 0)
         {
@@ -496,7 +498,7 @@ public class UniteonBattle : MonoBehaviour
         yield return StartCoroutine(battleDialogBox.TypeOutDialog($"You got it, {uniteon.UniteonBase.UniteonName}!"));
         // Wait an additional second after the text is done printing
         yield return new WaitForSeconds(1f);
-        _battleSequenceState = BattleSequenceState.ExecutingTurn;
+        _battleState = BattleSequenceState.ExecutingTurn;
     }
     #endregion
     
@@ -567,8 +569,7 @@ public enum BattleSequenceState
     NoMoveSelection, // If there are no remaining moves
     ExecutingTurn,
     Busy,
-    PartyScreenSelect,
-    PartyScreenFaint,
+    PartyScreen,
     BattleOver
 }
 
