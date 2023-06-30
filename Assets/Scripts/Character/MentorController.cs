@@ -113,8 +113,9 @@ public class MentorController : MonoBehaviour, Interactable
     /// Sets the FOV rotation to be the same angle as the facing direction.
     /// </summary>
     /// <param name="cardinal">The cardinal direction.</param>
-    public void SetFovRotation(FacingCardinal cardinal)
+    private void SetFovRotation(FacingCardinal cardinal)
     {
+        // Default: West
         float angle = 0;
         switch (cardinal)
         {

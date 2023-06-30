@@ -154,7 +154,7 @@ public class GamerController : MonoBehaviour
         sequence.Append(mainCamera.DOOrthoSize(_cameraSize + 2.5f, halvedTransitionTime));
         sequence.Append(mainCamera.DOOrthoSize(_cameraSize - 3.5f, halvedTransitionTime).SetEase(Ease.InSine));
         sequence.Join(transitionBlock.DOFade(1f, halvedTransitionTime).SetEase(Ease.InSine));
-        _inTransition = false;
+        sequence.OnComplete(() => _inTransition = false);
     }
 
     /// <summary>
