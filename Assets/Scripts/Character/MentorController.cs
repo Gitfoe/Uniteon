@@ -8,6 +8,8 @@ public class MentorController : MonoBehaviour
     [SerializeField] private Dialog dialog;
     [SerializeField] private GameObject exclamationMark;
     [SerializeField] private GameObject fov;
+    [SerializeField] private AudioClip eyesMeetIntro;
+    [SerializeField] private AudioClip eyesMeetLoop;
     private Character _character;
     
     private void Awake()
@@ -27,6 +29,7 @@ public class MentorController : MonoBehaviour
     /// <returns></returns>
     public IEnumerator TriggerMentorBattle(GamerController gamer)
     {
+        AudioManager.Instance.PlayMusic(eyesMeetIntro, eyesMeetLoop);
         yield return AnimateExclamationMark(0.5f, 0.27f);
         // Move towards the gamer
         Vector3 differenceVector = gamer.transform.position - transform.position;

@@ -114,10 +114,9 @@ public class UniteonBattle : MonoBehaviour
     /// <summary>
     /// Opens the party screen.
     /// </summary>
-    /// <param name="state">The party screen state (either party screen from selection or from fainted Uniteon)</param>
-    private void OpenPartyScreen(BattleSequenceState state)
+    private void OpenPartyScreen()
     {
-        _battleState = state;
+        _battleState = BattleSequenceState.PartyScreen;
         partyScreen.gameObject.SetActive(true);
         partyScreen.AddUniteonsToPartySlots(_gamerParty.Uniteons);
     }
@@ -183,7 +182,7 @@ public class UniteonBattle : MonoBehaviour
             {
                 _previousBattleState = _battleState;
                 AudioManager.Instance.PlaySfx(_audioClips["aButton"]);
-                OpenPartyScreen(BattleSequenceState.PartyScreen);
+                OpenPartyScreen();
             }
             else if (_actionSelection == 2) // Pack
             {
@@ -250,8 +249,9 @@ public class UniteonBattle : MonoBehaviour
                 partyScreen.SetMessageText($"{selectedUniteon.UniteonBase.UniteonName} is already on the field!");
                 return;
             }
-            // Check in which state the party selection screen was opened
             partyScreen.gameObject.SetActive(false);
+            // Check in which state the party selection screen was opened
+            
             if (_previousBattleState == BattleSequenceState.ActionSelection)
             {
                 _previousBattleState = null;
@@ -333,8 +333,11 @@ public class UniteonBattle : MonoBehaviour
             // Foe's turn
             uniteonUnitFoe.Uniteon.ExecutingMove = uniteonUnitFoe.Uniteon.Moves[Random.Range(0, uniteonUnitFoe.Uniteon.Moves.Count)];
             yield return ExecuteMove(uniteonUnitFoe, uniteonUnitGamer, uniteonUnitFoe.Uniteon.ExecutingMove);
+            if (uniteonUnitGamer.Uniteon.HealthPoints <= 0)
+                _previousBattleState = _battleState;
         }
-        if (_battleState != BattleSequenceState.BattleOver)
+        // Party Screen can be after next Uniteon died after switching
+        if (_battleState != BattleSequenceState.BattleOver && _battleState != BattleSequenceState.PartyScreen)
             ActionSelection();
     }
 
@@ -434,7 +437,7 @@ public class UniteonBattle : MonoBehaviour
         { // Check if gamer has more Uniteon in it's party
             Uniteon nextUniteon = _gamerParty.GetHealthyUniteon();
             if (nextUniteon != null)
-                OpenPartyScreen(BattleSequenceState.PartyScreen);
+                OpenPartyScreen();
             else
                 BattleOver(false);
         }
@@ -498,7 +501,14 @@ public class UniteonBattle : MonoBehaviour
         yield return StartCoroutine(battleDialogBox.TypeOutDialog($"You got it, {uniteon.UniteonBase.UniteonName}!"));
         // Wait an additional second after the text is done printing
         yield return new WaitForSeconds(1f);
-        _battleState = BattleSequenceState.ExecutingTurn;
+        // Check if the previous state is either PartyScreen or ExecutingTurn
+        if (_previousBattleState == BattleSequenceState.PartyScreen)
+        {
+            _previousBattleState = null;
+            ActionSelection();
+        }
+        else
+            _battleState = BattleSequenceState.ExecutingTurn;
     }
     #endregion
     
