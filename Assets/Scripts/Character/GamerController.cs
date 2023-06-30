@@ -77,7 +77,10 @@ public class GamerController : MonoBehaviour
             }
             _character.HandleUpdate();
             if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+            {
                 Interact();
+                CheckInMentorsView(); // Also check if in mentors view after they turned towards you
+            }
         }
     }
 

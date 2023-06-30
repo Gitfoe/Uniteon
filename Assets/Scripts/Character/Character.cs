@@ -91,4 +91,23 @@ public class Character : MonoBehaviour
             _animator.MoveY = Mathf.Clamp(yDifference, -1f, 1f);
         }
     }
+
+    public FacingCardinal GetFacingDirection(Vector3 targetDirection)
+    {
+        var position = transform.position;
+        var xDifference = Mathf.Floor(targetDirection.x) - Mathf.Floor(position.x);
+        var yDifference = Mathf.Floor(targetDirection.y) - Mathf.Floor(position.y);
+        if (xDifference == 0 || yDifference == 0) // Only check cardinal directions, not diagonal
+        {
+            float x = Mathf.Clamp(xDifference, -1f, 1f);
+            float y = Mathf.Clamp(yDifference, -1f, 1f);
+            if (x == 1)
+                return FacingCardinal.East;
+            if (x == -1)
+                return FacingCardinal.West;
+            if (y == 1)
+                return FacingCardinal.North;
+        }
+        return FacingCardinal.South; // y == -1
+    }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class MentorController : MonoBehaviour
+public class MentorController : MonoBehaviour, Interactable
 {
     // Fields
     [SerializeField] private Dialog dialog;
@@ -14,12 +14,17 @@ public class MentorController : MonoBehaviour
     [SerializeField] private AudioClip eyesMeetIntro;
     [SerializeField] private AudioClip eyesMeetLoop;
     private Character _character;
+    private Collider2D _collider;
     
     // Properties
     public string MentorName => mentorName;
     public Sprite Sprite => sprite;
     
-    private void Awake() => _character = GetComponent<Character>();
+    private void Awake()
+    {
+        _character = GetComponent<Character>();
+        _collider = fov.GetComponent<Collider2D>();
+    }
 
     private void Start()
     {
@@ -31,17 +36,32 @@ public class MentorController : MonoBehaviour
     /// </summary>
     /// <param name="gamer">The controller of the gamer that interacted with this mentor.</param>
     /// <returns>Coroutine.</returns>
-    public IEnumerator TriggerMentorChat(GamerController gamer)
+    public IEnumerator TriggerMentorChat(GamerController gamer = null)
     {
         AudioManager.Instance.PlayMusic(eyesMeetIntro, eyesMeetLoop);
         yield return AnimateExclamationMark(0.5f, 0.27f);
-        // Move towards the gamer
-        Vector3 differenceVector = gamer.transform.position - transform.position;
-        Vector3 moveVector = differenceVector - differenceVector.normalized; // Subtract by 1
-        moveVector = new Vector3(Mathf.Round(moveVector.x), Mathf.Round(moveVector.y));
-        yield return _character.Move(moveVector);
+        if (!ReferenceEquals(gamer, null))
+        {
+            // Move towards the gamer
+            Vector3 differenceVector = gamer.transform.position - transform.position;
+            Vector3 moveVector = differenceVector - differenceVector.normalized; // Subtract by 1
+            moveVector = new Vector3(Mathf.Round(moveVector.x), Mathf.Round(moveVector.y));
+            yield return _character.Move(moveVector);
+        }
         // Open dialog
         StartCoroutine(DialogManager.Instance.PrintDialog(dialog));
+    }
+    
+    /// <summary>
+    /// Faces the mentor to another direction and changes it's FOV rotation as well.
+    /// </summary>
+    /// <param name="initiator">The transform of the initiator.</param>
+    public void Interact(Transform initiator)
+    {
+        var position = initiator.position;
+        var facing = _character.GetFacingDirection(position);
+        SetFovRotation(facing);
+        _character.LookTowards(position);
     }
     
     /// <summary>
@@ -49,6 +69,12 @@ public class MentorController : MonoBehaviour
     /// </summary>
     public void InitiateMentorBattle() => GameController.Instance.InitiateBattle(this);
 
+    /// <summary>
+    /// Animates the exclamation mark that shows when interacted with a mentor.
+    /// </summary>
+    /// <param name="moveDuration">The duration of the animation.</param>
+    /// <param name="fadeDuration">The duration of the fading.</param>
+    /// <returns>Coroutine.</returns>
     private IEnumerator AnimateExclamationMark(float moveDuration, float fadeDuration)
     {
         exclamationMark.SetActive(true);
@@ -71,7 +97,6 @@ public class MentorController : MonoBehaviour
         exclamationMark.SetActive(false);
     }
 
-
     /// <summary>
     /// Sets the FOV rotation to be the same angle as the facing direction.
     /// </summary>
@@ -92,5 +117,8 @@ public class MentorController : MonoBehaviour
                 break;
         }
         fov.transform.eulerAngles = new Vector3(0f, 0f, angle);
+        // Disable and re-enable the collider to trigger collision detection
+        _collider.enabled = false;
+        _collider.enabled = true;
     }
 }
