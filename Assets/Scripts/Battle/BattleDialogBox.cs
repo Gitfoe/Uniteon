@@ -29,8 +29,9 @@ public class BattleDialogBox : MonoBehaviour
     /// Types out text based on a certain interval.
     /// </summary>
     /// <param name="text">Text that has to be set.</param>
+    /// <param name="waitTime">The time that needs to be waited after printing the text.</param>
     /// <returns>Coroutine.</returns>
-    public IEnumerator TypeOutDialog(string text)
+    public IEnumerator TypeOutDialog(string text, float waitTime = 0.72f)
     {
         dialogText.text = "";
         foreach (var l in text)
@@ -38,7 +39,7 @@ public class BattleDialogBox : MonoBehaviour
             dialogText.text += l;
             yield return new WaitForSeconds(1f/typeOutSpeed);
         }
-        yield return new WaitForSeconds(0.72f);
+        yield return new WaitForSeconds(waitTime);
     }
     
     /// <summary>

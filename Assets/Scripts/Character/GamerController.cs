@@ -16,6 +16,8 @@ public class GamerController : MonoBehaviour
     [SerializeField] private AudioClip sceneMusic;
     [SerializeField] private AudioClip wildMusicIntro;
     [SerializeField] private AudioClip wildMusicLoop;
+    [SerializeField] private AudioClip mentorBattleIntro;
+    [SerializeField] private AudioClip mentorBattleLoop;
     private Character _character;
     private Vector2 _gamerInput;
     private Vector2 _previousGamerInput;
@@ -29,6 +31,7 @@ public class GamerController : MonoBehaviour
     // Events
     public event Action<MentorController> OnEncountered;
     public event Action<Collider2D> OnInMentorsView;
+    public event Action OnTransitionDone;
 
     /// <summary>
     /// Initialise variables.
@@ -98,20 +101,16 @@ public class GamerController : MonoBehaviour
         if (ReferenceEquals(getNextObject, null)) return;
         if (Random.Range(1, 101) <= 10)
         {
-            _inTransition = true;
             _character.Animator.IsMoving = false;
             // Start battle transition
-            AudioManager.Instance.PlayMusic(wildMusicIntro, wildMusicLoop);
-            var sequence = DOTween.Sequence();
-            sequence.Append(mainCamera.DOOrthoSize(_cameraSize + 2.5f, 1.35f));
-            sequence.Append(mainCamera.DOOrthoSize(_cameraSize - 3.5f, 1.35f).SetEase(Ease.InSine));
-            sequence.Join(transitionBlock.DOFade(1f, 1.35f).SetEase(Ease.InSine));
+            Sequence sequence = DOTween.Sequence();
+            BattleTransition(wildMusicIntro, wildMusicLoop, sequence);
             sequence.OnComplete(() => OnEncountered?.Invoke(null));
         }
     }
 
     /// <summary>
-    /// Checks if a gamer is in the view of a mentor.
+    /// Checks if a gamer is in the view of a mentor and starts a battle.
     /// </summary>
     private void CheckInMentorsView()
     {
@@ -119,8 +118,35 @@ public class GamerController : MonoBehaviour
         if (!ReferenceEquals(mentorCollider, null))
         {
             _character.Animator.IsMoving = false;
+            // Start mentor eyes meet sequence
             OnInMentorsView?.Invoke(mentorCollider);
+            // Start battle transition
+            DialogManager.Instance.OnCloseDialog += () =>
+            {
+                Sequence sequence = DOTween.Sequence();
+                BattleTransition(mentorBattleIntro, mentorBattleLoop, sequence, 2.8f);
+                sequence.OnComplete(() => OnTransitionDone?.Invoke());
+            };
         }
+    }
+    
+    /// <summary>
+    /// Animates a transition into a battle and starts playing music,
+    /// </summary>
+    /// <param name="introClip">The intro part of an audio clip.</param>
+    /// <param name="loopClip">The looping part of an audio clip.</param>
+    /// <param name="sequence">An empty DOTween Sequence variable.</param>
+    /// <param name="transitionTime">The total time it takes to complete th transition.</param>
+    private void BattleTransition(AudioClip introClip, AudioClip loopClip, Sequence sequence = null, float transitionTime = 2.6f)
+    {
+        _inTransition = true;
+        if (ReferenceEquals(sequence, null))
+            sequence = DOTween.Sequence();
+        AudioManager.Instance.PlayMusic(introClip, loopClip);
+        float halvedTransitionTime = transitionTime / 2;
+        sequence.Append(mainCamera.DOOrthoSize(_cameraSize + 2.5f, halvedTransitionTime));
+        sequence.Append(mainCamera.DOOrthoSize(_cameraSize - 3.5f, halvedTransitionTime).SetEase(Ease.InSine));
+        sequence.Join(transitionBlock.DOFade(1f, halvedTransitionTime).SetEase(Ease.InSine));
     }
 
     /// <summary>

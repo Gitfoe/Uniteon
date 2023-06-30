@@ -55,28 +55,46 @@ public class UniteonBattle : MonoBehaviour
         _mentorParty = mentorParty;
         _isMentorBattle = true;
         _gamerController = gamerParty.GetComponent<GamerController>();
-        _mentorController = gamerParty.GetComponent<MentorController>();
+        _mentorController = mentorParty.GetComponent<MentorController>();
         StartCoroutine(InitialiseBattle());
     }
    
 
     /// <summary>
-    /// Initializes the battle scene.
+    /// Initializes the battle scene by sending out Uniteon(s).
     /// </summary>
     private IEnumerator InitialiseBattle()
     {
         // Initialise sfx
         _audioClips = UniteonSfx.ConvertListToDictionary(audioClips);
-
+        // Disable HUD
+        uniteonUnitGamer.DisableHud();
+        uniteonUnitFoe.DisableHud();
         if (_isMentorBattle)
         {
+            // Show gamer and foe sprites
             uniteonUnitGamer.gameObject.SetActive(false);
             uniteonUnitFoe.gameObject.SetActive(false);
             gamerSprite.gameObject.SetActive(true);
             foeSprite.gameObject.SetActive(true);
             gamerSprite.sprite = _gamerController.Sprite;
             foeSprite.sprite = _mentorController.Sprite;
-            yield return battleDialogBox.TypeOutDialog($"{_mentorController.MentorName} wants to fight!");
+            yield return battleDialogBox.TypeOutDialog($"{_mentorController.MentorName} wants to fight!", 1.72f);
+            // Send out first Uniteon of the foe
+            foeSprite.gameObject.SetActive(false);
+            uniteonUnitFoe.gameObject.SetActive(true);
+            Uniteon foeUniteon = _mentorParty.GetHealthyUniteon();
+            uniteonUnitFoe.InitialiseUniteonUnit(foeUniteon);
+            StartCoroutine(uniteonUnitFoe.Uniteon.PlayCry(0.72f));
+            yield return battleDialogBox.TypeOutDialog($"{_mentorController.MentorName} sent out {foeUniteon.UniteonBase.UniteonName}!", 1.27f);
+            // Send out first Uniteon of the gamer
+            gamerSprite.gameObject.SetActive(false);
+            uniteonUnitGamer.gameObject.SetActive(true);
+            Uniteon gamerUniteon = _gamerParty.GetHealthyUniteon();
+            uniteonUnitGamer.InitialiseUniteonUnit(gamerUniteon);
+            battleDialogBox.SetMoveNames(gamerUniteon.Moves);
+            StartCoroutine(uniteonUnitGamer.Uniteon.PlayCry(-0.72f));
+            yield return battleDialogBox.TypeOutDialog($"Go get 'em, {gamerUniteon.UniteonBase.UniteonName}!", 1.27f);
         }
         else
         {
@@ -473,11 +491,22 @@ public class UniteonBattle : MonoBehaviour
             Uniteon nextUniteon = _gamerParty.GetHealthyUniteon();
             if (nextUniteon != null)
                 OpenPartyScreen();
-            else
+            else // If not, lost
                 BattleOver(false);
         }
         else
-            BattleOver(true);
+        {
+            if (_isMentorBattle)
+            {
+                var nextUniteon = _mentorParty.GetHealthyUniteon(); // Just get the next Uniteon in the party
+                if (!ReferenceEquals(nextUniteon, null))
+                    StartCoroutine(SendOutMentorUniteon(nextUniteon));
+                else
+                    BattleOver(true);
+            }
+            else
+                BattleOver(true);
+        }
     }
 
     /// <summary>
@@ -544,6 +573,21 @@ public class UniteonBattle : MonoBehaviour
         }
         else
             _battleState = BattleSequenceState.ExecutingTurn;
+    }
+
+    /// <summary>
+    /// Sends out a mentor's Uniteon into the battlefield. 
+    /// </summary>
+    /// <param name="uniteon">The Uniteon that needs to be sent out.</param>
+    /// <returns>Coroutine.</returns>
+    private IEnumerator SendOutMentorUniteon(Uniteon uniteon)
+    {
+        _battleState = BattleSequenceState.Busy;
+        uniteonUnitFoe.InitialiseUniteonUnit(uniteon);
+        StartCoroutine(uniteon.PlayCry(0.72f));
+        yield return battleDialogBox.TypeOutDialog(
+            $"{_mentorController.MentorName} sent out {uniteon.UniteonBase.UniteonName}!");
+        _battleState = BattleSequenceState.ExecutingTurn;
     }
     #endregion
     

@@ -32,15 +32,15 @@ public class DialogManager : MonoBehaviour
     /// Prints NPC dialog to the dialog box in the world UI.
     /// </summary>
     /// <param name="dialog">The dialog that needs to be printed.</param>
-    /// <param name="OnFinished">Method that gets ran once a dialog finished.</param>
+    /// <param name="onFinished">Method that gets ran once a dialog finished.</param>
     /// <returns>Coroutine.</returns>
-    public IEnumerator PrintDialog(Dialog dialog, Action OnFinished = null)
+    public IEnumerator PrintDialog(Dialog dialog, Action onFinished = null)
     {
         yield return new WaitForEndOfFrame(); // Wait 1 frame because GetKeyDown is still active in the same frame
         OnShowDialog?.Invoke();
         AudioManager.Instance.PlaySfx(aButton);
         _dialog = dialog;
-        OnDialogFinished = OnFinished;
+        OnDialogFinished = onFinished;
         dialogBox.SetActive(true);
         StartCoroutine(TypeOutDialog(dialog.Lines[0]));
     }

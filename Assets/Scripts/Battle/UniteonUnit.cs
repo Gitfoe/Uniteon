@@ -43,9 +43,12 @@ public class UniteonUnit : MonoBehaviour
             ? PlaySpriteAnimation(Uniteon.UniteonBase.BackSprite)
             : PlaySpriteAnimation(Uniteon.UniteonBase.FrontSprite));
         uniteonHud.SetGamerData(uniteon);
+        uniteonHud.gameObject.SetActive(true);
         _sprite.color = _originalColorSprite;
         PlayBattleEnterAnimation();
     }
+
+    public void DisableHud() => uniteonHud.gameObject.SetActive(false);
     
     #region Animations
     /// <summary>
@@ -71,7 +74,7 @@ public class UniteonUnit : MonoBehaviour
     /// <summary>
     /// Plays the battle enter animation.
     /// </summary>
-    public void PlayBattleEnterAnimation()
+    private void PlayBattleEnterAnimation()
     {
         _sprite.rectTransform.localPosition = isGamerUniteon ? new Vector3(-500f, _originalPosSprite.y) : new Vector3( 500f, _originalPosSprite.y);
         _sprite.rectTransform.DOLocalMoveX(_originalPosSprite.x, 1.27f);

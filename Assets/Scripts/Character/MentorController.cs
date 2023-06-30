@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-using UnityEngine.Serialization;
 
 public class MentorController : MonoBehaviour
 {
@@ -20,10 +19,7 @@ public class MentorController : MonoBehaviour
     public string MentorName => mentorName;
     public Sprite Sprite => sprite;
     
-    private void Awake()
-    {
-        _character = GetComponent<Character>();
-    }
+    private void Awake() => _character = GetComponent<Character>();
 
     private void Start()
     {
@@ -33,9 +29,9 @@ public class MentorController : MonoBehaviour
     /// <summary>
     /// Gets triggered once the gamer enters the mentor's FOV.
     /// </summary>
-    /// <param name="gamer"></param>
-    /// <returns></returns>
-    public IEnumerator TriggerMentorBattle(GamerController gamer)
+    /// <param name="gamer">The controller of the gamer that interacted with this mentor.</param>
+    /// <returns>Coroutine.</returns>
+    public IEnumerator TriggerMentorChat(GamerController gamer)
     {
         AudioManager.Instance.PlayMusic(eyesMeetIntro, eyesMeetLoop);
         yield return AnimateExclamationMark(0.5f, 0.27f);
@@ -45,12 +41,14 @@ public class MentorController : MonoBehaviour
         moveVector = new Vector3(Mathf.Round(moveVector.x), Mathf.Round(moveVector.y));
         yield return _character.Move(moveVector);
         // Open dialog
-        StartCoroutine(DialogManager.Instance.PrintDialog(dialog, () =>
-        {
-            GameController.Instance.InitiateBattle(this);
-        }));
+        StartCoroutine(DialogManager.Instance.PrintDialog(dialog));
     }
     
+    /// <summary>
+    /// Gets fired once the transition animation is done by the gamer.
+    /// </summary>
+    public void InitiateMentorBattle() => GameController.Instance.InitiateBattle(this);
+
     private IEnumerator AnimateExclamationMark(float moveDuration, float fadeDuration)
     {
         exclamationMark.SetActive(true);

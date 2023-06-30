@@ -25,10 +25,11 @@ public class GameController : MonoBehaviour
         gamerController.OnInMentorsView += (Collider2D mentorCollider) =>
         {
             MentorController mentor = mentorCollider.GetComponentInParent<MentorController>();
+            gamerController.OnTransitionDone += mentor.InitiateMentorBattle;
             if (!ReferenceEquals(mentor, null))
             {
                 _gameState = GameState.Cutscene;
-                StartCoroutine(mentor.TriggerMentorBattle(gamerController));
+                StartCoroutine(mentor.TriggerMentorChat(gamerController));
             }
         };
         uniteonBattle.OnBattleOver += EndBattle;
