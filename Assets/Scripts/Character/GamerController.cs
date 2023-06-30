@@ -27,7 +27,7 @@ public class GamerController : MonoBehaviour
     // Properties
     public string GamerName => gamerName;
     public Sprite Sprite => sprite;
-    
+
     // Events
     public event Action<MentorController> OnEncountered;
     public event Action<Collider2D> OnInMentorsView;
@@ -50,7 +50,7 @@ public class GamerController : MonoBehaviour
     {
         transitionBlock.color = new Color(1f, 1f, 1f, 0f);
         mainCamera.orthographicSize = _cameraSize;
-        _inTransition = false;
+        //_inTransition = false;
         AudioManager.Instance.PlayMusic(sceneMusic);
     }
 
@@ -154,6 +154,7 @@ public class GamerController : MonoBehaviour
         sequence.Append(mainCamera.DOOrthoSize(_cameraSize + 2.5f, halvedTransitionTime));
         sequence.Append(mainCamera.DOOrthoSize(_cameraSize - 3.5f, halvedTransitionTime).SetEase(Ease.InSine));
         sequence.Join(transitionBlock.DOFade(1f, halvedTransitionTime).SetEase(Ease.InSine));
+        _inTransition = false;
     }
 
     /// <summary>

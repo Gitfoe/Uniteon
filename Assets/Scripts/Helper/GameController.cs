@@ -70,11 +70,11 @@ public class GameController : MonoBehaviour
     
     private void EndBattle(bool won)
     {
+        _gameState = GameState.World;
         if (!ReferenceEquals(_mentor, null) && won)
         {
             _mentor.HandleBattleLost();
         }
-        _gameState = GameState.World;
         gamerController.InitialiseWorld();
         uniteonBattle.gameObject.SetActive(false);
         worldCamera.gameObject.SetActive(true);

@@ -146,6 +146,9 @@ public class Uniteon
         };
     }
 
+    /// <summary>
+    /// Resets stat boosts.
+    /// </summary>
     public void OnBattleOver() => ResetBoosts();
     
     /// <summary>
