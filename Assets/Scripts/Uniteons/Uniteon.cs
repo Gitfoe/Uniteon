@@ -132,6 +132,20 @@ public class Uniteon
     }
 
     /// <summary>
+    /// Checks if an Uniteon leveled up.
+    /// </summary>
+    /// <returns>True if yes and false if not.</returns>
+    public bool CheckLevelUp()
+    {
+        if (Experience > UniteonBase.GetExperienceForLevel(level + 1))
+        {
+            level++;
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
     /// Resets all the stat boosts to 0.
     /// </summary>
     private void ResetBoosts()

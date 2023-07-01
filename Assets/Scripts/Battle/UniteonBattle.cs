@@ -2,15 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
+using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class UniteonBattle : MonoBehaviour
 {
     #region Fields
+    [SerializeField] private Image fade;
     [SerializeField] private UniteonUnit uniteonUnitGamer;
     [SerializeField] private UniteonUnit uniteonUnitFoe;
     [SerializeField] private BattleDialogBox battleDialogBox;
@@ -91,6 +91,10 @@ public class UniteonBattle : MonoBehaviour
     private IEnumerator InitialiseBattle()
     {
         BattleState = BattleSequenceState.Start;
+        // Fade in
+        fade.gameObject.SetActive(true);
+        fade.color = new Color(1f, 1f, 1f, 1f);
+        fade.DOFade(0f, 0.72f);
         // Initialise sfx dict
         _audioClips = UniteonSfx.ConvertListToDictionary(audioClips);
         // Disable HUD
@@ -218,11 +222,18 @@ public class UniteonBattle : MonoBehaviour
     /// Sets the state to battle over and clean up the class.
     /// </summary>
     /// <param name="won">If the gamer won or lost the battle.</param>
-    private void HandleBattleOver(bool won)
+    private IEnumerator HandleBattleOver(bool won)
     {
-        BattleState = BattleSequenceState.BattleOver;
+        // Wait until the gamer continues
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter));
+        AudioManager.Instance.PlaySfx(_audioClips["aButton"]);
+        // Fade out
+        fade.color = new Color(0f, 0f, 0f, 0f);
+        yield return fade.DOFade(1f, 0.72f).WaitForCompletion();
+        yield return new WaitForSeconds(0.72f);
         AudioManager.Instance.StopMusic();
         _gamerParty.Uniteons.ForEach(u => u.OnBattleOver());
+        OnBattleOver?.Invoke(won);
         // Reset variables
         _actionSelection = 0;
         _moveSelection = 0;
@@ -233,7 +244,7 @@ public class UniteonBattle : MonoBehaviour
         _isMentorBattle = false;
         _gamerController = null;
         _mentorController = null;
-        OnBattleOver?.Invoke(won);
+        fade.DOFade(0f, 1.27f);
     }
     #endregion
 
@@ -423,7 +434,7 @@ public class UniteonBattle : MonoBehaviour
                 CurrentTurn = CurrentBattleTurn.Second; // Declare second turn
                 if (secondUnit.Uniteon.HealthPoints > 0)
                     yield return ExecuteMove(secondUnit, firstUnit, secondUnit.Uniteon.ExecutingMove);
-                else
+                else if (secondUnit.IsGamerUniteon)
                     BattleState = BattleSequenceState.PartyScreenFromFaint;
             }
         }
@@ -493,7 +504,8 @@ public class UniteonBattle : MonoBehaviour
             // If Uniteon fainted, write to dialog box, play faint animation and cry
             if (defendingUnit.Uniteon.HealthPoints <= 0)
             {
-                AudioManager.Instance.StopSfx(2); // Stop low health sfx
+                if (!_isMentorBattle) // Stop low health sfx if it's not a mentor battle
+                    AudioManager.Instance.StopSfx(2);
                 yield return battleDialogBox.TypeOutDialog(
                     $"{defendingUnit.Uniteon.UniteonBase.UniteonName} fainted!");
                 yield return defendingUnit.Uniteon.PlayCry(panning: -panning, fainted: true);
@@ -501,6 +513,14 @@ public class UniteonBattle : MonoBehaviour
                 yield return defendingUnit.PlayFaintAnimation();
                 if (!defendingUnit.IsGamerUniteon)
                 {
+                    // If mentor out of Uniteon, or wild Uniteon fainted, battle over
+                    if ((_isMentorBattle && _mentorParty.GetHealthyUniteon() == null) || !_isMentorBattle)
+                    {
+                        BattleState = BattleSequenceState.BattleOver;
+                        AudioManager.Instance.StopSfx(2);
+                        AudioManager.Instance.PlayMusic(_audioClips["victoryMentorIntro"],
+                            _audioClips["victoryMentorLoop"]);
+                    }
                     // Gain experience for gamer Uniteon
                     var expYield = defendingUnit.Uniteon.UniteonBase.BaseExperience;
                     int foeLevel = defendingUnit.Uniteon.UniteonBase.BaseExperience;
@@ -509,10 +529,22 @@ public class UniteonBattle : MonoBehaviour
                     // https://bulbapedia.bulbagarden.net/wiki/Experience
                     int experienceGained = Mathf.FloorToInt((expYield * foeLevel * mentorBonus) / 7);
                     uniteonUnitGamer.Uniteon.Experience += experienceGained;
+                    // Print experience message
                     yield return battleDialogBox.TypeOutDialog(
                         $"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} gained {experienceGained} experience points!");
                     // Update exp bar
+                    AudioManager.Instance.PlaySfx(_audioClips["expRaise"]);
                     yield return uniteonUnitGamer.UniteonHud.UpdateExperienceBar();
+                    // Check for level up
+                    while (uniteonUnitGamer.Uniteon.CheckLevelUp())
+                    {
+                        uniteonUnitGamer.UniteonHud.UpdateLevel();
+                        AudioManager.Instance.PlaySfx(_audioClips["levelUp"]);
+                        yield return battleDialogBox.TypeOutDialog(
+                            $"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} grew to level {uniteonUnitGamer.Uniteon.Level}!");
+                        AudioManager.Instance.PlaySfx(_audioClips["expRaise"]);
+                        yield return uniteonUnitGamer.UniteonHud.UpdateExperienceBar(true);
+                    }
                 }
                 yield return CheckBattleOver(defendingUnit);
             }
@@ -526,26 +558,24 @@ public class UniteonBattle : MonoBehaviour
     /// <returns>Coroutine.</returns>
     private IEnumerator CheckBattleOver(UniteonUnit faintedUnit)
     {
-        if (faintedUnit.IsGamerUniteon)
+        if (BattleState == BattleSequenceState.BattleOver)
+            StartCoroutine(HandleBattleOver(true));
+        else if (faintedUnit.IsGamerUniteon)
         { // Check if gamer has more Uniteon in it's party
             Uniteon nextUniteon = _gamerParty.GetHealthyUniteon();
             if (nextUniteon != null) // If gamer has, open party screen
                 OpenPartyScreen(BattleSequenceState.PartyScreenFromFaint);
-            else // If not, lost
-                HandleBattleOver(false);
-        }
-        else
-        {
-            if (_isMentorBattle)
-            { // If it's a mentor battle, just send out next Uniteon
-                var nextUniteon = _mentorParty.GetHealthyUniteon(); // Just get the next Uniteon in the party
-                if (!ReferenceEquals(nextUniteon, null))
-                    yield return SwitchMentorUniteon(nextUniteon);
-                else
-                    HandleBattleOver(true);
-            }
             else
-                HandleBattleOver(true);
+            {
+                // If not, lost
+                yield return HandleBattleOver(false);
+            }
+        }
+        else // If it's a mentor battle, just send out next Uniteon
+        {
+            Uniteon nextUniteon = _mentorParty.GetHealthyUniteon(); // Just get the next Uniteon in the party
+            if (!ReferenceEquals(nextUniteon, null))
+                yield return SwitchMentorUniteon(nextUniteon);
         }
     }
     

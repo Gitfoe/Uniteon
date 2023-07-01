@@ -23,7 +23,7 @@ public class UniteonHud : MonoBehaviour
     {
         _uniteon = uniteon;
         nameText.text = uniteon.UniteonBase.UniteonName;
-        levelText.text = $"Lv.{uniteon.Level}";
+        UpdateLevel();
         if (healthText != null) // Only assign health text if there is place for it (only for the gamer, not for the foe)
             healthText.text = $"{uniteon.HealthPoints}/{uniteon.MaxHealthPoints}";
         healthBar.SetHealthBar((float)uniteon.HealthPoints / uniteon.MaxHealthPoints, isGamer); // Normalize health points
@@ -78,6 +78,9 @@ public class UniteonHud : MonoBehaviour
         yield return healthBar.SetHealthBarSmoothly((float)_uniteon.HealthPoints / _uniteon.MaxHealthPoints); // Normalize health points
     }
 
+    /// <summary>
+    /// Sets the experience bar to the correct experience value.
+    /// </summary>
     private void SetExperienceBar()
     {
         if (expBar == null) return;
@@ -85,17 +88,30 @@ public class UniteonHud : MonoBehaviour
         expBar.transform.localScale = new Vector3(normalizedExp, 1f, 1f);
     }
     
-    public IEnumerator UpdateExperienceBar()
+    /// <summary>
+    /// Sets the experience bar in a smooth manner.
+    /// </summary>
+    /// <param name="reset">Resets the bar to 0 first in case of level up.</param>
+    /// <returns>Coroutine.</returns>
+    public IEnumerator UpdateExperienceBar(bool reset = false)
     {
         if (ReferenceEquals(expBar, null)) yield break;
+        if (reset)
+            expBar.transform.localScale = new Vector3(0f, 1f, 1f);
         float normalizedExp = GetNormalizedExperienceGain();
-        yield return expBar.transform.DOScaleX(normalizedExp, 1.27f).WaitForCompletion();
+        yield return expBar.transform.DOScaleX(normalizedExp, 1.2f).SetEase(Ease.Linear).WaitForCompletion();
     }
-
+    
+    /// <summary>
+    /// Normalizes the experience gain.
+    /// </summary>
+    /// <returns>Experience value between 0 and 1 float.</returns>
     private float GetNormalizedExperienceGain()
     {
         int currentExp = _uniteon.UniteonBase.GetExperienceForLevel(_uniteon.Level);
         int nextExp = _uniteon.UniteonBase.GetExperienceForLevel(_uniteon.Level + 1);
         return Mathf.Clamp01((float)(_uniteon.Experience - currentExp) / (nextExp - currentExp)); // Normalize
     }
+    
+    public void UpdateLevel() => levelText.text = $"Lv.{_uniteon.Level}";
 }

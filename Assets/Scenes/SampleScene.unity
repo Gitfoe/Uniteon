@@ -9928,6 +9928,7 @@ RectTransform:
   - {fileID: 146759760}
   - {fileID: 1257568883}
   - {fileID: 1316574872}
+  - {fileID: 1492659395}
   m_Father: {fileID: 1495501004}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -11660,7 +11661,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -91.18526, y: -22.000004}
+  m_AnchoredPosition: {x: -91.18524, y: -22.000004}
   m_SizeDelta: {x: -211.75, y: 9.55}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1359428666
@@ -12057,6 +12058,82 @@ MonoBehaviour:
   - uniteonBase: {fileID: 11400000, guid: c1a4a01995a150646a9945ee467a9285, type: 2}
     level: 1
     healthPoints: 0
+--- !u!1 &1492659394
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1492659395}
+  - component: {fileID: 1492659396}
+  - component: {fileID: 1492659397}
+  m_Layer: 5
+  m_Name: Fade
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1492659395
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492659394}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 983939590}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &1492659396
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492659394}
+  m_CullTransparentMesh: 1
+--- !u!114 &1492659397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492659394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &1495501003
 GameObject:
   m_ObjectHideFlags: 0
@@ -12103,6 +12180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d52bc33afbaae1a4888a2f9a141a6b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fade: {fileID: 1492659397}
   uniteonUnitGamer: {fileID: 162767278}
   uniteonUnitFoe: {fileID: 1333168449}
   battleDialogBox: {fileID: 1257568886}
@@ -12129,6 +12207,18 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 2dfbb954e17b5dc4b9b465200a46a869, type: 3}
   - clipName: statFell
     clip: {fileID: 8300000, guid: 72ac76b0e33cc2646bd54b2b56e735b8, type: 3}
+  - clipName: expRaise
+    clip: {fileID: 8300000, guid: a2ae2a6d1faeecd43bdbc9c85e1f861d, type: 3}
+  - clipName: levelUp
+    clip: {fileID: 8300000, guid: 31419e01e4af9b7459c7aa305d831af9, type: 3}
+  - clipName: victoryGymIntro
+    clip: {fileID: 8300000, guid: 758fc9d3a9c11ab4c94230fac87630bd, type: 3}
+  - clipName: victoryGymLoop
+    clip: {fileID: 8300000, guid: 8ac58c0e4d99d9f48b187eceadead717, type: 3}
+  - clipName: victoryMentorIntro
+    clip: {fileID: 8300000, guid: d4ef96b869ae92949a6ffb90cf5a5466, type: 3}
+  - clipName: victoryMentorLoop
+    clip: {fileID: 8300000, guid: d7563ea5ee3410e41b10ef8abf9da304, type: 3}
   partyScreen: {fileID: 1316574871}
   defaultMove: {fileID: 11400000, guid: 7fc6fbc6efe38be4a92df4c9be06d3ac, type: 2}
   gamerSprite: {fileID: 675940988}
