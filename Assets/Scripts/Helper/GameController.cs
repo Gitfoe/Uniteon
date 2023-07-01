@@ -12,6 +12,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private GamerController gamer;
     [SerializeField] private UniteonBattle uniteonBattle;
     [SerializeField] private Camera worldCamera;
+    [SerializeField] private Canvas worldUI;
     private GameState _gameState;
     private MentorController _mentor;
     
@@ -59,6 +60,7 @@ public class GameController : MonoBehaviour
         _gameState = GameState.Battle;
         uniteonBattle.gameObject.SetActive(true);
         worldCamera.gameObject.SetActive(false);
+        worldUI.gameObject.SetActive(false);
         _mentor = mentor;
         UniteonParty gamerParty = gamer.GetComponent<UniteonParty>();
         if (ReferenceEquals(mentor, null))
@@ -85,6 +87,8 @@ public class GameController : MonoBehaviour
         gamer.InitialiseWorld();
         uniteonBattle.gameObject.SetActive(false);
         worldCamera.gameObject.SetActive(true);
+        worldUI.gameObject.SetActive(true);
+        
     }
 
     // Update is called once per frame

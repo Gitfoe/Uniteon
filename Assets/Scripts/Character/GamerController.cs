@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Serialization;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class GamerController : MonoBehaviour
@@ -12,12 +12,13 @@ public class GamerController : MonoBehaviour
     [SerializeField] private string gamerName;
     [SerializeField] private Sprite sprite;
     [SerializeField] private Camera mainCamera;
-    [SerializeField] private SpriteRenderer transitionBlock;
+    [SerializeField] private Image transition;
     [SerializeField] private AudioClip sceneMusic;
     [SerializeField] private AudioClip wildMusicIntro;
     [SerializeField] private AudioClip wildMusicLoop;
     [SerializeField] private AudioClip mentorBattleIntro;
     [SerializeField] private AudioClip mentorBattleLoop;
+    [SerializeField] private AudioClip[] grassSteps;
     private Character _character;
     private Vector2 _gamerInput;
     private Vector2 _previousGamerInput;
@@ -48,10 +49,13 @@ public class GamerController : MonoBehaviour
     /// </summary>
     public void InitialiseWorld()
     {
-        transitionBlock.color = new Color(1f, 1f, 1f, 0f);
+        // Set camera back to original size
         mainCamera.orthographicSize = _cameraSize;
-        //_inTransition = false;
+        // Start playing music
         AudioManager.Instance.PlayMusic(sceneMusic);
+        // Fade in
+        transition.color = new Color(0f, 0f, 0f, 1f);
+        transition.DOFade(0f, 0.72f).OnComplete(() => transition.gameObject.SetActive(false));
     }
 
     /// <summary>
@@ -115,6 +119,8 @@ public class GamerController : MonoBehaviour
                 Debug.Log($"In battle transition: {_inTransition}");
             });
         }
+        else
+            PlayRandomGrassClip();
     }
 
     /// <summary>
@@ -130,6 +136,7 @@ public class GamerController : MonoBehaviour
         if (mentor is { BattleLost: false })
         {
             _character.Animator.IsMoving = false;
+            _character.LookTowards(mentorCollider.transform.position);
             OnInMentorsView?.Invoke(mentorCollider);
         }
         // Start mentor eyes meet sequence, Only execute battle transition if mentor & battle available
@@ -161,6 +168,8 @@ public class GamerController : MonoBehaviour
     private void BattleTransition(AudioClip introClip, AudioClip loopClip, Sequence sequence = null, float transitionTime = 2.6f)
     {
         _inTransition = true;
+        transition.color = new Color(1f, 1f, 1f, 0f);
+        transition.gameObject.SetActive(true);
         Debug.Log($"In battle transition: {_inTransition}");
         if (ReferenceEquals(sequence, null))
             sequence = DOTween.Sequence();
@@ -168,7 +177,7 @@ public class GamerController : MonoBehaviour
         float halvedTransitionTime = transitionTime / 2;
         sequence.Append(mainCamera.DOOrthoSize(_cameraSize + 2.5f, halvedTransitionTime));
         sequence.Append(mainCamera.DOOrthoSize(_cameraSize - 3.5f, halvedTransitionTime).SetEase(Ease.InSine));
-        sequence.Join(transitionBlock.DOFade(1f, halvedTransitionTime).SetEase(Ease.InSine));
+        sequence.Join(transition.DOFade(1f, halvedTransitionTime).SetEase(Ease.InSine));
     }
 
     /// <summary>
@@ -183,5 +192,14 @@ public class GamerController : MonoBehaviour
         {
             collider.GetComponent<Interactable>()?.Interact(transform);
         }
+    }
+    
+    /// <summary>
+    /// Plays a random grass step audio sfx.
+    /// </summary>
+    private void PlayRandomGrassClip()
+    {
+        AudioClip grassClip = grassSteps[Random.Range(0, grassSteps.Length)];
+        AudioManager.Instance.PlaySfx(grassClip);
     }
 }

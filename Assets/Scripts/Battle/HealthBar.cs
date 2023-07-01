@@ -139,10 +139,11 @@ public class HealthBar : MonoBehaviour
                 if (!AudioManager.Instance.IsPlayingSfx(lowHealth) && sfx)
                     AudioManager.Instance.PlaySfx(lowHealth, true, 2);
                 break;
-            // Any other HP, disable flashing and stop audio if it is playing
+            // Any other HP, disable flashing and stop audio if it is playing, unless sfx is off
             default:
                 SetFlashingHealthBorder(false);
-                if (sfx) AudioManager.Instance.StopSfx(2, lowHealth);
+                if (sfx)
+                    AudioManager.Instance.StopSfx(2, lowHealth);
                 break;
         }
     }

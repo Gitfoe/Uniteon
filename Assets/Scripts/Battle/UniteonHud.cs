@@ -99,7 +99,8 @@ public class UniteonHud : MonoBehaviour
         if (reset)
             expBar.transform.localScale = new Vector3(0f, 1f, 1f);
         float normalizedExp = GetNormalizedExperienceGain();
-        yield return expBar.transform.DOScaleX(normalizedExp, 1.2f).SetEase(Ease.Linear).WaitForCompletion();
+        yield return expBar.transform.DOScaleX(normalizedExp, 1.27f).SetEase(Ease.Linear).WaitForCompletion();
+        yield return new WaitForSeconds(0.72f);
     }
     
     /// <summary>

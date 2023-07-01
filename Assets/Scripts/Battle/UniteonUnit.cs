@@ -42,8 +42,8 @@ public class UniteonUnit : MonoBehaviour
         _spriteAnimation = StartCoroutine(isGamerUniteon
             ? PlaySpriteAnimation(Uniteon.UniteonBase.BackSprite)
             : PlaySpriteAnimation(Uniteon.UniteonBase.FrontSprite));
-        uniteonHud.SetGamerData(uniteon);
         uniteonHud.gameObject.SetActive(true);
+        uniteonHud.SetGamerData(uniteon);
         _sprite.color = _originalColorSprite;
         PlayBattleEnterAnimation();
     }

@@ -32,6 +32,8 @@ public class UniteonBattle : MonoBehaviour
     private bool _isMentorBattle;
     private GamerController _gamerController;
     private MentorController _mentorController;
+    private Vector3 _orgPosGamerSprite;
+    private Vector3 _orgPosFoeSprite;
     #endregion
     
     #region Debug
@@ -83,7 +85,6 @@ public class UniteonBattle : MonoBehaviour
         _mentorController = mentorParty.GetComponent<MentorController>();
         StartCoroutine(InitialiseBattle());
     }
-   
 
     /// <summary>
     /// Initializes the battle scene by sending out Uniteon(s).
@@ -109,18 +110,22 @@ public class UniteonBattle : MonoBehaviour
             uniteonUnitFoe.gameObject.SetActive(false);
             gamerSprite.gameObject.SetActive(true);
             foeSprite.gameObject.SetActive(true);
+            _orgPosGamerSprite = gamerSprite.rectTransform.localPosition;
+            _orgPosFoeSprite = foeSprite.rectTransform.localPosition;
             gamerSprite.sprite = _gamerController.Sprite;
             foeSprite.sprite = _mentorController.Sprite;
+            gamerSprite.color = Color.white;
+            foeSprite.color = Color.white;
             yield return battleDialogBox.TypeOutDialog($"{_mentorController.MentorName} wants to fight!", 1.72f);
             // Send out first Uniteon of the foe
-            foeSprite.gameObject.SetActive(false);
+            PlayCharacterLeaveAnimation(false);
             uniteonUnitFoe.gameObject.SetActive(true);
             Uniteon foeUniteon = _mentorParty.GetHealthyUniteon();
             uniteonUnitFoe.InitialiseUniteonUnit(foeUniteon);
             StartCoroutine(uniteonUnitFoe.Uniteon.PlayCry(0.72f));
             yield return battleDialogBox.TypeOutDialog($"{_mentorController.MentorName} sent out {foeUniteon.UniteonBase.UniteonName}!", 1.27f);
             // Send out first Uniteon of the gamer
-            gamerSprite.gameObject.SetActive(false);
+            PlayCharacterLeaveAnimation(true);
             uniteonUnitGamer.gameObject.SetActive(true);
             Uniteon gamerUniteon = _gamerParty.GetHealthyUniteon();
             uniteonUnitGamer.InitialiseUniteonUnit(gamerUniteon);
@@ -227,10 +232,10 @@ public class UniteonBattle : MonoBehaviour
         // Wait until the gamer continues
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter));
         AudioManager.Instance.PlaySfx(_audioClips["aButton"]);
-        // Fade out
+        // Fade out screen and music
         fade.color = new Color(0f, 0f, 0f, 0f);
+        AudioManager.Instance.StopMusic(true, 0.72f);
         yield return fade.DOFade(1f, 0.72f).WaitForCompletion();
-        yield return new WaitForSeconds(0.72f);
         AudioManager.Instance.StopMusic();
         _gamerParty.Uniteons.ForEach(u => u.OnBattleOver());
         OnBattleOver?.Invoke(won);
@@ -559,7 +564,7 @@ public class UniteonBattle : MonoBehaviour
     private IEnumerator CheckBattleOver(UniteonUnit faintedUnit)
     {
         if (BattleState == BattleSequenceState.BattleOver)
-            StartCoroutine(HandleBattleOver(true));
+            yield return HandleBattleOver(true);
         else if (faintedUnit.IsGamerUniteon)
         { // Check if gamer has more Uniteon in it's party
             Uniteon nextUniteon = _gamerParty.GetHealthyUniteon();
@@ -650,7 +655,6 @@ public class UniteonBattle : MonoBehaviour
                 $"You've done well, {uniteonUnitGamer.Uniteon.UniteonBase.UniteonName}!", 1.27f);
             AudioManager.Instance.PlaySfx(_audioClips["switchOut"]);
             uniteonUnitGamer.PlayBattleLeaveAnimation();
-            yield return new WaitForSeconds(1.27f);
         }
         // Send out new Uniteon, initialise dialog box of gamer side of battlefield, play cry, print text
         uniteonUnitGamer.InitialiseUniteonUnit(uniteon);
@@ -748,6 +752,33 @@ public class UniteonBattle : MonoBehaviour
             string message = uniteon.StatusMessages.Dequeue();
             yield return battleDialogBox.TypeOutDialog(message);
         }
+    }
+    #endregion
+
+    #region Animations
+    /// <summary>
+    /// Animates the leave animation for the gamer and the foe.
+    /// </summary>
+    /// <param name="isGamer">If the gamer needs to be animated (true) or the foe (false).</param>
+    private void PlayCharacterLeaveAnimation(bool isGamer)
+    {
+        Image sprite;
+        Sequence sequence = DOTween.Sequence();
+        if (isGamer)
+        {
+            sprite = gamerSprite;
+            sequence.Append(
+                sprite.transform.DOLocalMove(new Vector3(_orgPosGamerSprite.x - 75f, _orgPosGamerSprite.y - 37.5f),
+                    0.72f));
+        }
+        else
+        {
+            sprite = foeSprite;
+            sequence.Append(
+                sprite.transform.DOLocalMove(new Vector3(_orgPosFoeSprite.x + 75f, _orgPosFoeSprite.y + 37.5f),
+                    0.72f));
+        }
+        sequence.Join(sprite.DOFade(0f, 0.72f));
     }
     #endregion
 }

@@ -1,4 +1,5 @@
 using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
@@ -87,10 +88,24 @@ public class AudioManager : MonoBehaviour
     /// <summary>
     /// Stops any active music from playing.
     /// </summary>
-    public void StopMusic()
+    /// <param name="fade">Whether to fade out the music.</param>
+    /// <param name="fadeDuration">The duration of the fade-out effect.</param>
+    public void StopMusic(bool fade = false, float fadeDuration = 0f)
     {
-        if (musicPlayer.isPlaying)
+        // Fade out the music if fade is enabled and fadeDuration is greater than 0
+        if (musicPlayer.isPlaying && fade && fadeDuration > 0f)
+        {
+            float startVolume = musicPlayer.volume;
+            musicPlayer.DOFade(0f, fadeDuration).OnComplete(() =>
+            {
+                musicPlayer.Stop();
+                musicPlayer.volume = startVolume;
+            });
+        }
+        // Stop the music immediately
+        else if (musicPlayer.isPlaying)
             musicPlayer.Stop();
+        // Stop any active music coroutine
         if (_playMusicRoutine != null)
             StopCoroutine(_playMusicRoutine);
     }
