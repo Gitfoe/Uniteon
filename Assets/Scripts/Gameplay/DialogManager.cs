@@ -18,7 +18,7 @@ public class DialogManager : MonoBehaviour
     // Events
     public event Action OnShowDialog;
     public event Action OnCloseDialog;
-    public event Action OnDialogFinished;
+    public event Action OnCloseDialogAssignable;
 
     // Properties
     public static DialogManager Instance { get; private set; }
@@ -40,9 +40,9 @@ public class DialogManager : MonoBehaviour
         OnShowDialog?.Invoke();
         AudioManager.Instance.PlaySfx(aButton);
         _dialog = dialog;
-        OnDialogFinished = onFinished;
+        OnCloseDialogAssignable = onFinished;
         dialogBox.SetActive(true);
-        StartCoroutine(TypeOutDialog(dialog.Lines[0]));
+        yield return TypeOutDialog(dialog.Lines[0]);
     }
 
     /// <summary>
@@ -62,7 +62,7 @@ public class DialogManager : MonoBehaviour
             {
                 _currentDialogLine = 0;
                 dialogBox.SetActive(false);
-                OnDialogFinished?.Invoke();
+                OnCloseDialogAssignable?.Invoke();
                 OnCloseDialog?.Invoke();
             }
         }

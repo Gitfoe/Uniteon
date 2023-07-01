@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,6 +24,9 @@ public class MentorController : MonoBehaviour, Interactable
     public Sprite Sprite => sprite;
     public bool BattleLost => _battleLost;
     
+    // Events
+    public event Action OnInitiateMentorBattle;
+    
     private void Awake()
     {
         _character = GetComponent<Character>();
@@ -41,6 +45,7 @@ public class MentorController : MonoBehaviour, Interactable
     /// <returns>Coroutine.</returns>
     public IEnumerator TriggerMentorBattle(GamerController gamer = null)
     {
+        Debug.Log($"Mentor battle triggered: {MentorName}");
         AudioManager.Instance.PlayMusic(eyesMeetIntro, eyesMeetLoop);
         yield return AnimateExclamationMark(0.5f, 0.27f);
         if (!ReferenceEquals(gamer, null))
@@ -49,11 +54,13 @@ public class MentorController : MonoBehaviour, Interactable
             Vector3 differenceVector = gamer.transform.position - transform.position;
             Vector3 moveVector = differenceVector - differenceVector.normalized; // Subtract by 1
             moveVector = new Vector3(Mathf.Round(moveVector.x), Mathf.Round(moveVector.y));
+            // Fix for an issue where mentor is not animating when moving
+            _character.Animator.IsMoving = true;
             yield return _character.Move(moveVector);
+            _character.Animator.IsMoving = false;
         }
-
-        // Open dialog
-        StartCoroutine(DialogManager.Instance.PrintDialog(dialog));
+        // Open dialog and bind event to know when a battle is initiated
+        StartCoroutine(DialogManager.Instance.PrintDialog(dialog, OnInitiateMentorBattle));
     }
     
     /// <summary>

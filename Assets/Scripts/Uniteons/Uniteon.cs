@@ -22,6 +22,7 @@ public class Uniteon
         get => healthPoints;
         set => healthPoints = value;
     }
+    public int Experience { get; set; }
     public List<Move> Moves { get; set; }
     public Move ExecutingMove { get; set; }
     public Dictionary<Statistic, int> Stats { get; private set; }
@@ -65,7 +66,7 @@ public class Uniteon
             { Statistic.Defense, Mathf.FloorToInt((UniteonBase.Defense * Level) / 100f) + 5 },
             { Statistic.SpecialAttack, Mathf.FloorToInt((UniteonBase.SpecialAttack * Level) / 100f) + 5 },
             { Statistic.SpecialDefense, Mathf.FloorToInt((UniteonBase.SpecialDefense * Level) / 100f) + 5 },
-            { Statistic.Speed, Mathf.FloorToInt((UniteonBase.Speed  * Level) / 100f) + 5 } 
+            { Statistic.Speed, Mathf.FloorToInt((UniteonBase.Speed * Level) / 100f) + 5 } 
         };
         MaxHealthPoints = Mathf.FloorToInt((UniteonBase.MaxHealthPoints * Level) / 100f) + 10 + Level;
     }

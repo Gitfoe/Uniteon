@@ -971,7 +971,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 269733546}
-  - component: {fileID: 269733545}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -979,21 +978,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &269733545
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 269733544}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 564de7ada1a5b844d921baa23e1109ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  musicPlayer: {fileID: 1023418548}
-  sfxPlayer1: {fileID: 1745574582}
-  sfxPlayer2: {fileID: 1050717743}
 --- !u!4 &269733546
 Transform:
   m_ObjectHideFlags: 0
@@ -11651,6 +11635,7 @@ GameObject:
   - component: {fileID: 1477238025}
   - component: {fileID: 1477238024}
   - component: {fileID: 1477238026}
+  - component: {fileID: 1477238033}
   - component: {fileID: 1477238028}
   - component: {fileID: 1477238029}
   - component: {fileID: 1477238030}
@@ -11760,12 +11745,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1477238023}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 10d6ba082588b6e48862cb9809de6d3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   uniteons:
+  - uniteonBase: {fileID: 11400000, guid: c1a4a01995a150646a9945ee467a9285, type: 2}
+    level: 47
+    healthPoints: 0
   - uniteonBase: {fileID: 11400000, guid: 6dbd16654a5094f4ab1fd566e9d95b00, type: 2}
     level: 1
     healthPoints: 0
@@ -11780,9 +11768,6 @@ MonoBehaviour:
     healthPoints: 0
   - uniteonBase: {fileID: 11400000, guid: 004a74598f3d5854cb376999c15c89a1, type: 2}
     level: 12
-    healthPoints: 0
-  - uniteonBase: {fileID: 11400000, guid: c1a4a01995a150646a9945ee467a9285, type: 2}
-    level: 47
     healthPoints: 0
 --- !u!114 &1477238029
 MonoBehaviour:
@@ -11877,6 +11862,22 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &1477238033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1477238023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10d6ba082588b6e48862cb9809de6d3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uniteons:
+  - uniteonBase: {fileID: 11400000, guid: c1a4a01995a150646a9945ee467a9285, type: 2}
+    level: 1
+    healthPoints: 0
 --- !u!1 &1495501003
 GameObject:
   m_ObjectHideFlags: 0
@@ -12671,11 +12672,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniteons:
-  - uniteonBase: {fileID: 11400000, guid: c1a4a01995a150646a9945ee467a9285, type: 2}
-    level: 47
-    healthPoints: 0
-  - uniteonBase: {fileID: 11400000, guid: 9d0e52104d630a2409a8d35a44432f27, type: 2}
-    level: 51
+  - uniteonBase: {fileID: 11400000, guid: e7ef14892e478264c98c3fd9dc87a4e5, type: 2}
+    level: 39
     healthPoints: 0
   - uniteonBase: {fileID: 11400000, guid: 004a74598f3d5854cb376999c15c89a1, type: 2}
     level: 22
@@ -12683,8 +12681,11 @@ MonoBehaviour:
   - uniteonBase: {fileID: 11400000, guid: ed448f7f717f704489c1532755724c75, type: 2}
     level: 9
     healthPoints: 0
-  - uniteonBase: {fileID: 11400000, guid: e7ef14892e478264c98c3fd9dc87a4e5, type: 2}
-    level: 39
+  - uniteonBase: {fileID: 11400000, guid: 9d0e52104d630a2409a8d35a44432f27, type: 2}
+    level: 51
+    healthPoints: 0
+  - uniteonBase: {fileID: 11400000, guid: c1a4a01995a150646a9945ee467a9285, type: 2}
+    level: 47
     healthPoints: 0
 --- !u!114 &1697058242
 MonoBehaviour:
@@ -14894,6 +14895,7 @@ GameObject:
   - component: {fileID: 2075463854}
   - component: {fileID: 2075463855}
   - component: {fileID: 2075463856}
+  - component: {fileID: 2075463857}
   m_Layer: 0
   m_Name: GeneralScripts
   m_TagString: Untagged
@@ -14943,7 +14945,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29c3334c7387b0e4893c354eb29883b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gamerController: {fileID: 1477238026}
+  gamer: {fileID: 1477238026}
   uniteonBattle: {fileID: 1495501005}
   worldCamera: {fileID: 519420031}
 --- !u!114 &2075463855
@@ -14989,6 +14991,21 @@ MonoBehaviour:
   fovLayer:
     serializedVersion: 2
     m_Bits: 1024
+--- !u!114 &2075463857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2075463851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 564de7ada1a5b844d921baa23e1109ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musicPlayer: {fileID: 1023418548}
+  sfxPlayer1: {fileID: 1745574582}
+  sfxPlayer2: {fileID: 1745574582}
 --- !u!1 &2095632816
 GameObject:
   m_ObjectHideFlags: 0

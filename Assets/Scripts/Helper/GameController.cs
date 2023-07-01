@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// The Game Controller class is responsible for giving controller access to different parts of the code.
@@ -8,7 +9,7 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
     // Fields
-    [SerializeField] private GamerController gamerController;
+    [SerializeField] private GamerController gamer;
     [SerializeField] private UniteonBattle uniteonBattle;
     [SerializeField] private Camera worldCamera;
     private GameState _gameState;
@@ -22,15 +23,19 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        gamerController.OnEncountered += InitiateBattle;
-        gamerController.OnInMentorsView += (Collider2D mentorCollider) =>
+        gamer.OnEncountered += InitiateBattle;
+        gamer.OnInMentorsView += (Collider2D mentorCollider) =>
         {
             MentorController mentor = mentorCollider.GetComponentInParent<MentorController>();
-            gamerController.OnTransitionDone += mentor.InitiateMentorBattle;
+            Debug.Log($"In mentor's view: {mentor.MentorName}");
+            // Subscribe to events
+            mentor.OnInitiateMentorBattle += gamer.TransitionIntoMentorBattle;
+            gamer.OnTransitionDone += mentor.InitiateMentorBattle;
+            // Start mentor battle
             if (!mentor.BattleLost)
             {
                 _gameState = GameState.Cutscene;
-                StartCoroutine(mentor.TriggerMentorBattle(gamerController));
+                StartCoroutine(mentor.TriggerMentorBattle(gamer));
             }
         };
         uniteonBattle.OnBattleOver += EndBattle;
@@ -55,16 +60,18 @@ public class GameController : MonoBehaviour
         uniteonBattle.gameObject.SetActive(true);
         worldCamera.gameObject.SetActive(false);
         _mentor = mentor;
-        UniteonParty gamerParty = gamerController.GetComponent<UniteonParty>();
+        UniteonParty gamerParty = gamer.GetComponent<UniteonParty>();
         if (ReferenceEquals(mentor, null))
         {
             Uniteon wildUniteon = FindObjectOfType<WorldArea>().GetComponent<WorldArea>().GetWildUniteon();
             uniteonBattle.StartBattle(gamerParty, wildUniteon);
+            Debug.Log($"Wild battle initiated: {wildUniteon.UniteonBase.UniteonName}");
         }
         else
         {
             UniteonParty mentorParty = mentor.GetComponent<UniteonParty>();
             uniteonBattle.StartBattle(gamerParty, mentorParty);
+            Debug.Log($"Mentor battle initiated: {mentor.MentorName}");
         }
     }
     
@@ -75,7 +82,7 @@ public class GameController : MonoBehaviour
         {
             _mentor.HandleBattleLost();
         }
-        gamerController.InitialiseWorld();
+        gamer.InitialiseWorld();
         uniteonBattle.gameObject.SetActive(false);
         worldCamera.gameObject.SetActive(true);
     }
@@ -86,7 +93,7 @@ public class GameController : MonoBehaviour
         switch (_gameState)
         {
             case GameState.World:
-                gamerController.ControllerUpdate();
+                gamer.ControllerUpdate();
                 break;
             case GameState.Battle:
                 uniteonBattle.ControllerUpdate();

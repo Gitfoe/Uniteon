@@ -108,33 +108,47 @@ public class GamerController : MonoBehaviour
             // Start battle transition
             Sequence sequence = DOTween.Sequence();
             BattleTransition(wildMusicIntro, wildMusicLoop, sequence);
-            sequence.OnComplete(() => OnEncountered?.Invoke(null));
+            sequence.OnComplete(() =>
+            {
+                OnEncountered?.Invoke(null);
+                _inTransition = false;
+                Debug.Log($"In battle transition: {_inTransition}");
+            });
         }
     }
 
     /// <summary>
-    /// Checks if a gamer is in the view of a mentor and starts a battle.
+    /// Checks if a gamer is in the view of a mentor and initiates the mentor's eyes meet sequence via an event.
     /// </summary>
     private void CheckInMentorsView()
     {
         Collider2D mentorCollider = Physics2D.OverlapCircle(transform.position, 0.2f, UnityLayers.Instance.FovLayer);
+        MentorController mentor;
         if (!ReferenceEquals(mentorCollider, null))
+            mentor = mentorCollider.GetComponentInParent<MentorController>();
+        else return;
+        if (mentor is { BattleLost: false })
         {
             _character.Animator.IsMoving = false;
-            // Start mentor eyes meet sequence
             OnInMentorsView?.Invoke(mentorCollider);
-            // Start battle transition
-            DialogManager.Instance.OnCloseDialog += () =>
-            {
-                MentorController mentor = mentorCollider.GetComponentInParent<MentorController>();
-                if (mentor is { BattleLost: false }) // Only execute battle transition if mentor & battle available
-                {
-                    Sequence sequence = DOTween.Sequence();
-                    BattleTransition(mentorBattleIntro, mentorBattleLoop, sequence, 2.8f);
-                    sequence.OnComplete(() => OnTransitionDone?.Invoke());
-                }
-            };
         }
+        // Start mentor eyes meet sequence, Only execute battle transition if mentor & battle available
+    }
+    
+    /// <summary>
+    /// Shows a battle transition animation and invokes an event letting mentors know when the transition is done.
+    /// </summary>
+    public void TransitionIntoMentorBattle()
+    {
+        Debug.Log($"In battle transition: {_inTransition}");
+        Sequence sequence = DOTween.Sequence();
+        BattleTransition(mentorBattleIntro, mentorBattleLoop, sequence, 2.8f);
+        sequence.OnComplete(() =>
+        {
+            OnTransitionDone?.Invoke();
+            OnTransitionDone = null; // Clear from subscribed mentors after transition done
+            _inTransition = false; // No longer in transition
+        });
     }
     
     /// <summary>
@@ -147,6 +161,7 @@ public class GamerController : MonoBehaviour
     private void BattleTransition(AudioClip introClip, AudioClip loopClip, Sequence sequence = null, float transitionTime = 2.6f)
     {
         _inTransition = true;
+        Debug.Log($"In battle transition: {_inTransition}");
         if (ReferenceEquals(sequence, null))
             sequence = DOTween.Sequence();
         AudioManager.Instance.PlayMusic(introClip, loopClip);
@@ -154,7 +169,6 @@ public class GamerController : MonoBehaviour
         sequence.Append(mainCamera.DOOrthoSize(_cameraSize + 2.5f, halvedTransitionTime));
         sequence.Append(mainCamera.DOOrthoSize(_cameraSize - 3.5f, halvedTransitionTime).SetEase(Ease.InSine));
         sequence.Join(transitionBlock.DOFade(1f, halvedTransitionTime).SetEase(Ease.InSine));
-        sequence.OnComplete(() => _inTransition = false);
     }
 
     /// <summary>

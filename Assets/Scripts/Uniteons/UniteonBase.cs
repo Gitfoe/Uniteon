@@ -22,6 +22,7 @@ public class UniteonBase : ScriptableObject
     [SerializeField] private int specialAttack;
     [SerializeField] private int specialDefense;
     [SerializeField] private int speed;
+    [SerializeField] private int baseExperience;
     [SerializeField] private List<LearnableMove> learnableMoves;
     [SerializeField] private AudioClip cry;
     
@@ -39,6 +40,7 @@ public class UniteonBase : ScriptableObject
     public int SpecialAttack => specialAttack;
     public int SpecialDefense => specialDefense;
     public int Speed => speed;
+    public int BaseExperience => baseExperience;
     public List<LearnableMove> LearnableMoves => learnableMoves;
     public AudioClip Cry => cry;
 }
