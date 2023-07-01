@@ -18,13 +18,15 @@ public class UniteonBattle : MonoBehaviour
     [SerializeField] private PartyScreen partyScreen;
     [SerializeField] private MoveBase defaultMove;
     [SerializeField] private Image gamerSprite; 
-    [SerializeField] private Image foeSprite; 
+    [SerializeField] private Image foeSprite;
+    [SerializeField] private MoveSelectionScreen moveSelectionScreen; 
     private BattleSequenceState _battleState;
     private BattleSequenceState _prevBattleState;
     private CurrentBattleTurn _currentTurn;
     private int _actionSelection;
     private int _moveSelection;
     private int _memberSelection;
+    private int _newMoveSelection;
     private Uniteon _wildUniteon;
     private UniteonParty _gamerParty;
     private UniteonParty _mentorParty;
@@ -34,6 +36,7 @@ public class UniteonBattle : MonoBehaviour
     private MentorController _mentorController;
     private Vector3 _orgPosGamerSprite;
     private Vector3 _orgPosFoeSprite;
+    private MoveBase _moveToLearn;
     #endregion
     
     #region Debug
@@ -168,11 +171,14 @@ public class UniteonBattle : MonoBehaviour
             case BattleSequenceState.PartyScreenFromSelection or BattleSequenceState.PartyScreenFromFaint:
                 HandlePartyScreenSelection();
                 break;
+            case BattleSequenceState.MoveToForget:
+                HandleNewMoveSelection();
+                break;
         }
     }
     #endregion
     
-    #region Selection
+    #region State Selection
     /// <summary>
     /// Transitions the scene state to action.
     /// </summary>
@@ -209,7 +215,22 @@ public class UniteonBattle : MonoBehaviour
         partyScreen.gameObject.SetActive(true);
         partyScreen.AddUniteonsToPartySlots(_gamerParty.Uniteons);
     }
-    
+
+    /// <summary>
+    /// Initiates the move to forget UI.
+    /// </summary>
+    /// <param name="uniteon">The Uniteon that wants to learn a new move.</param>
+    /// <param name="newMove">The new move it wants to learn.</param>
+    /// <returns>Coroutine.</returns>
+    private IEnumerator ChooseMoveToForget(Uniteon uniteon, MoveBase newMove)
+    {
+        BattleState = BattleSequenceState.MoveToForget;
+        yield return battleDialogBox.TypeOutDialog($"Choose a move you want to forget.");
+        moveSelectionScreen.gameObject.SetActive(true);
+        moveSelectionScreen.SetMoveNames(uniteon.Moves.Select(x => x.MoveBase).ToList(), newMove);
+        _moveToLearn = newMove;
+    }
+
     /// <summary>
     /// Handles running away from the battlefield.
     /// </summary>
@@ -255,12 +276,12 @@ public class UniteonBattle : MonoBehaviour
 
     #region Selection Buttons
     /// <summary>
-    /// Handles the selection of 4 buttons.
+    /// Handles the selection of multiple buttons in a grid array.
     /// </summary>
     /// <param name="selection">The selection parameter you want to modify.</param>
     /// <param name="upperBound">The maximum value of selectable buttons.</param>
     /// <returns>The current selection.</returns>
-    private int HandleSelectionButtons(int selection, int upperBound)
+    private int HandleGridSelectionButtons(int selection, int upperBound)
     {
         int direction = 0;
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
@@ -282,13 +303,33 @@ public class UniteonBattle : MonoBehaviour
         }
         return Mathf.Clamp(selection, 0, upperBound);
     }
+
+    /// <summary>
+    /// Handles the selection of multiple buttons in a list array.
+    /// </summary>
+    /// <param name="selection">The selection parameter you want to modify.</param>
+    /// <param name="upperBound">The maximum value of selectable buttons.</param>
+    /// <returns>The current selection.</returns>
+    private int HandleListSelectionButtons(int selection, int upperBound)
+    {
+        int previousSelection = selection;
+        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+            selection++;
+        else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+            selection--;
+        // Clamp the selection within the valid range
+        selection = Mathf.Clamp(selection, 0, upperBound);
+        if (selection != previousSelection)
+            AudioManager.Instance.PlaySfx(_audioClips["aButton"]);
+        return selection;
+    }
     
     /// <summary>
     /// Watches for input of the player and changes the graphics accordingly in the action selection state.
     /// </summary>
     private void HandleActionSelection()
     {
-        _actionSelection = HandleSelectionButtons(_actionSelection, 3);
+        _actionSelection = HandleGridSelectionButtons(_actionSelection, 3);
         battleDialogBox.UpdateActionSelection(_actionSelection);
         // Transition to the next state if an action has been selected
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
@@ -319,7 +360,7 @@ public class UniteonBattle : MonoBehaviour
     /// </summary>
     private void HandleMoveSelection()
     {
-        _moveSelection = HandleSelectionButtons(_moveSelection, uniteonUnitGamer.Uniteon.Moves.Count - 1);
+        _moveSelection = HandleGridSelectionButtons(_moveSelection, uniteonUnitGamer.Uniteon.Moves.Count - 1);
         battleDialogBox.UpdateMoveSelection(_moveSelection, uniteonUnitGamer.Uniteon.Moves[_moveSelection]);
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
         {
@@ -342,13 +383,24 @@ public class UniteonBattle : MonoBehaviour
             ActionSelection();
         }
     }
+    
+    private void HandleNewMoveSelection()
+    {
+        _newMoveSelection = HandleListSelectionButtons(_newMoveSelection, UniteonBase.MaxMoves);
+        moveSelectionScreen.HighlightSelectionInList(_newMoveSelection);
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            AudioManager.Instance.PlaySfx(_audioClips["aButton"]);
+            StartCoroutine(LearnNewMoveWhenMoveSlotsFull());
+        }
+    }
 
     /// <summary>
     /// Watches for inputs in the party selection screen and sends out a new Uniteon if one got selected.
     /// </summary>
     private void HandlePartyScreenSelection()
     {
-        _memberSelection = HandleSelectionButtons(_memberSelection, _gamerParty.Uniteons.Count - 1);
+        _memberSelection = HandleGridSelectionButtons(_memberSelection, _gamerParty.Uniteons.Count - 1);
         partyScreen.UpdateMemberSelection(_memberSelection);
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
         {
@@ -528,10 +580,9 @@ public class UniteonBattle : MonoBehaviour
                     }
                     // Gain experience for gamer Uniteon
                     var expYield = defendingUnit.Uniteon.UniteonBase.BaseExperience;
-                    int foeLevel = defendingUnit.Uniteon.UniteonBase.BaseExperience;
+                    int foeLevel = defendingUnit.Uniteon.Level;
                     float mentorBonus = (_isMentorBattle) ? 1.5f : 1f; // 1.5x bonus for mentor Uniteon
                     // Calculate experience
-                    // https://bulbapedia.bulbagarden.net/wiki/Experience
                     int experienceGained = Mathf.FloorToInt((expYield * foeLevel * mentorBonus) / 7);
                     uniteonUnitGamer.Uniteon.Experience += experienceGained;
                     // Print experience message
@@ -553,12 +604,23 @@ public class UniteonBattle : MonoBehaviour
                         var newMove = uniteonUnitGamer.Uniteon.GetLearnableMoveAtCurrentLevel();
                         if (!ReferenceEquals(newMove, null))
                         {
+                            // If there are empty move slots, just learn the move
                             if (uniteonUnitGamer.Uniteon.Moves.Count < UniteonBase.MaxMoves)
                             {
                                 uniteonUnitGamer.Uniteon.LearnMove(newMove);
+                                AudioManager.Instance.PlaySfx(_audioClips["levelUp"]);
                                 yield return battleDialogBox.TypeOutDialog(
                                     $"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} learned {newMove.MoveBase.MoveName}!");
                                 battleDialogBox.SetMoveNames(uniteonUnitGamer.Uniteon.Moves);
+                            }
+                            // Give gamer selection what move to forgets
+                            else
+                            {
+                                yield return battleDialogBox.TypeOutDialog(
+                                    $"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} wants to learn a new move, but it can only learn {UniteonBase.MaxMoves} at a time.");
+                                yield return ChooseMoveToForget(uniteonUnitGamer.Uniteon, newMove.MoveBase);
+                                yield return new WaitUntil(() => BattleState != BattleSequenceState.MoveToForget);
+                                yield return new WaitForSeconds(1.27f);
                             }
                         }
                     }
@@ -588,7 +650,7 @@ public class UniteonBattle : MonoBehaviour
                 yield return HandleBattleOver(false);
             }
         }
-        else // If it's a mentor battle, just send out next Uniteon
+        else if (_isMentorBattle) // If it's a mentor battle, just send out next Uniteon
         {
             Uniteon nextUniteon = _mentorParty.GetHealthyUniteon(); // Just get the next Uniteon in the party
             if (!ReferenceEquals(nextUniteon, null))
@@ -712,7 +774,7 @@ public class UniteonBattle : MonoBehaviour
     }
     #endregion
     
-    #region Move Helper Functions
+    #region Helper Functions
     /// <summary>
     /// Plays the Uniteon hit sound effect.
     /// </summary>
@@ -765,6 +827,32 @@ public class UniteonBattle : MonoBehaviour
             yield return battleDialogBox.TypeOutDialog(message);
         }
     }
+    
+    /// <summary>
+    /// Forgets and learns a new move based on the current selection or decides to not learn it.
+    /// </summary>
+    /// <returns>Coroutine.</returns>
+    private IEnumerator LearnNewMoveWhenMoveSlotsFull()
+    {
+        moveSelectionScreen.gameObject.SetActive(false);
+        // Don't learn new move
+        if (_newMoveSelection == UniteonBase.MaxMoves)
+        {
+            yield return battleDialogBox.TypeOutDialog(
+                $"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} did not learn {_moveToLearn.MoveName}.");
+        }
+        // Forget selected move and learn new move
+        else
+        {
+            MoveBase selectedMove = uniteonUnitGamer.Uniteon.Moves[_newMoveSelection].MoveBase;
+            yield return battleDialogBox.TypeOutDialog(
+                $"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} learned {_moveToLearn.MoveName} and forgot {selectedMove.MoveName}!");
+            uniteonUnitGamer.Uniteon.Moves[_newMoveSelection] = new Move(_moveToLearn);
+            battleDialogBox.SetMoveNames(uniteonUnitGamer.Uniteon.Moves); // Reload moves
+        }
+        _moveToLearn = null;
+        BattleState = BattleSequenceState.BattleOver;   
+    }
     #endregion
 
     #region Animations
@@ -809,6 +897,7 @@ public enum BattleSequenceState
     FoeSwitching,
     PartyScreenFromSelection,
     PartyScreenFromFaint,
+    MoveToForget,
     BattleOver
 }
 

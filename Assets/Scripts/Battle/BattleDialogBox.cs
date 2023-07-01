@@ -99,7 +99,7 @@ public class BattleDialogBox : MonoBehaviour
     /// <param name="textsList">The list that the selection has to take place in.</param>
     private void HighlightSelectionInList(int selectedText, List<Text> textsList)
     {
-        for (var i = 0; i < textsList.Count; i++)
+        for (int i = 0; i < textsList.Count; i++)
         {
             textsList[i].color = i == selectedText ? selectedColour : deselectedColour;
         }
