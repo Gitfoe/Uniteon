@@ -89,8 +89,16 @@ public class GamerController : MonoBehaviour
     /// </summary>
     private void HandleMoveOver()
     {
-        CheckWildGrass();
-        CheckInMentorsView();
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.2f, UnityLayers.Instance.TriggerableLayers);
+        foreach (var collider in colliders)
+        {
+            var triggerable = collider.GetComponent<IPlayerTriggerable>();
+            if (!ReferenceEquals(triggerable, null))
+            {
+                triggerable.OnPlayerTriggered(this);
+                break;
+            }
+        }
     }
 
     /// <summary>

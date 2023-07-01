@@ -14,13 +14,16 @@ public class UnityLayers : MonoBehaviour
     [SerializeField] private LayerMask interactableLayer;
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private LayerMask fovLayer;
+    [SerializeField] private LayerMask portalLayer;
     
     // Properties
+    public LayerMask TriggerableLayers => wildGrassLayer | fovLayer | portalLayer;
     public LayerMask ObjectsLayer => objectsLayer;
     public LayerMask WildGrassLayer => wildGrassLayer;
     public LayerMask InteractableLayer => interactableLayer;
     public LayerMask PlayerLayer => playerLayer;
     public LayerMask FovLayer => fovLayer;
+    public LayerMask PortalLayer => portalLayer;
     
     public static UnityLayers Instance { get; private set; }
 
