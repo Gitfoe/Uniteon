@@ -15,6 +15,11 @@ public class MentorController : MonoBehaviour, Interactable
     [SerializeField] private GameObject fov;
     [SerializeField] private AudioClip eyesMeetIntro;
     [SerializeField] private AudioClip eyesMeetLoop;
+    [SerializeField] private AudioClip battleIntro;
+    [SerializeField] private AudioClip battleLoop;
+    [SerializeField] private AudioClip victoryIntro;
+    [SerializeField] private AudioClip victoryLoop;
+    
     private Character _character;
     private Collider2D _collider;
     private bool _battleLost;
@@ -23,6 +28,10 @@ public class MentorController : MonoBehaviour, Interactable
     public string MentorName => mentorName;
     public Sprite Sprite => sprite;
     public bool BattleLost => _battleLost;
+    public AudioClip BattleIntro => battleIntro;
+    public AudioClip BattleLoop => battleLoop;
+    public AudioClip VictoryIntro => victoryIntro;
+    public AudioClip VictoryLoop => victoryLoop;
     
     // Events
     public event Action OnInitiateMentorBattle;

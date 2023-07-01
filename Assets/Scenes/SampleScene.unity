@@ -344,7 +344,7 @@ GameObject:
   - component: {fileID: 16190546}
   - component: {fileID: 16190545}
   m_Layer: 8
-  m_Name: Trainer1
+  m_Name: Mentor1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -391,6 +391,10 @@ MonoBehaviour:
   fov: {fileID: 701709925}
   eyesMeetIntro: {fileID: 8300000, guid: a28a831d23c83904981288602bc947fd, type: 3}
   eyesMeetLoop: {fileID: 8300000, guid: bcc34199d91547e4680b833e00421e09, type: 3}
+  battleIntro: {fileID: 8300000, guid: 4966e7c5c5b2da749b06d2e4c7ee5b42, type: 3}
+  battleLoop: {fileID: 8300000, guid: ec28c057ef5cd0a4eaa591ba26ee53c1, type: 3}
+  victoryIntro: {fileID: 8300000, guid: d4ef96b869ae92949a6ffb90cf5a5466, type: 3}
+  victoryLoop: {fileID: 8300000, guid: d7563ea5ee3410e41b10ef8abf9da304, type: 3}
 --- !u!114 &16190543
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1307,6 +1311,42 @@ MonoBehaviour:
   musicPlayer: {fileID: 1023418548}
   sfxPlayer1: {fileID: 1745574582}
   sfxPlayer2: {fileID: 1050717743}
+  sfxClips:
+  - clipName: aButton
+    clip: {fileID: 8300000, guid: 86a76c5481126c34aa4c958b22b09905, type: 3}
+  - clipName: hitNormalEffectiveness
+    clip: {fileID: 8300000, guid: 1f2d439fa94034c4a8299ce8252ce59d, type: 3}
+  - clipName: hitNotVeryEffective
+    clip: {fileID: 8300000, guid: 3b00a101858a9aa43a4614c62b73a079, type: 3}
+  - clipName: hitSuperEffective
+    clip: {fileID: 8300000, guid: 2f76c7719de9e084c995f482be7f74c2, type: 3}
+  - clipName: faint
+    clip: {fileID: 8300000, guid: 5345de975d6b05042b45c6fee1e7a46a, type: 3}
+  - clipName: switchOut
+    clip: {fileID: 8300000, guid: 0e7baec5ffb203643858c28af27acbcb, type: 3}
+  - clipName: thud
+    clip: {fileID: 8300000, guid: f6fae0b243bab4b40a69862b009094a3, type: 3}
+  - clipName: tackle
+    clip: {fileID: 8300000, guid: c0c4692a4a98e8e469df5d7021bcd01d, type: 3}
+  - clipName: statRaised
+    clip: {fileID: 8300000, guid: 2dfbb954e17b5dc4b9b465200a46a869, type: 3}
+  - clipName: statFell
+    clip: {fileID: 8300000, guid: 72ac76b0e33cc2646bd54b2b56e735b8, type: 3}
+  - clipName: expRaise
+    clip: {fileID: 8300000, guid: a2ae2a6d1faeecd43bdbc9c85e1f861d, type: 3}
+  - clipName: levelUp
+    clip: {fileID: 8300000, guid: 31419e01e4af9b7459c7aa305d831af9, type: 3}
+  musicClips:
+  - clipName: eternaCity
+    clip: {fileID: 8300000, guid: 0d21a5938f3449a4faaa7ef9503e5c33, type: 3}
+  - clipName: wildBattleIntro
+    clip: {fileID: 8300000, guid: b5373601505befc429a0600ff447cbc8, type: 3}
+  - clipName: wildBattleLoop
+    clip: {fileID: 8300000, guid: e967ee42f42f25047883cb4a03e23e99, type: 3}
+  - clipName: victoryMentorIntro
+    clip: {fileID: 8300000, guid: d4ef96b869ae92949a6ffb90cf5a5466, type: 3}
+  - clipName: victoryMentorLoop
+    clip: {fileID: 8300000, guid: d7563ea5ee3410e41b10ef8abf9da304, type: 3}
 --- !u!1 &330237994
 GameObject:
   m_ObjectHideFlags: 0
@@ -12203,8 +12243,8 @@ GameObject:
   - component: {fileID: 1477238025}
   - component: {fileID: 1477238024}
   - component: {fileID: 1477238026}
-  - component: {fileID: 1477238033}
   - component: {fileID: 1477238028}
+  - component: {fileID: 1477238033}
   - component: {fileID: 1477238029}
   - component: {fileID: 1477238030}
   - component: {fileID: 1477238032}
@@ -12276,7 +12316,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1477238023}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 0, z: 0}
+  m_LocalPosition: {x: 1.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -12300,11 +12340,6 @@ MonoBehaviour:
   sprite: {fileID: 1984116760, guid: 7c73451e418ef4845b27b4946aef4a43, type: 3}
   mainCamera: {fileID: 519420031}
   transition: {fileID: 1823285602}
-  sceneMusic: {fileID: 8300000, guid: 0d21a5938f3449a4faaa7ef9503e5c33, type: 3}
-  wildMusicIntro: {fileID: 8300000, guid: b5373601505befc429a0600ff447cbc8, type: 3}
-  wildMusicLoop: {fileID: 8300000, guid: e967ee42f42f25047883cb4a03e23e99, type: 3}
-  mentorBattleIntro: {fileID: 8300000, guid: 4966e7c5c5b2da749b06d2e4c7ee5b42, type: 3}
-  mentorBattleLoop: {fileID: 8300000, guid: ec28c057ef5cd0a4eaa591ba26ee53c1, type: 3}
   grassSteps:
   - {fileID: 8300000, guid: de2c6a81e6287f44fbb4c5f17b27b891, type: 3}
   - {fileID: 8300000, guid: 8e184e29eeb6ff642be2ad46e1c1389b, type: 3}
@@ -12323,9 +12358,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniteons:
-  - uniteonBase: {fileID: 11400000, guid: c1a4a01995a150646a9945ee467a9285, type: 2}
-    level: 47
-    healthPoints: 0
   - uniteonBase: {fileID: 11400000, guid: 6dbd16654a5094f4ab1fd566e9d95b00, type: 2}
     level: 1
     healthPoints: 0
@@ -12339,7 +12371,10 @@ MonoBehaviour:
     level: 15
     healthPoints: 0
   - uniteonBase: {fileID: 11400000, guid: 004a74598f3d5854cb376999c15c89a1, type: 2}
-    level: 12
+    level: 19
+    healthPoints: 0
+  - uniteonBase: {fileID: 11400000, guid: c1a4a01995a150646a9945ee467a9285, type: 2}
+    level: 48
     healthPoints: 0
 --- !u!114 &1477238029
 MonoBehaviour:
@@ -12441,7 +12476,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1477238023}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 10d6ba082588b6e48862cb9809de6d3f, type: 3}
   m_Name: 
@@ -12576,41 +12611,6 @@ MonoBehaviour:
   uniteonUnitGamer: {fileID: 162767278}
   uniteonUnitFoe: {fileID: 1333168449}
   battleDialogBox: {fileID: 1257568886}
-  audioClips:
-  - clipName: aButton
-    clip: {fileID: 8300000, guid: 86a76c5481126c34aa4c958b22b09905, type: 3}
-  - clipName: hitNormalEffectiveness
-    clip: {fileID: 8300000, guid: 1f2d439fa94034c4a8299ce8252ce59d, type: 3}
-  - clipName: hitNotVeryEffective
-    clip: {fileID: 8300000, guid: 3b00a101858a9aa43a4614c62b73a079, type: 3}
-  - clipName: hitSuperEffective
-    clip: {fileID: 8300000, guid: 2f76c7719de9e084c995f482be7f74c2, type: 3}
-  - clipName: faint
-    clip: {fileID: 8300000, guid: 5345de975d6b05042b45c6fee1e7a46a, type: 3}
-  - clipName: run
-    clip: {fileID: 8300000, guid: 5f8e77ab3a7752f4bab3708638cf195f, type: 3}
-  - clipName: switchOut
-    clip: {fileID: 8300000, guid: 0e7baec5ffb203643858c28af27acbcb, type: 3}
-  - clipName: thud
-    clip: {fileID: 8300000, guid: f6fae0b243bab4b40a69862b009094a3, type: 3}
-  - clipName: tackle
-    clip: {fileID: 8300000, guid: c0c4692a4a98e8e469df5d7021bcd01d, type: 3}
-  - clipName: statRaised
-    clip: {fileID: 8300000, guid: 2dfbb954e17b5dc4b9b465200a46a869, type: 3}
-  - clipName: statFell
-    clip: {fileID: 8300000, guid: 72ac76b0e33cc2646bd54b2b56e735b8, type: 3}
-  - clipName: expRaise
-    clip: {fileID: 8300000, guid: a2ae2a6d1faeecd43bdbc9c85e1f861d, type: 3}
-  - clipName: levelUp
-    clip: {fileID: 8300000, guid: 31419e01e4af9b7459c7aa305d831af9, type: 3}
-  - clipName: victoryGymIntro
-    clip: {fileID: 8300000, guid: 758fc9d3a9c11ab4c94230fac87630bd, type: 3}
-  - clipName: victoryGymLoop
-    clip: {fileID: 8300000, guid: 8ac58c0e4d99d9f48b187eceadead717, type: 3}
-  - clipName: victoryMentorIntro
-    clip: {fileID: 8300000, guid: d4ef96b869ae92949a6ffb90cf5a5466, type: 3}
-  - clipName: victoryMentorLoop
-    clip: {fileID: 8300000, guid: d7563ea5ee3410e41b10ef8abf9da304, type: 3}
   partyScreen: {fileID: 1316574871}
   defaultMove: {fileID: 11400000, guid: 7fc6fbc6efe38be4a92df4c9be06d3ac, type: 2}
   gamerSprite: {fileID: 675940988}
@@ -13124,7 +13124,7 @@ GameObject:
   - component: {fileID: 1697058238}
   - component: {fileID: 1697058237}
   m_Layer: 8
-  m_Name: Trainer2
+  m_Name: Mentor2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13282,7 +13282,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialog:
     dialogLines:
-    - Pingsock! Bet ya didn't see me, you pepega.
+    - Bet ya didn't see me, you pepega.
     - You will get desimated.
     - Fin.
   dialogAfterBattle:
@@ -13295,6 +13295,10 @@ MonoBehaviour:
   fov: {fileID: 1005481214}
   eyesMeetIntro: {fileID: 8300000, guid: a28a831d23c83904981288602bc947fd, type: 3}
   eyesMeetLoop: {fileID: 8300000, guid: bcc34199d91547e4680b833e00421e09, type: 3}
+  battleIntro: {fileID: 8300000, guid: 6dc202818031bb643b1dd32a9841a213, type: 3}
+  battleLoop: {fileID: 8300000, guid: 85c68afb5b722dd44aa4d9c69e886460, type: 3}
+  victoryIntro: {fileID: 8300000, guid: 758fc9d3a9c11ab4c94230fac87630bd, type: 3}
+  victoryLoop: {fileID: 8300000, guid: 8ac58c0e4d99d9f48b187eceadead717, type: 3}
 --- !u!212 &1697058243
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -15599,26 +15603,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wildUniteons:
   - uniteonBase: {fileID: 11400000, guid: 6dbd16654a5094f4ab1fd566e9d95b00, type: 2}
-    level: 1
+    level: 3
     healthPoints: 0
   - uniteonBase: {fileID: 11400000, guid: e7ef14892e478264c98c3fd9dc87a4e5, type: 2}
-    level: 1
+    level: 32
     healthPoints: 0
   - uniteonBase: {fileID: 11400000, guid: 30229852b8d53474a96bd47973dbb568, type: 2}
-    level: 1
+    level: 18
     healthPoints: 0
   - uniteonBase: {fileID: 11400000, guid: 9d0e52104d630a2409a8d35a44432f27, type: 2}
-    level: 1
+    level: 48
     healthPoints: 0
   - uniteonBase: {fileID: 11400000, guid: 14e8cc068eb8177498bf6c3f49e6df63, type: 2}
-    level: 1
+    level: 7
     healthPoints: 0
   - uniteonBase: {fileID: 11400000, guid: 3f6101762fd5ec34996d2032de5f34c0, type: 2}
-    level: 28
+    level: 37
     healthPoints: 0
-  - uniteonBase: {fileID: 11400000, guid: 6dbd16654a5094f4ab1fd566e9d95b00, type: 2}
-    level: 28
-    healthPoints: 1
 --- !u!1 &2075463851
 GameObject:
   m_ObjectHideFlags: 0
@@ -15700,7 +15701,6 @@ MonoBehaviour:
   dialogBox: {fileID: 2095632816}
   dialogText: {fileID: 1632877807}
   typeOutSpeed: 27
-  aButton: {fileID: 8300000, guid: 86a76c5481126c34aa4c958b22b09905, type: 3}
 --- !u!114 &2075463856
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -13,17 +13,13 @@ public class GamerController : MonoBehaviour
     [SerializeField] private Sprite sprite;
     [SerializeField] private Camera mainCamera;
     [SerializeField] private Image transition;
-    [SerializeField] private AudioClip sceneMusic;
-    [SerializeField] private AudioClip wildMusicIntro;
-    [SerializeField] private AudioClip wildMusicLoop;
-    [SerializeField] private AudioClip mentorBattleIntro;
-    [SerializeField] private AudioClip mentorBattleLoop;
     [SerializeField] private AudioClip[] grassSteps;
     private Character _character;
     private Vector2 _gamerInput;
     private Vector2 _previousGamerInput;
     private float _cameraSize;
     private bool _inTransition;
+    private MentorController _battlingMentor;
 
     // Properties
     public string GamerName => gamerName;
@@ -41,7 +37,7 @@ public class GamerController : MonoBehaviour
     {
         _character = GetComponent<Character>();
         _cameraSize = mainCamera.orthographicSize;
-        AudioManager.Instance.PlayMusic(sceneMusic);
+        AudioManager.Instance.PlayMusic("eternaCity");
     }
 
     /// <summary>
@@ -52,7 +48,7 @@ public class GamerController : MonoBehaviour
         // Set camera back to original size
         mainCamera.orthographicSize = _cameraSize;
         // Start playing music
-        AudioManager.Instance.PlayMusic(sceneMusic);
+        AudioManager.Instance.PlayMusic("eternaCity");
         // Fade in
         transition.color = new Color(0f, 0f, 0f, 1f);
         transition.DOFade(0f, 0.72f).OnComplete(() => transition.gameObject.SetActive(false));
@@ -111,7 +107,7 @@ public class GamerController : MonoBehaviour
             _character.Animator.IsMoving = false;
             // Start battle transition
             Sequence sequence = DOTween.Sequence();
-            BattleTransition(wildMusicIntro, wildMusicLoop, sequence);
+            BattleTransition( AudioManager.Music["wildBattleIntro"], AudioManager.Music["wildBattleLoop"], sequence);
             sequence.OnComplete(() =>
             {
                 OnEncountered?.Invoke(null);
@@ -129,11 +125,10 @@ public class GamerController : MonoBehaviour
     private void CheckInMentorsView()
     {
         Collider2D mentorCollider = Physics2D.OverlapCircle(transform.position, 0.2f, UnityLayers.Instance.FovLayer);
-        MentorController mentor;
         if (!ReferenceEquals(mentorCollider, null))
-            mentor = mentorCollider.GetComponentInParent<MentorController>();
+            _battlingMentor = mentorCollider.GetComponentInParent<MentorController>();
         else return;
-        if (mentor is { BattleLost: false })
+        if (_battlingMentor is { BattleLost: false })
         {
             _character.Animator.IsMoving = false;
             _character.LookTowards(mentorCollider.transform.position);
@@ -149,12 +144,13 @@ public class GamerController : MonoBehaviour
     {
         Debug.Log($"In battle transition: {_inTransition}");
         Sequence sequence = DOTween.Sequence();
-        BattleTransition(mentorBattleIntro, mentorBattleLoop, sequence, 2.8f);
+        BattleTransition(_battlingMentor.BattleIntro, _battlingMentor.BattleLoop, sequence, 2.8f);
         sequence.OnComplete(() =>
         {
             OnTransitionDone?.Invoke();
             OnTransitionDone = null; // Clear from subscribed mentors after transition done
             _inTransition = false; // No longer in transition
+            _battlingMentor = null; // No longer needed
         });
     }
     

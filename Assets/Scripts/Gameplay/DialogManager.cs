@@ -10,10 +10,9 @@ public class DialogManager : MonoBehaviour
     [SerializeField] private GameObject dialogBox;
     [SerializeField] private Text dialogText;
     [SerializeField] private int typeOutSpeed;
-    [SerializeField] private AudioClip aButton;
     private Dialog _dialog;
     private int _currentDialogLine;
-    private bool _isTyping; // To ensure gamer can't go to the next line while line is still printing
+    private bool _isPrinting; // To ensure gamer can't go to the next line while line is still printing
     
     // Events
     public event Action OnShowDialog;
@@ -38,7 +37,7 @@ public class DialogManager : MonoBehaviour
     {
         yield return new WaitForEndOfFrame(); // Wait 1 frame because GetKeyDown is still active in the same frame
         OnShowDialog?.Invoke();
-        AudioManager.Instance.PlaySfx(aButton);
+        AudioManager.Instance.PlaySfx("aButton");
         _dialog = dialog;
         OnCloseDialogAssignable = onFinished;
         dialogBox.SetActive(true);
@@ -50,9 +49,9 @@ public class DialogManager : MonoBehaviour
     /// </summary>
     public void ControllerUpdate()
     {
-        if ((Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) && !_isTyping)
+        if ((Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) && !_isPrinting)
         {
-            AudioManager.Instance.PlaySfx(aButton);
+            AudioManager.Instance.PlaySfx("aButton");
             _currentDialogLine++;
             if (_currentDialogLine < _dialog.Lines.Count)
             {
@@ -75,13 +74,13 @@ public class DialogManager : MonoBehaviour
     /// <returns>Coroutine.</returns>
     private IEnumerator TypeOutDialog(string line)
     {
-        _isTyping = true;
+        _isPrinting = true;
         dialogText.text = "";
         foreach (var l in line)
         {
             dialogText.text += l;
             yield return new WaitForSeconds(1f/typeOutSpeed);
         }
-        _isTyping = false;
+        _isPrinting = false;
     } 
 }

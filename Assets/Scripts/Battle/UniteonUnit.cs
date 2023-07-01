@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using TMPro;
-using UnityEngine.Serialization;
 
 public class UniteonUnit : MonoBehaviour
 {
@@ -45,7 +43,7 @@ public class UniteonUnit : MonoBehaviour
         uniteonHud.gameObject.SetActive(true);
         uniteonHud.SetGamerData(uniteon);
         _sprite.color = _originalColorSprite;
-        PlayBattleEnterAnimation();
+        StartCoroutine(PlayBattleEnterAnimation());
     }
 
     public void DisableHud() => uniteonHud.gameObject.SetActive(false);
@@ -74,21 +72,21 @@ public class UniteonUnit : MonoBehaviour
     /// <summary>
     /// Plays the battle enter animation.
     /// </summary>
-    private void PlayBattleEnterAnimation()
+    private IEnumerator PlayBattleEnterAnimation()
     {
         _sprite.rectTransform.localPosition = isGamerUniteon ? new Vector3(-500f, _originalPosSprite.y) : new Vector3( 500f, _originalPosSprite.y);
-        _sprite.rectTransform.DOLocalMoveX(_originalPosSprite.x, 1.27f);
+        yield return _sprite.rectTransform.DOLocalMoveX(_originalPosSprite.x, 1.27f).WaitForCompletion();
     }
     
     /// <summary>
     /// Plays the battle leave animation.
     /// </summary>
-    public void PlayBattleLeaveAnimation()
+    public IEnumerator PlayBattleLeaveAnimation()
     {
         if (isGamerUniteon)
-            _sprite.rectTransform.DOLocalMoveX(_originalPosSprite.x - 500f, 1.27f);
+            yield return _sprite.rectTransform.DOLocalMoveX(_originalPosSprite.x - 500f, 1.27f).WaitForCompletion();
         else
-            _sprite.rectTransform.DOLocalMoveX(_originalPosSprite.x + 500f, 1.27f);
+            yield return _sprite.rectTransform.DOLocalMoveX(_originalPosSprite.x + 500f, 1.27f).WaitForCompletion();
     }
 
     /// <summary>
@@ -132,7 +130,7 @@ public class UniteonUnit : MonoBehaviour
         Sequence sequence = DOTween.Sequence();
         sequence.Append(_sprite.transform.DOLocalMoveY(_originalPosSprite.y - 150f, 0.35f));
         sequence.Join(_sprite.DOFade(0f, 0.35f));
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.72f);
     }
     
     /// <summary>

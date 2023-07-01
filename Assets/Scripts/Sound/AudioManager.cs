@@ -1,4 +1,7 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 
@@ -8,17 +11,23 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioSource musicPlayer;
     [SerializeField] private AudioSource sfxPlayer1;
     [SerializeField] private AudioSource sfxPlayer2;
+    [SerializeField] private List<UniteonAudioClip> sfxClips;
+    [SerializeField] private List<UniteonAudioClip> musicClips;
     private Coroutine _playMusicRoutine;
-    
+
     // Properties
     public static AudioManager Instance { get; private set; }
+    public static Dictionary<string, AudioClip> Sfx { get; private set; }
+    public static Dictionary<string, AudioClip> Music { get; private set; }
 
     /// <summary>
-    /// Sets this instance of the audio manager to a public static variable.
+    /// Sets this instance of the audio manager to a public static variable, as well as the audio clips.
     /// </summary>
     private void Awake()
     {
         Instance = this;
+        Sfx = UniteonAudioClip.ConvertListToDictionary(sfxClips);
+        Music = UniteonAudioClip.ConvertListToDictionary(musicClips);
     }
 
     /// <summary>
@@ -34,6 +43,11 @@ public class AudioManager : MonoBehaviour
         musicPlayer.loop = loop;
         musicPlayer.Play();
     }
+    
+    public void PlayMusic(string clip, bool loop = true)
+    {
+        PlayMusic(Music[clip], loop);
+    }
 
     /// <summary>
     /// Plays music that has a beginning section and a looping section on the music channel.
@@ -46,6 +60,11 @@ public class AudioManager : MonoBehaviour
             PlayMusic(loopClip);
         else
             _playMusicRoutine = StartCoroutine(PlayMusicRoutine(beginClip, loopClip));
+    }
+
+    public void PlayMusic(string beginClip, string endClip)
+    {
+        PlayMusic(Music[beginClip], Music[endClip]);
     }
 
     /// <summary>
@@ -84,6 +103,11 @@ public class AudioManager : MonoBehaviour
         sfxPlayerChannel.pitch = pitch;
         sfxPlayerChannel.Play();
     }
+    
+    public void PlaySfx(string clip, bool loop = false, int channel = 1, float panning = 0f, float pitch = 1f)
+    {
+        PlaySfx(Sfx[clip], loop, channel, panning, pitch);
+    }
 
     /// <summary>
     /// Stops any active music from playing.
@@ -115,13 +139,18 @@ public class AudioManager : MonoBehaviour
     /// </summary>
     /// <param name="channel">The SFX player channel the audio must be stopped on.</param>
     /// <param name="clip">Only stop if this audio clip is playing.</param>
-    public void StopSfx(int channel = 1, AudioClip clip = null)
+    public void StopSfx(int channel, AudioClip clip = null)
     {
         AudioSource sfxPlayerChannel = SelectSfxPlayerChannel(channel);
         if (clip != null && sfxPlayerChannel.isPlaying && sfxPlayerChannel.clip == clip)
             sfxPlayerChannel.Stop();
         else if (clip == null && sfxPlayerChannel.isPlaying)
             sfxPlayerChannel.Stop();
+    }
+
+    public void StopSfx(int channel, string clip)
+    {
+        StopSfx(channel, Sfx[clip]);
     }
 
     /// <summary>
@@ -134,6 +163,11 @@ public class AudioManager : MonoBehaviour
     {
         AudioSource sfxPlayerChannel = SelectSfxPlayerChannel(channel);
         return sfxPlayerChannel.clip == clip;
+    }
+
+    public bool IsPlayingSfx(string clip, int channel = 1)
+    {
+        return IsPlayingSfx(Sfx[clip], channel);
     }
 
     /// <summary>
@@ -151,4 +185,25 @@ public class AudioManager : MonoBehaviour
         };
         return sfxPlayerChannel;
     }
+}
+
+/// <summary>
+/// Holds an audio clip and their accompanying name.
+/// </summary>
+[Serializable]
+public struct UniteonAudioClip
+{
+    [SerializeField] private string clipName;
+    [SerializeField] private AudioClip clip;
+
+    public string ClipName => clipName;
+    public AudioClip Clip => clip;
+
+    /// <summary>
+    /// Converts a list of UniteonSfx structs to a dictionary, since they're functionally the same and easier to manage.
+    /// </summary>
+    /// <param name="uniteonSfxList">The sfx list full of UniteonSfx structs.</param>
+    /// <returns>The generated dictionary.</returns>
+    public static Dictionary<string, AudioClip> ConvertListToDictionary(List<UniteonAudioClip> uniteonSfxList) => 
+        uniteonSfxList.ToDictionary(sfx => sfx.ClipName, sfx => sfx.Clip);
 }
