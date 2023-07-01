@@ -498,15 +498,18 @@ public class UniteonBattle : MonoBehaviour
                 yield return defendingUnit.Uniteon.PlayCry(panning: -panning, fainted: true);
                 AudioManager.Instance.PlaySfx(_audioClips["faint"], panning: -panning);
                 yield return defendingUnit.PlayFaintAnimation();
-                // Gain experience
                 if (!defendingUnit.IsGamerUniteon)
                 {
+                    // Gain experience for gamer Uniteon
                     var expYield = defendingUnit.Uniteon.UniteonBase.BaseExperience;
                     int foeLevel = defendingUnit.Uniteon.UniteonBase.BaseExperience;
                     float mentorBonus = (_isMentorBattle) ? 1.5f : 1f; // 1.5x bonus for mentor Uniteon
                     // Calculate experience
                     // https://bulbapedia.bulbagarden.net/wiki/Experience
-                    int expGain = Mathf.FloorToInt((expYield * foeLevel * mentorBonus) / 7);
+                    int experienceGained = Mathf.FloorToInt((expYield * foeLevel * mentorBonus) / 7);
+                    uniteonUnitGamer.Uniteon.Experience += experienceGained;
+                    yield return battleDialogBox.TypeOutDialog(
+                        $"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} gained {experienceGained} experience points!");
                 }
                 yield return CheckBattleOver(defendingUnit);
             }

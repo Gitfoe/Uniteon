@@ -48,6 +48,7 @@ public class Uniteon
             if (Moves.Count >= 4)
                 break; // After the Uniteon already knows 4 moves, don't learn more moves
         }
+        Experience = UniteonBase.GetExperienceForLevel(Level);
         CalculateStats();
         HealthPoints = MaxHealthPoints; // Set Uniteon HP to max when launching the game
         ResetBoosts();

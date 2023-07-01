@@ -23,6 +23,7 @@ public class UniteonBase : ScriptableObject
     [SerializeField] private int specialDefense;
     [SerializeField] private int speed;
     [SerializeField] private int baseExperience;
+    [SerializeField] private GrowthRate growthRate;
     [SerializeField] private List<LearnableMove> learnableMoves;
     [SerializeField] private AudioClip cry;
     
@@ -41,8 +42,23 @@ public class UniteonBase : ScriptableObject
     public int SpecialDefense => specialDefense;
     public int Speed => speed;
     public int BaseExperience => baseExperience;
+    public GrowthRate GrowthRate => growthRate;
     public List<LearnableMove> LearnableMoves => learnableMoves;
     public AudioClip Cry => cry;
+    
+    /// <summary>
+    /// https://bulbapedia.bulbagarden.net/wiki/Experience
+    /// </summary>
+    /// <returns>The experience points for this Uniteon for a certain level taking into account growth rate.</returns>
+    public int GetExperienceForLevel(int level)
+    {
+        return growthRate switch
+        {
+            GrowthRate.Fast => 4 * (level * level * level) / 5,
+            GrowthRate.MediumFast => level * level * level,
+            _ => -1
+        };
+    }
 }
 
 /// <summary>
@@ -90,6 +106,15 @@ public enum Statistic
     // Not actual stats, but used for checking move accuracy
     Accuracy,
     Evasion
+}
+
+/// <summary>
+/// The Uniteon growth rate. The faster the growth rate, the less experience the Uniteon needs to level up.
+/// </summary>
+public enum GrowthRate
+{
+    Fast,
+    MediumFast
 }
 
 /// <summary>
