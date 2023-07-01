@@ -83,8 +83,8 @@ public class Character : MonoBehaviour
     public void LookTowards(Vector3 targetDirection)
     {
         var position = transform.position;
-        var xDifference = Mathf.Floor(targetDirection.x) - Mathf.Floor(position.x);
-        var yDifference = Mathf.Floor(targetDirection.y) - Mathf.Floor(position.y);
+        var xDifference = Mathf.Round(targetDirection.x) - Mathf.Round(position.x);
+        var yDifference = Mathf.Round(targetDirection.y) - Mathf.Round(position.y);
         if (xDifference == 0 || yDifference == 0) // Only check cardinal directions, not diagonal
         {
             _animator.MoveX = Mathf.Clamp(xDifference, -1f, 1f); // Pass variables through to animator
@@ -95,8 +95,8 @@ public class Character : MonoBehaviour
     public FacingCardinal GetFacingDirection(Vector3 targetDirection)
     {
         var position = transform.position;
-        var xDifference = Mathf.Floor(targetDirection.x) - Mathf.Floor(position.x);
-        var yDifference = Mathf.Floor(targetDirection.y) - Mathf.Floor(position.y);
+        var xDifference = Mathf.Round(targetDirection.x) - Mathf.Round(position.x);
+        var yDifference = Mathf.Round(targetDirection.y) - Mathf.Round(position.y);
         if (xDifference == 0 || yDifference == 0) // Only check cardinal directions, not diagonal
         {
             float x = Mathf.Clamp(xDifference, -1f, 1f);

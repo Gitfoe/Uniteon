@@ -549,6 +549,18 @@ public class UniteonBattle : MonoBehaviour
                             $"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} grew to level {uniteonUnitGamer.Uniteon.Level}!");
                         AudioManager.Instance.PlaySfx(_audioClips["expRaise"]);
                         yield return uniteonUnitGamer.UniteonHud.UpdateExperienceBar(true);
+                        // Learn new move
+                        var newMove = uniteonUnitGamer.Uniteon.GetLearnableMoveAtCurrentLevel();
+                        if (!ReferenceEquals(newMove, null))
+                        {
+                            if (uniteonUnitGamer.Uniteon.Moves.Count < UniteonBase.MaxMoves)
+                            {
+                                uniteonUnitGamer.Uniteon.LearnMove(newMove);
+                                yield return battleDialogBox.TypeOutDialog(
+                                    $"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} learned {newMove.MoveBase.MoveName}!");
+                                battleDialogBox.SetMoveNames(uniteonUnitGamer.Uniteon.Moves);
+                            }
+                        }
                     }
                 }
                 yield return CheckBattleOver(defendingUnit);

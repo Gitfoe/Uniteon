@@ -102,7 +102,7 @@ public class GamerController : MonoBehaviour
     /// </summary>
     private void CheckWildGrass()
     {
-        Vector3 grassPosition = transform.position;
+        Vector3 grassPosition = transform.position - new Vector3(0f, 0f, -0.5f);
         grassPosition.y -= 0.5f; // Move gamer down to make the game not think that you're touching grass when you're 1 grid below it
         Collider2D getNextObject = Physics2D.OverlapCircle(grassPosition, 0.2f, UnityLayers.Instance.WildGrassLayer);
         if (ReferenceEquals(getNextObject, null)) return;

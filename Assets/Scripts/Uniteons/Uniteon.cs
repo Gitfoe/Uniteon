@@ -28,7 +28,7 @@ public class Uniteon
     public Dictionary<Statistic, int> Stats { get; private set; }
     public Dictionary<Statistic, int> StatBoosts { get; private set; } // Boost up to 6x
     public Queue<string> StatusMessages { get; private set; } // Status messages
-    
+
     // Statistic properties
     public int MaxHealthPoints { get; private set; }
     public int Attack => GetBattleStat(Statistic.Attack);
@@ -45,7 +45,7 @@ public class Uniteon
         {
             if (move.Level <= level)
                 Moves.Add(new Move(move.MoveBase)); // Add new moves to the moves list if leveling up
-            if (Moves.Count >= 4)
+            if (Moves.Count >= UniteonBase.MaxMoves)
                 break; // After the Uniteon already knows 4 moves, don't learn more moves
         }
         Experience = UniteonBase.GetExperienceForLevel(Level);
@@ -97,6 +97,14 @@ public class Uniteon
         movesWithPP = Moves.Where(x => x.PowerPoints > 0).ToList();
         int randomMove = Random.Range(0, movesWithPP.Count);
         return movesWithPP.Count > 0 ? movesWithPP[randomMove] : null;
+    }
+
+    public LearnableMove GetLearnableMoveAtCurrentLevel() => UniteonBase.LearnableMoves.FirstOrDefault(x => x.Level == level);
+
+    public void LearnMove(LearnableMove move)
+    {
+        if (Moves.Count < UniteonBase.MaxMoves)
+            Moves.Add(new Move(move.MoveBase));
     }
 
     /// <summary>

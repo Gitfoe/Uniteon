@@ -46,6 +46,9 @@ public class UniteonBase : ScriptableObject
     public List<LearnableMove> LearnableMoves => learnableMoves;
     public AudioClip Cry => cry;
     
+    // Static properties
+    public static int MaxMoves { get; private set; } = 4;
+    
     /// <summary>
     /// https://bulbapedia.bulbagarden.net/wiki/Experience
     /// </summary>
@@ -84,7 +87,7 @@ public class UniteonBase : ScriptableObject
 /// Struct that holds a learnable move and at which level it is earned by leveling up.
 /// </summary>
 [Serializable]
-public struct LearnableMove
+public class LearnableMove
 {
     [SerializeField] private MoveBase moveBase;
     [SerializeField] private int level;
