@@ -257,7 +257,7 @@ MonoBehaviour:
   specialDefense: 45
   speed: 45
   baseExperience: 62
-  growthRate: 0
+  growthRate: 2
   learnableMoves:
   - moveBase: {fileID: 11400000, guid: 967afaba2a7001147b1daba69e06b641, type: 2}
     level: 1

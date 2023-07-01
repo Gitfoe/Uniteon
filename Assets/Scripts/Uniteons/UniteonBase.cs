@@ -50,15 +50,34 @@ public class UniteonBase : ScriptableObject
     /// https://bulbapedia.bulbagarden.net/wiki/Experience
     /// </summary>
     /// <returns>The experience points for this Uniteon for a certain level taking into account growth rate.</returns>
-    public int GetExperienceForLevel(int level)
-    {
-        return growthRate switch
+    public int GetExperienceForLevel(int level) =>
+        growthRate switch
         {
             GrowthRate.Fast => 4 * (level * level * level) / 5,
             GrowthRate.MediumFast => level * level * level,
+            GrowthRate.MediumSlow => 6 * (level * level * level) / 5 - 15 * (level * level) + 100 * level - 140,
+            GrowthRate.Slow => 5 * (level * level * level) / 4,
+            GrowthRate.Fluctuating => GetFluctuating(level),
+            GrowthRate.Erratic => GetErratic(level),
             _ => -1
         };
-    }
+    
+    private int GetFluctuating(int level) =>
+        level switch
+        {
+            < 15 => Mathf.FloorToInt(Mathf.Pow(level, 3) * ((Mathf.Floor((level + 1) / 3) + 24) / 50)),
+            >= 15 and < 36 => Mathf.FloorToInt(Mathf.Pow(level, 3) * ((level + 14) / 50)),
+            _ => Mathf.FloorToInt(Mathf.Pow(level, 3) * ((Mathf.Floor(level / 2) + 32) / 50))
+        };
+
+    private int GetErratic(int level) =>
+        level switch
+        {
+            < 50 => Mathf.FloorToInt(Mathf.Pow(level, 3) * ((level - 100) / 50)),
+            >= 50 and < 68 => Mathf.FloorToInt(Mathf.Pow(level, 3) * ((level - 150) / 100)),
+            >= 68 and < 98 => Mathf.FloorToInt(Mathf.Pow(level, 3) * ((Mathf.Floor(1911 - (level * 10)) / 3) / 500)),
+            _ => Mathf.FloorToInt(Mathf.Pow(level, 3) * ((level - 160) / 100))
+        };
 }
 
 /// <summary>
@@ -114,7 +133,11 @@ public enum Statistic
 public enum GrowthRate
 {
     Fast,
-    MediumFast
+    MediumFast,
+    MediumSlow,
+    Slow,
+    Fluctuating,
+    Erratic
 }
 
 /// <summary>
