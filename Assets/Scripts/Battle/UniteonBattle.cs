@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -510,6 +511,8 @@ public class UniteonBattle : MonoBehaviour
                     uniteonUnitGamer.Uniteon.Experience += experienceGained;
                     yield return battleDialogBox.TypeOutDialog(
                         $"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} gained {experienceGained} experience points!");
+                    // Update exp bar
+                    yield return uniteonUnitGamer.UniteonHud.UpdateExperienceBar();
                 }
                 yield return CheckBattleOver(defendingUnit);
             }

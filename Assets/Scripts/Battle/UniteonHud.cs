@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,8 +9,9 @@ public class UniteonHud : MonoBehaviour
     // Fields
     [SerializeField] private Text nameText;
     [SerializeField] private Text levelText;
-    [SerializeField] private Text healthText;
     [SerializeField] private HealthBar healthBar;
+    [SerializeField] private Text healthText;
+    [SerializeField] private GameObject expBar;
     [SerializeField] private bool isGamer;
     private Uniteon _uniteon;
 
@@ -25,6 +27,7 @@ public class UniteonHud : MonoBehaviour
         if (healthText != null) // Only assign health text if there is place for it (only for the gamer, not for the foe)
             healthText.text = $"{uniteon.HealthPoints}/{uniteon.MaxHealthPoints}";
         healthBar.SetHealthBar((float)uniteon.HealthPoints / uniteon.MaxHealthPoints, isGamer); // Normalize health points
+        SetExperienceBar();
     }
 
     /// <summary>
@@ -73,5 +76,26 @@ public class UniteonHud : MonoBehaviour
     private IEnumerator UpdateHealthBar()
     {
         yield return healthBar.SetHealthBarSmoothly((float)_uniteon.HealthPoints / _uniteon.MaxHealthPoints); // Normalize health points
+    }
+
+    private void SetExperienceBar()
+    {
+        if (expBar == null) return;
+        float normalizedExp = GetNormalizedExperienceGain();
+        expBar.transform.localScale = new Vector3(normalizedExp, 1f, 1f);
+    }
+    
+    public IEnumerator UpdateExperienceBar()
+    {
+        if (ReferenceEquals(expBar, null)) yield break;
+        float normalizedExp = GetNormalizedExperienceGain();
+        yield return expBar.transform.DOScaleX(normalizedExp, 1.27f).WaitForCompletion();
+    }
+
+    private float GetNormalizedExperienceGain()
+    {
+        int currentExp = _uniteon.UniteonBase.GetExperienceForLevel(_uniteon.Level);
+        int nextExp = _uniteon.UniteonBase.GetExperienceForLevel(_uniteon.Level + 1);
+        return Mathf.Clamp01((float)(_uniteon.Experience - currentExp) / (nextExp - currentExp)); // Normalize
     }
 }
