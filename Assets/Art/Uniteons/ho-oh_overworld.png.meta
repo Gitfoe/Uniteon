@@ -118,8 +118,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c8773995906039b44a7f2c3f18d7e004
-      internalID: 359048880
+      spriteID: f3c4b9c4cf2bde647a1d6e2bfe756ffd
+      internalID: 864576571
       vertices: []
       indices: 
       edges: []
@@ -139,8 +139,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 63d9bf660e589204696907fa48f55338
-      internalID: -601238636
+      spriteID: 685a5a225ac02454793f11ec77773c93
+      internalID: 320660335
       vertices: []
       indices: 
       edges: []
@@ -156,8 +156,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      ho-oh_overworld_1: -601238636
-      ho-oh_overworld_0: 359048880
+      ho-oh_overworld_1: 320660335
+      ho-oh_overworld_0: 864576571
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

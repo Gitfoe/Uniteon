@@ -149,10 +149,8 @@ public class AudioManager : MonoBehaviour
 
     public IEnumerator FadeOutMusicAndPlayNewMusic(string clip, float fadeDuration, bool loop = true)
     {
-        if (clip != "none")
-            yield return FadeOutMusicAndPlayNewMusic(Music[clip], fadeDuration, loop);
-        else
-            yield return StopMusic(true, fadeDuration);
+        yield return FadeOutMusicAndPlayNewMusic(Music[clip], fadeDuration, loop);
+        yield return StopMusic(true, fadeDuration);
     }
     
     /// <summary>

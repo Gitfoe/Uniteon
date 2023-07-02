@@ -23,4 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Ecruteak House.unity
     guid: 8638b07cc2b766d41a3bf6ac51c91512
+  - enabled: 1
+    path: Assets/Scenes/Ecruteak Tower.unity
+    guid: 16b6298ebeb34574d855a3ce8cee3173
   m_configObjects: {}
