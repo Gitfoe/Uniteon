@@ -1,0 +1,1948 @@
+fileFormatVersion: 2
+guid: 90d01019a66662d41aa2da8e1ade1462
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 96
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ho-oh-front_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1010
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 056d2f94df3f4824996215b9f870d05e
+      internalID: 672552287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_1
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 1010
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab6fa8542dc6b4a41abc671189318e6f
+      internalID: -516280683
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_2
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 1010
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e992eb9575efe2e46a337c63c5c91fce
+      internalID: -72410845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_3
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 1010
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 232fa41649bd76e4d9bfa321d3ba83f2
+      internalID: 1794854370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_4
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 1010
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b64abf4beaf96a74fb1b450f4ff755cd
+      internalID: -1491171266
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_5
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 1010
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 44ff4dba3f30fa14381d4e8e66911345
+      internalID: -364009826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_6
+      rect:
+        serializedVersion: 2
+        x: 642
+        y: 1010
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0389e11bf47273d49ae1497db6031c4f
+      internalID: 652895289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_7
+      rect:
+        serializedVersion: 2
+        x: 749
+        y: 1010
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a34b5eb3118c3124d9aa854495c1bbe4
+      internalID: 1262809483
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 909
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 692cbeae2b2f7bd40a7a7ea6003ffa4c
+      internalID: 671849452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_9
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 909
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b00af7b5eeaf8fd44a1e36b9a792df9b
+      internalID: 1916049999
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_10
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 909
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd7d3f8a37420e547b52e2d7c17ca35f
+      internalID: -163511981
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_11
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 909
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6bbd808c4086b6244b9a2c84851ca65a
+      internalID: 571080406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_12
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 909
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5cab4f8aef14f334785dcd861285bc8c
+      internalID: -1034061115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_13
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 909
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e2cc7813f2786342b2667cd994b5f3e
+      internalID: 1198045552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_14
+      rect:
+        serializedVersion: 2
+        x: 642
+        y: 909
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ca3bc105ab46264c8530626195325db
+      internalID: 1599654348
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_15
+      rect:
+        serializedVersion: 2
+        x: 749
+        y: 909
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 90deb49915d051048ab88c762dd4b542
+      internalID: 743319838
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 808
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61bc9cde07420b84a9924890243691bf
+      internalID: -753672226
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_17
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 808
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20e03f2e697743f48a62a07198db5a9b
+      internalID: 227037613
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_18
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 808
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a0f20e66e76c0842b3aea057ff2c6af
+      internalID: 1302253602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_19
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 808
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40fdc0120a1db5846aa8debd4293d08a
+      internalID: 1156052638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_20
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 808
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b830be28581fcdb49b15d2c39a29924b
+      internalID: 777654486
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_21
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 808
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fafae9daca751b744a7d97e7e51fc21d
+      internalID: -960593243
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_22
+      rect:
+        serializedVersion: 2
+        x: 642
+        y: 808
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f17a3feb72ed7004190afce57f750f64
+      internalID: 822044870
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_23
+      rect:
+        serializedVersion: 2
+        x: 749
+        y: 808
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f4834cd5d0fa16448ad8447c86ee642
+      internalID: -633671984
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_24
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 707
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 629c55cea73a77d46b795efd3481a505
+      internalID: -268717111
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_25
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 707
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 775260bfa05991541aa8e4c3e0e5212b
+      internalID: -1924006222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_26
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 707
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 90b3df06159863d4890991d0e961bbfa
+      internalID: 854723010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_27
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 707
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2a2d7d1b961d8f4992936f97b05a0b7
+      internalID: 1185834829
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_28
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 707
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 92a1f4f867381b24e82225692f7f31a7
+      internalID: 1915284359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_29
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 707
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dab582a3286b50f4e8d7a3df4dc02b13
+      internalID: 1458492953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_30
+      rect:
+        serializedVersion: 2
+        x: 642
+        y: 707
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb45e8249da196f47bc09d15b6cc3747
+      internalID: -902005906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_31
+      rect:
+        serializedVersion: 2
+        x: 749
+        y: 707
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ecabecaf57045c349909952f20941208
+      internalID: -156584924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_32
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 606
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 748e8453c34f9eb42a6802712c45a88d
+      internalID: 1814099015
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_33
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 606
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c026f7adfe65c54a972450c0940f0e1
+      internalID: -345215433
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_34
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 606
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c0baff443111d5c4ab1e5c815b69d086
+      internalID: 981647632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_35
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 606
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 431e1922b1ada9e4f8815efe6b2cade3
+      internalID: 1248010298
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_36
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 606
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 376812618f307aa4d9109d773167c69a
+      internalID: -1797414155
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_37
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 606
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d218feaf87ab3941825a4984bb72bad
+      internalID: -835120930
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_38
+      rect:
+        serializedVersion: 2
+        x: 642
+        y: 606
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 29488721a7f522b49b938d86b45b3d00
+      internalID: 3060638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_39
+      rect:
+        serializedVersion: 2
+        x: 749
+        y: 606
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad7d34f6fb0c40a40aec9f09675f036d
+      internalID: 2028137763
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_40
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 505
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f2a664b09b52b534fb72474f54f4af60
+      internalID: 1774474636
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_41
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 505
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c04cf6904adad7b4fb04480e9cd4f372
+      internalID: 183397746
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_42
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 505
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82824f9f3c297c64d94a0b524aa175c0
+      internalID: 1799949198
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_43
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 505
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a19541cf1d9269c4ca598c3b8064c73a
+      internalID: -698384505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_44
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 505
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3ff27cd264a47fd4b84aabb3414b65c1
+      internalID: 1752596042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_45
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 505
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f38ea8dac96c8645869a76c78ef28e7
+      internalID: 398420196
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_46
+      rect:
+        serializedVersion: 2
+        x: 642
+        y: 505
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1d80eed9dd86e147a73096fc3854f53
+      internalID: -802014668
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_47
+      rect:
+        serializedVersion: 2
+        x: 749
+        y: 505
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b7ce056d6e1af084b9a06ee48d768745
+      internalID: 1155472350
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_48
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 404
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7018757ca80ccb249a9718ba70d8e575
+      internalID: -2057264989
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_49
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 404
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f79511f15be97b6488570a104e562846
+      internalID: -738351446
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_50
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 404
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fadbdf20d8b7a064d94c2fff75e389ba
+      internalID: 1013181912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_51
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 404
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d4e607da083cc849a247b92a83a2b2a
+      internalID: -602565287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_52
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 404
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03f34e7e0896df4408ad764f7a8d9fa6
+      internalID: -1775037865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_53
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 404
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ddd37a29866d9c45bf6527ef7e81381
+      internalID: -3049194
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_54
+      rect:
+        serializedVersion: 2
+        x: 642
+        y: 404
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 97a2da4bb3b97364fa79a6624284fd68
+      internalID: -1446821327
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_55
+      rect:
+        serializedVersion: 2
+        x: 749
+        y: 404
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6087a1af611e30f4188fff97a5ce7ccf
+      internalID: -121921921
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_56
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 303
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b95a583e7af835343a364c94473955ff
+      internalID: -867487989
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_57
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 303
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1d612c88e58936b479ef7bc609043351
+      internalID: -708007904
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_58
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 303
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9f6b6d5e082394841baab2026a01fe24
+      internalID: 1655215030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_59
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 303
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f70967d8eafc474e930251323891d81
+      internalID: -414348169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_60
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 303
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 93cfdf4ddba66444d90eaf81dd48e72b
+      internalID: -2137623428
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_61
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 303
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 485b7edabedd2cc41b38766aa9be5835
+      internalID: -1098045984
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_62
+      rect:
+        serializedVersion: 2
+        x: 642
+        y: 303
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22fdd7c88ca8bea4a97f891e602e8dcc
+      internalID: 1317384214
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_63
+      rect:
+        serializedVersion: 2
+        x: 749
+        y: 303
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 295a5aede38d1c84fb890f0a2ddedcf7
+      internalID: 163071981
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_64
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 202
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d87915b2751a2b84bbb1c02ef6e8e63b
+      internalID: -35516330
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_65
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 202
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a0f50987540116408c7eb613365d9de
+      internalID: 893014598
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_66
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 202
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5752e05c1c12f044a97179e4de255413
+      internalID: 1618596495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_67
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 202
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c60944a51cf020543807ba8c33c28152
+      internalID: -252183583
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_68
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 202
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 47a8ecfe540213f42b0b9528371429b7
+      internalID: -1018502304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_69
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 202
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 135181a65c384c548a3ee20e4a49479e
+      internalID: 1399126804
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_70
+      rect:
+        serializedVersion: 2
+        x: 642
+        y: 202
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f265e3c26196c0b4fa1ca1b2086d2ec4
+      internalID: -46067130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_71
+      rect:
+        serializedVersion: 2
+        x: 749
+        y: 202
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 63895d53c4ae19841944fdf6ec6fa453
+      internalID: 838403409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_72
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 101
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d4800ca14f31dc40989aafe1644dd34
+      internalID: -1462669065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_73
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 101
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56061689dfc21e942bc23fcda8c97eec
+      internalID: -1239178228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_74
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 101
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 81ba55cf754308b479a5dd7d71eab455
+      internalID: 1169513267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_75
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 101
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd63bc3864f8812438419f9bc3920110
+      internalID: 2126068177
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_76
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 101
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 01c9bb6c4b1743743b53db9cdb0aba0b
+      internalID: 183551814
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_77
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 101
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: deb994986be29d94b961bba3fc0b9491
+      internalID: 938940871
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_78
+      rect:
+        serializedVersion: 2
+        x: 642
+        y: 101
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56cf288cd81586340b52f55f23e44ac3
+      internalID: -165168338
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_79
+      rect:
+        serializedVersion: 2
+        x: 749
+        y: 101
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 02a18da61ce5d9943bde600021475f7e
+      internalID: -1173363116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_80
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f526531a6194ae4f81fd52e8fe1220b
+      internalID: 581489768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_81
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 0
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 42b03d7e01f389e4994e3ff7c07817a7
+      internalID: -233857531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ho-oh-front_82
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 0
+        width: 107
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 170514e8e164b044785e9bbb50023363
+      internalID: -1661210683
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      ho-oh-front_6: 652895289
+      ho-oh-front_33: -345215433
+      ho-oh-front_51: -602565287
+      ho-oh-front_59: -414348169
+      ho-oh-front_55: -121921921
+      ho-oh-front_44: 1752596042
+      ho-oh-front_67: -252183583
+      ho-oh-front_79: -1173363116
+      ho-oh-front_27: 1185834829
+      ho-oh-front_13: 1198045552
+      ho-oh-front_80: 581489768
+      ho-oh-front_61: -1098045984
+      ho-oh-front_63: 163071981
+      ho-oh-front_54: -1446821327
+      ho-oh-front_4: -1491171266
+      ho-oh-front_46: -802014668
+      ho-oh-front_57: -708007904
+      ho-oh-front_34: 981647632
+      ho-oh-front_39: 2028137763
+      ho-oh-front_35: 1248010298
+      ho-oh-front_14: 1599654348
+      ho-oh-front_69: 1399126804
+      ho-oh-front_78: -165168338
+      ho-oh-front_66: 1618596495
+      ho-oh-front_9: 1916049999
+      ho-oh-front_75: 2126068177
+      ho-oh-front_19: 1156052638
+      ho-oh-front_49: -738351446
+      ho-oh-front_25: -1924006222
+      ho-oh-front_10: -163511981
+      ho-oh-front_2: -72410845
+      ho-oh-front_15: 743319838
+      ho-oh-front_48: -2057264989
+      ho-oh-front_36: -1797414155
+      ho-oh-front_11: 571080406
+      ho-oh-front_77: 938940871
+      ho-oh-front_64: -35516330
+      ho-oh-front_72: -1462669065
+      ho-oh-front_41: 183397746
+      ho-oh-front_68: -1018502304
+      ho-oh-front_23: -633671984
+      ho-oh-front_76: 183551814
+      ho-oh-front_29: 1458492953
+      ho-oh-front_81: -233857531
+      ho-oh-front_3: 1794854370
+      ho-oh-front_42: 1799949198
+      ho-oh-front_16: -753672226
+      ho-oh-front_73: -1239178228
+      ho-oh-front_20: 777654486
+      ho-oh-front_30: -902005906
+      ho-oh-front_47: 1155472350
+      ho-oh-front_62: 1317384214
+      ho-oh-front_1: -516280683
+      ho-oh-front_52: -1775037865
+      ho-oh-front_65: 893014598
+      ho-oh-front_60: -2137623428
+      ho-oh-front_12: -1034061115
+      ho-oh-front_50: 1013181912
+      ho-oh-front_0: 672552287
+      ho-oh-front_28: 1915284359
+      ho-oh-front_45: 398420196
+      ho-oh-front_71: 838403409
+      ho-oh-front_5: -364009826
+      ho-oh-front_21: -960593243
+      ho-oh-front_70: -46067130
+      ho-oh-front_74: 1169513267
+      ho-oh-front_58: 1655215030
+      ho-oh-front_43: -698384505
+      ho-oh-front_56: -867487989
+      ho-oh-front_8: 671849452
+      ho-oh-front_37: -835120930
+      ho-oh-front_82: -1661210683
+      ho-oh-front_7: 1262809483
+      ho-oh-front_22: 822044870
+      ho-oh-front_24: -268717111
+      ho-oh-front_26: 854723010
+      ho-oh-front_53: -3049194
+      ho-oh-front_17: 227037613
+      ho-oh-front_38: 3060638
+      ho-oh-front_40: 1774474636
+      ho-oh-front_18: 1302253602
+      ho-oh-front_31: -156584924
+      ho-oh-front_32: 1814099015
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

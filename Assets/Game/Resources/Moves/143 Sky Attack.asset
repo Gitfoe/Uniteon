@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1c3c3bf392619847971b6dd32d35618, type: 3}
+  m_Name: 143 Sky Attack
+  m_EditorClassIdentifier: 
+  moveID: 143
+  moveName: Sky Attack
+  description: 'This move has a heightened chance of landing a critical hit and may
+    also make the target flinch. '
+  moveType: 10
+  moveCategory: 0
+  powerPoints: 5
+  power: 140
+  accuracy: 90
+  priority: 0
+  neverMisses: 0
+  moveEffects:
+    boosts: []
+  moveTarget: 0

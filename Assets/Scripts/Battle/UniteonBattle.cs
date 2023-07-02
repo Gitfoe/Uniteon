@@ -31,6 +31,7 @@ public class UniteonBattle : MonoBehaviour
     private UniteonParty _gamerParty;
     private UniteonParty _mentorParty;
     private bool _isMentorBattle;
+    private bool _obtainUniteonAfterWin;
     private GamerController _gamerController;
     private MentorController _mentorController;
     private Vector3 _orgPosGamerSprite;
@@ -68,10 +69,11 @@ public class UniteonBattle : MonoBehaviour
     /// <summary>
     /// Starts a wild Uniteon battle.
     /// </summary>
-    public void StartBattle(UniteonParty gamerParty, Uniteon wildUniteon)
+    public void StartBattle(UniteonParty gamerParty, Uniteon wildUniteon, bool obtainUniteonAfterWin = false)
     {
         _gamerParty = gamerParty;
         _wildUniteon = wildUniteon;
+        _obtainUniteonAfterWin = obtainUniteonAfterWin;
         StartCoroutine(InitialiseBattle());
     }
     
@@ -258,6 +260,15 @@ public class UniteonBattle : MonoBehaviour
     {
         // Wait until the gamer continues
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter));
+        // Add Uniteon to gamer's party if they won and party isn't full
+        if (won && _obtainUniteonAfterWin && _gamerParty.Uniteons.Count < 6)
+        {
+            AudioManager.Instance.PlaySfx("levelUp");
+            yield return battleDialogBox.TypeOutDialog(
+                $"{uniteonUnitFoe.Uniteon.UniteonBase.UniteonName} has been added to your party!");
+            _gamerParty.Uniteons.Add(uniteonUnitFoe.Uniteon);
+            _gamerParty.HealAllUniteons();
+        }
         // Fade out screen and music
         fade.color = new Color(0f, 0f, 0f, 0f);
         StartCoroutine(AudioManager.Instance.StopMusic(true, 0.72f));

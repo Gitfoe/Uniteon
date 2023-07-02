@@ -19,6 +19,7 @@ public class GamerController : MonoBehaviour
     private Vector2 _previousGamerInput;
     private bool _inTransition;
     private MentorController _battlingMentor;
+    private OverworldUniteonController _battlingOverworldUniteon;
 
     // Properties
     public string GamerName => gamerName;
@@ -26,8 +27,9 @@ public class GamerController : MonoBehaviour
     public Character Character => _character;
 
     // Events
-    public event Action<MentorController> OnEncountered;
+    public event Action<MentorController, OverworldUniteonController> OnEncountered;
     public event Action<Collider2D> OnInMentorsView;
+    public event Action<Collider2D> OnInUniteonsView;
     public event Action OnTransitionDone;
 
     /// <summary>
@@ -86,6 +88,7 @@ public class GamerController : MonoBehaviour
         }
         CheckWildGrass();
         CheckInMentorsView();
+        CheckInUniteonsView();
     }
 
     /// <summary>
@@ -103,7 +106,7 @@ public class GamerController : MonoBehaviour
             BattleTransition( AudioManager.Music["wildBattleIntro"], AudioManager.Music["wildBattleLoop"], sequence);
             sequence.OnComplete(() =>
             {
-                OnEncountered?.Invoke(null);
+                OnEncountered?.Invoke(null, null);
                 _inTransition = false;
                 Debug.Log($"In battle transition: {_inTransition}");
             });
@@ -127,7 +130,23 @@ public class GamerController : MonoBehaviour
             _character.LookTowards(mentorCollider.transform.position);
             OnInMentorsView?.Invoke(mentorCollider);
         }
-        // Start mentor eyes meet sequence, Only execute battle transition if mentor & battle available
+    }
+    
+    /// <summary>
+    /// Checks if in Uniteon's view and initates the dialog of the Uniteon.
+    /// </summary>
+    private void CheckInUniteonsView()
+    {
+        Collider2D uniteonCollider = Physics2D.OverlapCircle(transform.position - new Vector3(0, _character.YOffset), 0.2f, UnityLayers.Instance.FovLayer);
+        if (!ReferenceEquals(uniteonCollider, null))
+            _battlingOverworldUniteon = uniteonCollider.GetComponentInParent<OverworldUniteonController>();
+        else return;
+        if (!ReferenceEquals(_battlingOverworldUniteon, null))
+        {
+            _character.Animator.IsMoving = false;
+            _character.LookTowards(uniteonCollider.transform.position);
+            OnInUniteonsView?.Invoke(uniteonCollider);
+        }
     }
     
     /// <summary>
@@ -144,6 +163,23 @@ public class GamerController : MonoBehaviour
             OnTransitionDone = null; // Clear from subscribed mentors after transition done
             _inTransition = false; // No longer in transition
             _battlingMentor = null; // No longer needed
+        });
+    }
+    
+    /// <summary>
+    /// Shows a battle transition animation and invokes an event letting overworld Uniteons know when the transition is done.
+    /// </summary>
+    public void TransitionIntoOverworldUniteonBattle()
+    {
+        Debug.Log($"In battle transition: {_inTransition}");
+        Sequence sequence = DOTween.Sequence();
+        BattleTransition(_battlingOverworldUniteon.BattleIntro, _battlingOverworldUniteon.BattleLoop, sequence, 2.8f);
+        sequence.OnComplete(() =>
+        {
+            OnTransitionDone?.Invoke();
+            OnTransitionDone = null; // Clear from subscribed mentors after transition done
+            _inTransition = false; // No longer in transition
+            _battlingOverworldUniteon = null; // No longer needed
         });
     }
     
@@ -176,13 +212,7 @@ public class GamerController : MonoBehaviour
     /// </summary>
     private void Interact()
     {
-        Vector3 faceDir = new Vector3(_character.Animator.MoveX, _character.Animator.MoveY);
-        Vector3 interactPos = transform.position + faceDir;
-        Collider2D collider = Physics2D.OverlapCircle(interactPos, 0.3f, UnityLayers.Instance.InteractableLayer);
-        if (collider != null)
-        {
-            collider.GetComponent<Interactable>()?.Interact(transform);
-        }
+        
     }
     
     /// <summary>

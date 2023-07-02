@@ -54,7 +54,7 @@ public class NpcController : MonoBehaviour, Interactable
     /// <summary>
     /// As the NPC, speak to the dialog box.
     /// </summary>
-    /// <param name="initiator">The transformr of the GameObject that initiated the interaction.</param>
+    /// <param name="initiator">The transform of the GameObject that initiated the interaction.</param>
     public virtual void Interact(Transform initiator)
     {
         if (NpcState == NpcState.Idling)

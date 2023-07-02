@@ -24,6 +24,7 @@ public class Character : MonoBehaviour
     /// Coroutine to move a character on the grid.
     /// </summary>
     /// <param name="moveVector">The next position the character needs to be moved to.</param>
+    /// <param name="OnMoveOver">Event that gets executed once a move is over.</param>
     /// <returns>Coroutine.</returns>
     public IEnumerator Move(Vector2 moveVector, Action OnMoveOver = null)
     {
@@ -103,11 +104,11 @@ public class Character : MonoBehaviour
         {
             float x = Mathf.Clamp(xDifference, -1f, 1f);
             float y = Mathf.Clamp(yDifference, -1f, 1f);
-            if (x == 1)
+            if ((int)x == 1)
                 return FacingCardinal.East;
-            if (x == -1)
+            if ((int)x == -1)
                 return FacingCardinal.West;
-            if (y == 1)
+            if ((int)y == 1)
                 return FacingCardinal.North;
         }
         return FacingCardinal.South; // y == -1

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +18,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private Dialog lostDialog;
     private GameState _gameState;
     private MentorController _mentor;
+    private OverworldUniteonController _overworldUniteon;
     private GameState _previousGameState;
     private Transition _transition;
     
@@ -49,6 +51,21 @@ public class GameController : MonoBehaviour
                 StartCoroutine(mentor.TriggerMentorBattle(gamer));
             }
         };
+        gamer.OnInUniteonsView += (Collider2D overworldUniteonCollider) =>
+        {
+            OverworldUniteonController overworldUniteon =
+                overworldUniteonCollider.GetComponentInParent<OverworldUniteonController>();
+            Debug.Log($"In overworld Uniteon's view: {overworldUniteon.UniteonName}");
+            // Subscribe to events
+            overworldUniteon.OnInitiateOverworldUniteonBattle += gamer.TransitionIntoOverworldUniteonBattle;
+            gamer.OnTransitionDone += overworldUniteon.InitiateOverworldUniteonBattle;
+            // Start mentor battle
+            if (!overworldUniteon.BattleLost)
+            {
+                _gameState = GameState.Cutscene;
+                StartCoroutine(overworldUniteon.TriggerOverworldUniteonBattle(gamer));
+            }
+        };
         uniteonBattle.OnBattleOver += EndBattle;
         DialogManager.Instance.OnShowDialog += () =>
         {
@@ -65,25 +82,33 @@ public class GameController : MonoBehaviour
     /// Starts either a wild battle or a mentor battle.
     /// </summary>
     /// <param name="mentor">If mentor is entered, it will be a trainer battle instead of a wild battle.</param>
-    public void InitiateBattle(MentorController mentor = null)
+    /// <param name="overworldUniteon">Will enter overworld Uniteon battle.</param>
+    public void InitiateBattle(MentorController mentor = null, OverworldUniteonController overworldUniteon = null)
     {
         _gameState = GameState.Battle;
         uniteonBattle.gameObject.SetActive(true);
         worldCamera.gameObject.SetActive(false);
         worldUI.gameObject.SetActive(false);
         _mentor = mentor;
+        _overworldUniteon = overworldUniteon;
         UniteonParty gamerParty = gamer.GetComponent<UniteonParty>();
-        if (ReferenceEquals(mentor, null))
+        if (ReferenceEquals(mentor, null) && ReferenceEquals(overworldUniteon, null))
         {
             Uniteon wildUniteon = FindObjectOfType<WorldArea>().GetComponent<WorldArea>().GetWildUniteon();
             uniteonBattle.StartBattle(gamerParty, wildUniteon);
             Debug.Log($"Wild battle initiated: {wildUniteon.UniteonBase.UniteonName}");
         }
-        else
+        else if (!ReferenceEquals(mentor, null) && ReferenceEquals(overworldUniteon, null))
         {
             UniteonParty mentorParty = mentor.GetComponent<UniteonParty>();
             uniteonBattle.StartBattle(gamerParty, mentorParty);
             Debug.Log($"Mentor battle initiated: {mentor.MentorName}");
+        }
+        else
+        {
+            UniteonParty wildUniteon = overworldUniteon.GetComponent<UniteonParty>();
+            uniteonBattle.StartBattle(gamerParty, wildUniteon.Uniteons.FirstOrDefault(), true);
+            Debug.Log($"Mentor battle initiated: {overworldUniteon.UniteonName}");
         }
     }
     
@@ -101,6 +126,8 @@ public class GameController : MonoBehaviour
         {
             if (!ReferenceEquals(_mentor, null))
                 _mentor.HandleBattleLost();
+            if (!ReferenceEquals(_overworldUniteon, null))
+                _overworldUniteon.HandleBattleLost();
             StartCoroutine(_transition.FadeOut(0.72f, Color.black));
             AudioManager.Instance.PlayMusic(AudioManager.PlayingWorldMusic);
         }
