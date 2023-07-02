@@ -565,7 +565,7 @@ MonoBehaviour:
     - Hmpf. You did pretty well.
     - Have a nice day, mate.
   mentorName: Julian
-  sprite: {fileID: 937628103, guid: 8bbbf57206c290748adf5c6055e11cde, type: 3}
+  sprite: {fileID: -1409536112, guid: 7406a16e48e4da746b0655fe96d78e2c, type: 3}
   exclamationMark: {fileID: 1126450647}
   fov: {fileID: 2260595}
   battlePlatforms: {fileID: -1251110461, guid: bfbb8e7a02446124caf234989428f2e2, type: 3}
