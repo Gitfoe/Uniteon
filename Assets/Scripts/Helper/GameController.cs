@@ -22,12 +22,17 @@ public class GameController : MonoBehaviour
     
     // Singleton Design Pattern
     public static GameController Instance { get; private set; }
-
+    
     private void Awake() => Instance = this;
 
     // Start is called before the first frame update
     private void Start()
     {
+        // Play music, currently hard-coded
+        const string worldMusic = "eternaLoop";
+        AudioManager.Instance.SetPlayingWorldMusic(worldMusic);
+        AudioManager.Instance.PlayMusic(worldMusic);
+        // Initialise variables and events
         _transition = FindObjectOfType<Transition>();
         gamer.OnEncountered += InitiateBattle;
         gamer.OnInMentorsView += (Collider2D mentorCollider) =>
@@ -97,7 +102,7 @@ public class GameController : MonoBehaviour
             if (!ReferenceEquals(_mentor, null))
                 _mentor.HandleBattleLost();
             StartCoroutine(_transition.FadeOut(0.72f, Color.black));
-            AudioManager.Instance.PlayMusic("eternaLoop");
+            AudioManager.Instance.PlayMusic(AudioManager.PlayingWorldMusic);
         }
         else
         {
@@ -106,7 +111,7 @@ public class GameController : MonoBehaviour
                 () =>
                 {
                     StartCoroutine(HealUniteonsTransition("potion", false,
-                        () => { AudioManager.Instance.PlayMusic("eternaLoop"); }));
+                        () => { AudioManager.Instance.PlayMusic(AudioManager.PlayingWorldMusic); }));
                 }));
         }
     }

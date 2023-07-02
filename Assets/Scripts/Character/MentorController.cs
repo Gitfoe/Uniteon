@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class MentorController : MonoBehaviour, Interactable
 {
@@ -13,6 +14,7 @@ public class MentorController : MonoBehaviour, Interactable
     [SerializeField] private Sprite sprite;
     [SerializeField] private GameObject exclamationMark;
     [SerializeField] private GameObject fov;
+    [SerializeField] private Sprite battlePlatforms;
     [SerializeField] private AudioClip eyesMeetIntro;
     [SerializeField] private AudioClip eyesMeetLoop;
     [SerializeField] private AudioClip battleIntro;
@@ -28,6 +30,7 @@ public class MentorController : MonoBehaviour, Interactable
     public string MentorName => mentorName;
     public Sprite Sprite => sprite;
     public bool BattleLost => _battleLost;
+    public Sprite BattlePlatforms => battlePlatforms;
     public AudioClip BattleIntro => battleIntro;
     public AudioClip BattleLoop => battleLoop;
     public AudioClip VictoryIntro => victoryIntro;

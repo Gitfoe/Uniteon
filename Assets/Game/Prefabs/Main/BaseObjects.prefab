@@ -343,6 +343,14 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: e73f4a352e7add74ab182896b821955c, type: 3}
   - clipName: ecruteakLoop
     clip: {fileID: 8300000, guid: 614eeaa3248a4204eaaab06ec08248c8, type: 3}
+  - clipName: route113Intro
+    clip: {fileID: 8300000, guid: 3e4ecfe2312cfc6498bf611510006ccb, type: 3}
+  - clipName: route113Loop
+    clip: {fileID: 8300000, guid: 9db9917cbcea38849966c09c4b87ec03, type: 3}
+  - clipName: ho-ohIntro
+    clip: {fileID: 8300000, guid: 9ddeb23a93dfd8349ab7a3c6c23e04f5, type: 3}
+  - clipName: ho-ohLoop
+    clip: {fileID: 8300000, guid: b15b8dedd0d137a44b51c9eda1f16965, type: 3}
 --- !u!1 &4793920549046404322
 GameObject:
   m_ObjectHideFlags: 0
@@ -2770,7 +2778,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4793920549930426379
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2862,7 +2870,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4793920549945905615}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.5, y: 0.8, z: 0}
+  m_LocalPosition: {x: 1.5, y: 2.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3151,6 +3159,7 @@ MonoBehaviour:
   gamerSprite: {fileID: 4793920549673649844}
   foeSprite: {fileID: 4793920550667778064}
   moveSelectionScreen: {fileID: 4793920550219034959}
+  platforms: {fileID: 4793920549636002605}
 --- !u!1 &4793920550096564464
 GameObject:
   m_ObjectHideFlags: 0

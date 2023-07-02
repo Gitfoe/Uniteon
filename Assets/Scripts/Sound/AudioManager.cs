@@ -19,6 +19,8 @@ public class AudioManager : MonoBehaviour
     public static AudioManager Instance { get; private set; }
     public static Dictionary<string, AudioClip> Sfx { get; private set; }
     public static Dictionary<string, AudioClip> Music { get; private set; }
+    public static List<AudioClip> PlayingMusic { get; private set; }
+    public static List<AudioClip> PlayingWorldMusic { get; set; }
 
     /// <summary>
     /// Sets this instance of the audio manager to a public static variable, as well as the audio clips.
@@ -43,6 +45,7 @@ public class AudioManager : MonoBehaviour
         musicPlayer.clip = clip;
         musicPlayer.loop = loop;
         musicPlayer.Play();
+        PlayingMusic = new List<AudioClip>() { clip };
     }
     
     public void PlayMusic(string clip, bool loop = true)
@@ -60,12 +63,28 @@ public class AudioManager : MonoBehaviour
         if (beginClip == null)
             PlayMusic(loopClip);
         else
+        {
             _playMusicRoutine = StartCoroutine(PlayMusicRoutine(beginClip, loopClip));
+            PlayingMusic = new List<AudioClip>() { beginClip, loopClip };
+        }
     }
 
     public void PlayMusic(string beginClip, string endClip)
     {
         PlayMusic(Music[beginClip], Music[endClip]);
+    }
+
+    public void PlayMusic(List<AudioClip> clips)
+    {
+        switch (clips.Count)
+        {
+            case 1:
+                PlayMusic(clips[0]);
+                break;
+            case 2:
+                PlayMusic(clips[0], clips[1]);
+                break;
+        }
     }
 
     /// <summary>
@@ -100,13 +119,17 @@ public class AudioManager : MonoBehaviour
             yield return musicPlayer.DOFade(0f, fadeDuration).WaitForCompletion();
             musicPlayer.Stop();
             musicPlayer.volume = startVolume;
+            PlayingMusic = null;
         }
         // Stop the music immediately if any other than this music is playing
         else if (musicPlayer.isPlaying)
+        {
             musicPlayer.Stop();
+            PlayingMusic = null;
+        }
         // Stop any active music coroutine
-        if (_playMusicRoutine != null)
-            StopCoroutine(_playMusicRoutine);
+        if (_playMusicRoutine != null) {
+            StopCoroutine(_playMusicRoutine); }
     }
 
     /// <summary>
@@ -241,6 +264,31 @@ public class AudioManager : MonoBehaviour
             yield return new WaitForSeconds(silenceTime);
             yield return musicPlayer.DOFade(startVolume, fadeTime).WaitForCompletion();
         }
+    }
+    #endregion
+    
+    #region Set Properties
+    /// <summary>
+    /// Sets the PlayingWorldMusic property. No values entered means that the property will be set to null.
+    /// </summary>
+    /// <param name="clip1">The intro clip, or if there is no intro clip, the looping clip..</param>
+    /// <param name="clip2">The looping clip.</param>
+    public void SetPlayingWorldMusic(AudioClip clip1 = null, AudioClip clip2 = null)
+    {
+        if (!ReferenceEquals(clip1, null) && ReferenceEquals(clip2, null))
+            PlayingWorldMusic = new List<AudioClip>() { clip1 };
+        else if (!ReferenceEquals(clip1, null))
+            PlayingWorldMusic = new List<AudioClip>() { clip1, clip2 };
+        else if (ReferenceEquals(clip2, null))
+            PlayingWorldMusic = null;
+    }
+
+    public void SetPlayingWorldMusic(string clip1, string clip2 = null)
+    {
+        if (ReferenceEquals(clip2, null))
+            SetPlayingWorldMusic(Music[clip1]);
+        else
+            SetPlayingWorldMusic(Music[clip1], Music[clip2]);
     }
     #endregion
 }

@@ -19,6 +19,7 @@ public class UniteonBattle : MonoBehaviour
     [SerializeField] private Image gamerSprite; 
     [SerializeField] private Image foeSprite;
     [SerializeField] private MoveSelectionScreen moveSelectionScreen; 
+    [SerializeField] private Image platforms; 
     private BattleSequenceState _battleState;
     private BattleSequenceState _prevBattleState;
     private CurrentBattleTurn _currentTurn;
@@ -84,6 +85,7 @@ public class UniteonBattle : MonoBehaviour
         _isMentorBattle = true;
         _gamerController = gamerParty.GetComponent<GamerController>();
         _mentorController = mentorParty.GetComponent<MentorController>();
+        platforms.sprite = _mentorController.BattlePlatforms;
         StartCoroutine(InitialiseBattle());
     }
 
@@ -876,23 +878,37 @@ public class UniteonBattle : MonoBehaviour
     /// <param name="isGamer">If the gamer needs to be animated (true) or the foe (false).</param>
     private void PlayCharacterLeaveAnimation(bool isGamer)
     {
+        // Set variables
         Image sprite;
+        Vector3 orgPosSprite;
+        float moveX;
+        float moveY;
+        const float duration = 0.72f;
         Sequence sequence = DOTween.Sequence();
+        // Determine variables
         if (isGamer)
         {
             sprite = gamerSprite;
-            sequence.Append(
-                sprite.transform.DOLocalMove(new Vector3(_orgPosGamerSprite.x - 75f, _orgPosGamerSprite.y - 37.5f),
-                    0.72f));
+            orgPosSprite = _orgPosGamerSprite;
+            moveX = -75f;
+            moveY = -37.5f;
         }
         else
         {
             sprite = foeSprite;
-            sequence.Append(
-                sprite.transform.DOLocalMove(new Vector3(_orgPosFoeSprite.x + 75f, _orgPosFoeSprite.y + 37.5f),
-                    0.72f));
+            orgPosSprite = _orgPosFoeSprite;
+            moveX = 75f;
+            moveY = 37.5f;
         }
-        sequence.Join(sprite.DOFade(0f, 0.72f));
+        // Execute animation
+        sequence.Append(
+            sprite.transform.DOLocalMove(new Vector3(orgPosSprite.x + moveX, orgPosSprite.y + moveY), duration));
+        sequence.Join(sprite.DOFade(0f, duration));
+        // Reset sprite to original position
+        sequence.OnComplete(() =>
+        {
+            sprite.transform.localPosition = orgPosSprite;
+        });
     }
     #endregion
 }

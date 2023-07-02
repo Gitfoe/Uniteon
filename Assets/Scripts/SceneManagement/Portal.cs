@@ -47,9 +47,15 @@ public class Portal : MonoBehaviour, IPlayerTriggerable
         PlayPortalSfx(portalSfx);
         // Play new scene music if set
         if (sceneMusicIntro != "" && sceneMusicLoop != "")
+        {
             StartCoroutine(AudioManager.Instance.FadeOutMusicAndPlayNewMusic(sceneMusicIntro, sceneMusicLoop, 0.72f));
+            AudioManager.Instance.SetPlayingWorldMusic(sceneMusicIntro, sceneMusicLoop);
+        }
         else if (sceneMusicIntro == "" && sceneMusicLoop != "")
+        {
             StartCoroutine(AudioManager.Instance.FadeOutMusicAndPlayNewMusic(sceneMusicLoop, 0.72f));
+            AudioManager.Instance.SetPlayingWorldMusic(sceneMusicLoop);
+        }
         // Fade in
         yield return _transition.FadeIn(0.72f, Color.black);
         // Load scene
