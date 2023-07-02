@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ public class Portal : MonoBehaviour, IPlayerTriggerable
     [SerializeField] private int loadScene = -1;
     [SerializeField] private Transform spawn;
     [SerializeField] private PortalDestination destination;
+    [SerializeField] private SfxType _sfx;
     private Transition _transition;
     private GamerController _gamer;
 
@@ -40,6 +42,7 @@ public class Portal : MonoBehaviour, IPlayerTriggerable
         // Transition in - don't destroy portal
         DontDestroyOnLoad(gameObject);
         GameController.Instance.PauseGame(true);
+        PlayPortalSfx(_sfx);
         yield return _transition.FadeIn(0.72f, Color.black);
         // Load scene
         yield return SceneManager.LoadSceneAsync(loadScene);
@@ -52,6 +55,27 @@ public class Portal : MonoBehaviour, IPlayerTriggerable
         GameController.Instance.PauseGame(false);
         Destroy(gameObject); // After executing code, portal can be destroyed
     }
+
+    /// <summary>
+    /// Plays a portal sfx.
+    /// </summary>
+    /// <param name="type">The portal sfx you want to have played.</param>
+    private void PlayPortalSfx(SfxType type)
+    {
+        string sfxName;
+        switch (type)
+        {
+            case SfxType.GoInside:
+                sfxName = "goInside";
+                break;
+            case SfxType.GoOutside:
+                sfxName = "goOutside";
+                break;
+            default:
+                return;
+        }
+        AudioManager.Instance.PlaySfx(sfxName);
+    }
 }
 
 /// <summary>
@@ -60,4 +84,14 @@ public class Portal : MonoBehaviour, IPlayerTriggerable
 public enum PortalDestination
 {
     A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z
+}
+
+/// <summary>
+/// Which sfx the portal should play.
+/// </summary>
+public enum SfxType
+{
+    None,
+    GoInside,
+    GoOutside,
 }

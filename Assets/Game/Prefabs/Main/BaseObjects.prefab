@@ -43,7 +43,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -316,6 +316,10 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: a2ae2a6d1faeecd43bdbc9c85e1f861d, type: 3}
   - clipName: levelUp
     clip: {fileID: 8300000, guid: 31419e01e4af9b7459c7aa305d831af9, type: 3}
+  - clipName: goInside
+    clip: {fileID: 8300000, guid: b4ad52c2e0756ca4f89e26fa38574e7e, type: 3}
+  - clipName: goOutside
+    clip: {fileID: 8300000, guid: 45fa1dc107f03e34d86c4621bae64b47, type: 3}
   musicClips:
   - clipName: eternaCity
     clip: {fileID: 8300000, guid: 0d21a5938f3449a4faaa7ef9503e5c33, type: 3}
@@ -1675,7 +1679,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.22543609, g: 0.4811321, b: 0.24295115, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
