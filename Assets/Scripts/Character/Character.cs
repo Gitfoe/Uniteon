@@ -12,10 +12,12 @@ public class Character : MonoBehaviour
     // Properties
     public CharacterAnimator Animator => _animator;
     public bool IsMoving { get; private set; }
+    public float YOffset { get; private set; } = 0.3f;
 
     private void Awake()
     {
         _animator = GetComponent<CharacterAnimator>();
+        SetPositionAndSnapToTile(transform.position);
     }
 
     /// <summary>
@@ -109,5 +111,13 @@ public class Character : MonoBehaviour
                 return FacingCardinal.North;
         }
         return FacingCardinal.South; // y == -1
+    }
+
+    public void SetPositionAndSnapToTile(Vector2 position)
+    {
+        // Example: 2.7 => Floor => 2.0 => 2.5 (center of tile)
+        position.x = Mathf.Floor(position.x) + 0.5f;
+        position.y = Mathf.Floor(position.y) + 0.5f + YOffset;
+        transform.position = position;
     }
 }

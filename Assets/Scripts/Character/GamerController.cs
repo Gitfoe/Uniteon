@@ -24,6 +24,7 @@ public class GamerController : MonoBehaviour
     // Properties
     public string GamerName => gamerName;
     public Sprite Sprite => sprite;
+    public Character Character => _character;
 
     // Events
     public event Action<MentorController> OnEncountered;
@@ -85,20 +86,23 @@ public class GamerController : MonoBehaviour
     }
 
     /// <summary>
-    /// Encapsulates all the checking methods.
+    /// Encapsulates all the other checking methods.
     /// </summary>
     private void HandleMoveOver()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.2f, UnityLayers.Instance.TriggerableLayers);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position - new Vector3(0, _character.YOffset), 0.2f, UnityLayers.Instance.TriggerableLayers);
         foreach (var collider in colliders)
         {
             var triggerable = collider.GetComponent<IPlayerTriggerable>();
             if (!ReferenceEquals(triggerable, null))
             {
+                _character.Animator.IsMoving = false;
                 triggerable.OnPlayerTriggered(this);
                 break;
             }
         }
+        CheckWildGrass();
+        CheckInMentorsView();
     }
 
     /// <summary>
@@ -106,9 +110,7 @@ public class GamerController : MonoBehaviour
     /// </summary>
     private void CheckWildGrass()
     {
-        Vector3 grassPosition = transform.position - new Vector3(0f, 0f, -0.5f);
-        grassPosition.y -= 0.5f; // Move gamer down to make the game not think that you're touching grass when you're 1 grid below it
-        Collider2D getNextObject = Physics2D.OverlapCircle(grassPosition, 0.2f, UnityLayers.Instance.WildGrassLayer);
+        Collider2D getNextObject = Physics2D.OverlapCircle(transform.position - new Vector3(0, _character.YOffset), 0.2f, UnityLayers.Instance.WildGrassLayer);
         if (ReferenceEquals(getNextObject, null)) return;
         if (Random.Range(1, 101) <= 10)
         {
@@ -132,7 +134,7 @@ public class GamerController : MonoBehaviour
     /// </summary>
     private void CheckInMentorsView()
     {
-        Collider2D mentorCollider = Physics2D.OverlapCircle(transform.position, 0.2f, UnityLayers.Instance.FovLayer);
+        Collider2D mentorCollider = Physics2D.OverlapCircle(transform.position - new Vector3(0, _character.YOffset), 0.2f, UnityLayers.Instance.FovLayer);
         if (!ReferenceEquals(mentorCollider, null))
             _battlingMentor = mentorCollider.GetComponentInParent<MentorController>();
         else return;
