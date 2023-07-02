@@ -351,7 +351,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3395273339670579738, guid: 5ed2ce17de45c9e4b90f77a25c87247a, type: 3}
       propertyPath: loadScene
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3395273339670579738, guid: 5ed2ce17de45c9e4b90f77a25c87247a, type: 3}
       propertyPath: portalSfx

@@ -46,7 +46,7 @@ public class Portal : MonoBehaviour, IPlayerTriggerable
         GameController.Instance.PauseGame(true);
         PlayPortalSfx(portalSfx);
         // Play new scene music if set
-        if (sceneMusicIntro == "none" || sceneMusicLoop == "none")
+        if (sceneMusicIntro == "none" && sceneMusicLoop == "none")
             StartCoroutine(AudioManager.Instance.StopMusic(true, 0.72f));
         else if (sceneMusicIntro != "" && sceneMusicLoop != "")
         {
