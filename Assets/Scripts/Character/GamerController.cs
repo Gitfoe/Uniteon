@@ -38,8 +38,12 @@ public class GamerController : MonoBehaviour
     {
         _character = GetComponent<Character>();
         _cameraSize = mainCamera.orthographicSize;
-        AudioManager.Instance.PlayMusic("eternaCity");
     }
+
+    /// <summary>
+    /// Play music.
+    /// </summary>
+    private void Start() => AudioManager.Instance.PlayMusic("eternaCity");
 
     /// <summary>
     /// Sets a few key variables for switching back to the world mode from battle modes.

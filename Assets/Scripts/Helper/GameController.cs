@@ -15,6 +15,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private Canvas worldUI;
     private GameState _gameState;
     private MentorController _mentor;
+    private GameState _previousGameState;
     
     // Singleton Design Pattern
     public static GameController Instance { get; private set; }
@@ -91,6 +92,21 @@ public class GameController : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Sets the gamestate to paused, or back to its previous state.
+    /// </summary>
+    /// <param name="pause">Whether to pause or continue.</param>
+    public void PauseGame(bool pause)
+    {
+        if (pause)
+        {
+            _previousGameState = _gameState;
+            _gameState = GameState.Paused;
+        }
+        else
+            _gameState = _previousGameState;
+    } 
+
     // Update is called once per frame
     void Update()
     {
@@ -114,5 +130,6 @@ public enum GameState
     World,
     Battle,
     Dialog,
-    Cutscene
+    Cutscene,
+    Paused
 }
