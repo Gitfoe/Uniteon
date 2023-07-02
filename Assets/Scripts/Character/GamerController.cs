@@ -41,7 +41,7 @@ public class GamerController : MonoBehaviour
     /// <summary>
     /// Play music.
     /// </summary>
-    private void Start() => AudioManager.Instance.PlayMusic("eternaLoop");
+    private void Start() => AudioManager.Instance.PlayMusic("eternaLoop"); // Bug: hard coded music, should be based on scene
     
     /// <summary>
     /// Update is called once per frame if set active by the GameController.

@@ -233,11 +233,19 @@ public class UniteonBattle : MonoBehaviour
     /// <returns>Coroutine.</returns>
     private IEnumerator RunAway()
     {
-        AudioManager.Instance.PlaySfx("thud");
         if (_isMentorBattle)
+        {
+            AudioManager.Instance.PlaySfx("thud");
             yield return battleDialogBox.TypeOutDialog("You can't run from mentor battles!");
-        else // Haven't implemented running yet
-            yield return battleDialogBox.TypeOutDialog("You can't run, sorry mate!");
+        }
+        else
+        {
+            BattleState = BattleSequenceState.BattleOver;
+            AudioManager.Instance.PlaySfx("run");
+            battleDialogBox.EnableActionSelector(false);
+            yield return battleDialogBox.TypeOutDialog("You ran away!");
+            yield return HandleBattleOver(true); // Didn't actually win, but needs to use win logic
+        }
     }
 
     /// <summary>
@@ -253,7 +261,7 @@ public class UniteonBattle : MonoBehaviour
         StartCoroutine(AudioManager.Instance.StopMusic(true, 0.72f));
         yield return fade.DOFade(1f, 0.72f).WaitForCompletion();
         _gamerParty.Uniteons.ForEach(u => u.ResetBoosts());
-        // Heal party Uniteon if gamer has lost
+        // Heal party Uniteon if gamer has lost, and the battle didn't end because of running away
         if (!won)
             _gamerParty.HealAllUniteons();
         OnBattleOver?.Invoke(won);
@@ -580,50 +588,53 @@ public class UniteonBattle : MonoBehaviour
                         AudioManager.Instance.StopSfx(2);
                         AudioManager.Instance.PlayMusic(victoryIntro, victoryLoop);
                     }
-                    // Gain experience for gamer Uniteon
-                    var expYield = defendingUnit.Uniteon.UniteonBase.BaseExperience;
-                    int foeLevel = defendingUnit.Uniteon.Level;
-                    float mentorBonus = (_isMentorBattle) ? 1.5f : 1f; // 1.5x bonus for mentor Uniteon
-                    // Calculate experience
-                    int experienceGained = Mathf.FloorToInt((expYield * foeLevel * mentorBonus) / 7);
-                    uniteonUnitGamer.Uniteon.Experience += experienceGained;
-                    // Print experience message
-                    yield return battleDialogBox.TypeOutDialog(
-                        $"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} gained {experienceGained} experience points!");
-                    // Update exp bar
-                    AudioManager.Instance.PlaySfx("expRaise");
-                    yield return uniteonUnitGamer.UniteonHud.UpdateExperienceBar();
-                    // Check for level up
-                    while (uniteonUnitGamer.Uniteon.CheckLevelUp())
+                    // Gain experience for gamer Uniteon if they are below level 100
+                    if (uniteonUnitGamer.Uniteon.Level < 100)
                     {
-                        uniteonUnitGamer.Uniteon.CalculateStats(true);
-                        uniteonUnitGamer.UniteonHud.UpdateLevelAndHealth();
-                        AudioManager.Instance.PlaySfx("levelUp");
+                        var expYield = defendingUnit.Uniteon.UniteonBase.BaseExperience;
+                        int foeLevel = defendingUnit.Uniteon.Level;
+                        float mentorBonus = (_isMentorBattle) ? 1.5f : 1f; // 1.5x bonus for mentor Uniteon
+                        // Calculate experience
+                        int experienceGained = Mathf.FloorToInt((expYield * foeLevel * mentorBonus) / 7);
+                        uniteonUnitGamer.Uniteon.Experience += experienceGained;
+                        // Print experience message
                         yield return battleDialogBox.TypeOutDialog(
-                            $"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} grew to level {uniteonUnitGamer.Uniteon.Level}!");
+                            $"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} gained {experienceGained} experience points!");
+                        // Update exp bar
                         AudioManager.Instance.PlaySfx("expRaise");
-                        yield return uniteonUnitGamer.UniteonHud.UpdateExperienceBar(true);
-                        // Learn new move
-                        var newMove = uniteonUnitGamer.Uniteon.GetLearnableMoveAtCurrentLevel();
-                        if (!ReferenceEquals(newMove, null))
+                        yield return uniteonUnitGamer.UniteonHud.UpdateExperienceBar();
+                        // Check for level up until level 100
+                        while (uniteonUnitGamer.Uniteon.CheckLevelUp() && uniteonUnitGamer.Uniteon.Level < 100)
                         {
-                            // If there are empty move slots, just learn the move
-                            if (uniteonUnitGamer.Uniteon.Moves.Count < UniteonBase.MaxMoves)
+                            uniteonUnitGamer.Uniteon.CalculateStats(true);
+                            uniteonUnitGamer.UniteonHud.UpdateLevelAndHealth();
+                            AudioManager.Instance.PlaySfx("levelUp");
+                            yield return battleDialogBox.TypeOutDialog(
+                                $"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} grew to level {uniteonUnitGamer.Uniteon.Level}!");
+                            AudioManager.Instance.PlaySfx("expRaise");
+                            yield return uniteonUnitGamer.UniteonHud.UpdateExperienceBar(true);
+                            // Learn new move
+                            var newMove = uniteonUnitGamer.Uniteon.GetLearnableMoveAtCurrentLevel();
+                            if (!ReferenceEquals(newMove, null))
                             {
-                                uniteonUnitGamer.Uniteon.LearnMove(newMove);
-                                AudioManager.Instance.PlaySfx("levelUp");
-                                yield return battleDialogBox.TypeOutDialog(
-                                    $"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} learned {newMove.MoveBase.MoveName}!");
-                                battleDialogBox.SetMoveNames(uniteonUnitGamer.Uniteon.Moves);
-                            }
-                            // Give gamer selection what move to forgets
-                            else
-                            {
-                                yield return battleDialogBox.TypeOutDialog(
-                                    $"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} wants to learn a new move, but it can only learn {UniteonBase.MaxMoves} at a time.");
-                                yield return ChooseMoveToForget(uniteonUnitGamer.Uniteon, newMove.MoveBase);
-                                yield return new WaitUntil(() => BattleState != BattleSequenceState.MoveToForget);
-                                yield return new WaitForSeconds(1.27f);
+                                // If there are empty move slots, just learn the move
+                                if (uniteonUnitGamer.Uniteon.Moves.Count < UniteonBase.MaxMoves)
+                                {
+                                    uniteonUnitGamer.Uniteon.LearnMove(newMove);
+                                    AudioManager.Instance.PlaySfx("levelUp");
+                                    yield return battleDialogBox.TypeOutDialog(
+                                        $"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} learned {newMove.MoveBase.MoveName}!");
+                                    battleDialogBox.SetMoveNames(uniteonUnitGamer.Uniteon.Moves);
+                                }
+                                // Give gamer selection what move to forgets
+                                else
+                                {
+                                    yield return battleDialogBox.TypeOutDialog(
+                                        $"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} wants to learn a new move, but it can only learn {UniteonBase.MaxMoves} at a time.");
+                                    yield return ChooseMoveToForget(uniteonUnitGamer.Uniteon, newMove.MoveBase);
+                                    yield return new WaitUntil(() => BattleState != BattleSequenceState.MoveToForget);
+                                    yield return new WaitForSeconds(1.27f);
+                                }
                             }
                         }
                     }
@@ -901,7 +912,7 @@ public enum BattleSequenceState
     PartyScreenFromSelection,
     PartyScreenFromFaint,
     MoveToForget,
-    BattleOver
+    BattleOver,
 }
 
 public enum CurrentBattleTurn

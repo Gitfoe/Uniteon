@@ -326,6 +326,8 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 025cb628e9d37df4ebac326feb90d559, type: 3}
   - clipName: potion
     clip: {fileID: 8300000, guid: 653ba71c5faca9440bd10ccb83c68676, type: 3}
+  - clipName: run
+    clip: {fileID: 8300000, guid: 5f8e77ab3a7752f4bab3708638cf195f, type: 3}
   musicClips:
   - clipName: eternaLoop
     clip: {fileID: 8300000, guid: 0d21a5938f3449a4faaa7ef9503e5c33, type: 3}
