@@ -165,7 +165,7 @@ public class Uniteon
     /// <summary>
     /// Resets all the stat boosts to 0.
     /// </summary>
-    private void ResetBoosts()
+    public void ResetBoosts()
     {
         StatBoosts = new Dictionary<Statistic, int>()
         {
@@ -179,11 +179,6 @@ public class Uniteon
         };
     }
 
-    /// <summary>
-    /// Resets stat boosts.
-    /// </summary>
-    public void OnBattleOver() => ResetBoosts();
-    
     /// <summary>
     /// Take damage according to the official Pokemon algorithm at https://bulbapedia.bulbagarden.net/wiki/Damage
     /// </summary>

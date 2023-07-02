@@ -17,7 +17,6 @@ public class GamerController : MonoBehaviour
     private Character _character;
     private Vector2 _gamerInput;
     private Vector2 _previousGamerInput;
-    private float _cameraSize;
     private bool _inTransition;
     private MentorController _battlingMentor;
 
@@ -37,27 +36,13 @@ public class GamerController : MonoBehaviour
     private void Awake()
     {
         _character = GetComponent<Character>();
-        _cameraSize = mainCamera.orthographicSize;
     }
 
     /// <summary>
     /// Play music.
     /// </summary>
     private void Start() => AudioManager.Instance.PlayMusic("eternaLoop");
-
-    /// <summary>
-    /// Sets a few key variables for switching back to the world mode from battle modes.
-    /// </summary>
-    public void InitialiseWorld()
-    {
-        // Set camera back to original size
-        mainCamera.orthographicSize = _cameraSize;
-        // Start playing music
-        AudioManager.Instance.PlayMusic("eternaLoop"); // Bug: this needs to return to the scene music, not hard coded
-        // Fade in
-        StartCoroutine(transition.FadeOut(0.72f, Color.black));
-    }
-
+    
     /// <summary>
     /// Update is called once per frame if set active by the GameController.
     /// </summary>
@@ -176,16 +161,19 @@ public class GamerController : MonoBehaviour
     /// <param name="transitionTime">The total time it takes to complete th transition.</param>
     private void BattleTransition(AudioClip introClip, AudioClip loopClip, Sequence sequence = null, float transitionTime = 2.6f)
     {
-        _inTransition = true;
-        transition.gameObject.SetActive(true);
         Debug.Log($"In battle transition: {_inTransition}");
+        float cameraSize = mainCamera.orthographicSize;
+        _inTransition = true;
         if (ReferenceEquals(sequence, null))
             sequence = DOTween.Sequence();
         AudioManager.Instance.PlayMusic(introClip, loopClip);
         float halvedTransitionTime = transitionTime / 2;
-        sequence.Append(mainCamera.DOOrthoSize(_cameraSize + 2.5f, halvedTransitionTime));
-        sequence.Append(mainCamera.DOOrthoSize(_cameraSize - 3.5f, halvedTransitionTime).SetEase(Ease.InSine));
-        StartCoroutine(transition.FadeIn(halvedTransitionTime, halvedTransitionTime, Color.white));
+        sequence.Append(mainCamera.DOOrthoSize(cameraSize + 2.5f, halvedTransitionTime));
+        sequence.Append(mainCamera.DOOrthoSize(cameraSize - 3.5f, halvedTransitionTime).SetEase(Ease.InSine));
+        StartCoroutine(transition.FadeIn(halvedTransitionTime, halvedTransitionTime, Color.white, () =>
+        {
+            mainCamera.orthographicSize = cameraSize;
+        }));
     }
 
     /// <summary>

@@ -248,12 +248,14 @@ public class UniteonBattle : MonoBehaviour
     {
         // Wait until the gamer continues
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter));
-        AudioManager.Instance.PlaySfx("aButton");
         // Fade out screen and music
         fade.color = new Color(0f, 0f, 0f, 0f);
         StartCoroutine(AudioManager.Instance.StopMusic(true, 0.72f));
         yield return fade.DOFade(1f, 0.72f).WaitForCompletion();
-        _gamerParty.Uniteons.ForEach(u => u.OnBattleOver());
+        _gamerParty.Uniteons.ForEach(u => u.ResetBoosts());
+        // Heal party Uniteon if gamer has lost
+        if (!won)
+            _gamerParty.HealAllUniteons();
         OnBattleOver?.Invoke(won);
         // Reset variables
         _actionSelection = 0;
@@ -265,7 +267,6 @@ public class UniteonBattle : MonoBehaviour
         _isMentorBattle = false;
         _gamerController = null;
         _mentorController = null;
-        fade.DOFade(0f, 1.27f);
     }
     #endregion
 

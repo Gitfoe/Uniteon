@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,9 +14,11 @@ public class GameController : MonoBehaviour
     [SerializeField] private UniteonBattle uniteonBattle;
     [SerializeField] private Camera worldCamera;
     [SerializeField] private Canvas worldUI;
+    [SerializeField] private Dialog lostDialog;
     private GameState _gameState;
     private MentorController _mentor;
     private GameState _previousGameState;
+    private Transition _transition;
     
     // Singleton Design Pattern
     public static GameController Instance { get; private set; }
@@ -25,6 +28,7 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        _transition = FindObjectOfType<Transition>();
         gamer.OnEncountered += InitiateBattle;
         gamer.OnInMentorsView += (Collider2D mentorCollider) =>
         {
@@ -78,18 +82,50 @@ public class GameController : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// Gets called once the battle is over.
+    /// </summary>
+    /// <param name="won">If the gamer won or not.</param>
     private void EndBattle(bool won)
     {
         _gameState = GameState.World;
-        if (!ReferenceEquals(_mentor, null) && won)
-        {
-            _mentor.HandleBattleLost();
-        }
-        gamer.InitialiseWorld();
         uniteonBattle.gameObject.SetActive(false);
         worldCamera.gameObject.SetActive(true);
         worldUI.gameObject.SetActive(true);
-        
+        if (won)
+        {
+            if (!ReferenceEquals(_mentor, null))
+                _mentor.HandleBattleLost();
+            StartCoroutine(_transition.FadeOut(0.72f, Color.black));
+            AudioManager.Instance.PlayMusic("eternaLoop");
+        }
+        else
+        {
+            _transition.SetTransitionColor(Color.black);
+            StartCoroutine(DialogManager.Instance.PrintDialog(lostDialog,
+                () =>
+                {
+                    StartCoroutine(HealUniteonsTransition("potion", false,
+                        () => { AudioManager.Instance.PlayMusic("eternaLoop"); }));
+                }));
+        }
+    }
+
+    /// <summary>
+    /// Plays the fading, sfx and music sequence for healing all party Uniteons. Doesn't actually heal the Uniteons.
+    /// </summary>
+    /// <returns>Coroutine.</returns>
+    public IEnumerator HealUniteonsTransition(string sfxName, bool playFadeIn = true, Action onComplete = null)
+    {
+        float sfxLength = AudioManager.Sfx[sfxName].length;
+        float fadeTime = 0.4f;
+        StartCoroutine(AudioManager.Instance.FadeMuteMusicVolume(fadeTime, sfxLength));
+        if (playFadeIn)
+            yield return _transition.FadeIn(fadeTime, Color.black);
+        AudioManager.Instance.PlaySfx(sfxName);
+        yield return new WaitForSeconds(sfxLength);
+        onComplete?.Invoke();
+        yield return _transition.FadeOut(fadeTime, Color.black);
     }
 
     /// <summary>

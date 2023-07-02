@@ -324,6 +324,8 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: f073db3f67256c24ab04e0cf18855401, type: 3}
   - clipName: centerHeal
     clip: {fileID: 8300000, guid: 025cb628e9d37df4ebac326feb90d559, type: 3}
+  - clipName: potion
+    clip: {fileID: 8300000, guid: 653ba71c5faca9440bd10ccb83c68676, type: 3}
   musicClips:
   - clipName: eternaLoop
     clip: {fileID: 8300000, guid: 0d21a5938f3449a4faaa7ef9503e5c33, type: 3}
@@ -2598,8 +2600,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4793920550401252729}
   - {fileID: 4793920550673673641}
+  - {fileID: 4793920550401252729}
   m_Father: {fileID: 4793920550622984661}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2836,6 +2838,7 @@ GameObject:
   - component: {fileID: 4793920549945905601}
   - component: {fileID: 4793920549945905600}
   - component: {fileID: 4793920549945905602}
+  - component: {fileID: 3226721161354636500}
   - component: {fileID: 4793920549945905604}
   - component: {fileID: 4793920549945905605}
   - component: {fileID: 4793920549945905606}
@@ -2938,7 +2941,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 8e184e29eeb6ff642be2ad46e1c1389b, type: 3}
   - {fileID: 8300000, guid: 4ea8987006e73d240bf23baaabe7ba1d, type: 3}
   - {fileID: 8300000, guid: 38de46f73626e564fb8ffbbbc00b2826, type: 3}
---- !u!114 &4793920549945905604
+--- !u!114 &3226721161354636500
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2946,6 +2949,22 @@ MonoBehaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4793920549945905615}
   m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10d6ba082588b6e48862cb9809de6d3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uniteons:
+  - uniteonBase: {fileID: 11400000, guid: 14e8cc068eb8177498bf6c3f49e6df63, type: 2}
+    level: 100
+    healthPoints: 0
+--- !u!114 &4793920549945905604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4793920549945905615}
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 10d6ba082588b6e48862cb9809de6d3f, type: 3}
   m_Name: 
@@ -4084,7 +4103,7 @@ RectTransform:
   m_Children:
   - {fileID: 4793920550896922662}
   m_Father: {fileID: 4793920549725608743}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -4275,6 +4294,10 @@ MonoBehaviour:
   uniteonBattle: {fileID: 4793920549960532997}
   worldCamera: {fileID: 4793920548822447287}
   worldUI: {fileID: 4793920549725608742}
+  lostDialog:
+    dialogLines:
+    - Oh no, all my Uniteon fainted.
+    - Ah, I've found some potions I can use...
 --- !u!114 &4793920550521101415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4477,7 +4500,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4793920549725608743}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}

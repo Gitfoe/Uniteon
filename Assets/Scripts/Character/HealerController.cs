@@ -35,14 +35,8 @@ public class HealerController : NpcController
     /// <returns>Coroutine.</returns>
     private IEnumerator HealUniteonsSequence(UniteonParty gamerParty)
     {
-        string sfxName = "centerHeal";
-        float sfxLength = AudioManager.Sfx[sfxName].length;
-        float fadeTime = 0.4f;
+        yield return GameController.Instance.HealUniteonsTransition("centerHeal");
         gamerParty.HealAllUniteons();
-        StartCoroutine(AudioManager.Instance.FadeMuteMusicVolume(fadeTime, sfxLength));
-        yield return _transition.FadeIn(fadeTime, Color.black);
-        AudioManager.Instance.PlaySfx(sfxName);
-        yield return _transition.FadeOut(fadeTime, sfxLength, Color.black);
         IdleTimer = 0f;
         NpcState = NpcState.Idling;
     }
