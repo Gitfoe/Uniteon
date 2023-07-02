@@ -322,6 +322,8 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 45fa1dc107f03e34d86c4621bae64b47, type: 3}
   - clipName: lowHealth
     clip: {fileID: 8300000, guid: f073db3f67256c24ab04e0cf18855401, type: 3}
+  - clipName: centerHeal
+    clip: {fileID: 8300000, guid: 025cb628e9d37df4ebac326feb90d559, type: 3}
   musicClips:
   - clipName: eternaLoop
     clip: {fileID: 8300000, guid: 0d21a5938f3449a4faaa7ef9503e5c33, type: 3}
@@ -2835,7 +2837,6 @@ GameObject:
   - component: {fileID: 4793920549945905600}
   - component: {fileID: 4793920549945905602}
   - component: {fileID: 4793920549945905604}
-  - component: {fileID: 4793920549945905625}
   - component: {fileID: 4793920549945905605}
   - component: {fileID: 4793920549945905606}
   - component: {fileID: 4793920549945905624}
@@ -2967,22 +2968,6 @@ MonoBehaviour:
     healthPoints: 0
   - uniteonBase: {fileID: 11400000, guid: c1a4a01995a150646a9945ee467a9285, type: 2}
     level: 48
-    healthPoints: 0
---- !u!114 &4793920549945905625
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4793920549945905615}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10d6ba082588b6e48862cb9809de6d3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uniteons:
-  - uniteonBase: {fileID: 11400000, guid: 14e8cc068eb8177498bf6c3f49e6df63, type: 2}
-    level: 11
     healthPoints: 0
 --- !u!114 &4793920549945905605
 MonoBehaviour:

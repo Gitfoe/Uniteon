@@ -224,6 +224,25 @@ public class AudioManager : MonoBehaviour
         return sfxPlayerChannel;
     }
     #endregion
+    
+    #region Volume
+    /// <summary>
+    /// Mutes the music in a fading motion, waits for a bit, and then restores the volume.
+    /// </summary>
+    /// <param name="fadeTime">The fading duration.</param>
+    /// <param name="silenceTime">The time you want the audio to be silent.</param>
+    /// <returns></returns>
+    public IEnumerator FadeMuteMusicVolume(float fadeTime, float silenceTime)
+    {
+        if (musicPlayer.isPlaying)
+        {
+            float startVolume = musicPlayer.volume;
+            yield return musicPlayer.DOFade(0f, fadeTime).WaitForCompletion();
+            yield return new WaitForSeconds(silenceTime);
+            yield return musicPlayer.DOFade(startVolume, fadeTime).WaitForCompletion();
+        }
+    }
+    #endregion
 }
 
 /// <summary>

@@ -6,35 +6,35 @@ using UnityEngine;
 public class NpcController : MonoBehaviour, Interactable
 {
     // Fields
-    [SerializeField] private Dialog dialog;
+    [SerializeField] protected Dialog dialog;
     [SerializeField] private List<Vector2> movementPattern;
     [SerializeField] private float timeBetweenMove;
-    private Character _character;
-    private NpcState _npcState;
-    private float _idleTimer;
+    protected float IdleTimer;
     private int _currentPattern;
+    protected Character Character;
+    protected NpcState NpcState;
 
-    private void Start()
+    public virtual void Start()
     {
-        _character = GetComponent<Character>();
+        Character = GetComponent<Character>();
     }
 
     /// <summary>
-    /// Constantly walk the pattren set in movementPattern.
+    /// Constantly walk the pattern set in movementPattern.
     /// </summary>
     private void Update()
     {
-        if (_npcState == NpcState.Idling)
+        if (NpcState == NpcState.Idling)
         {
-            _idleTimer += Time.deltaTime;
-            if (_idleTimer > timeBetweenMove)
+            IdleTimer += Time.deltaTime;
+            if (IdleTimer > timeBetweenMove)
             {
-                _idleTimer = 0f;
+                IdleTimer = 0f;
                 if (movementPattern.Count > 0)
                     StartCoroutine(Walk());
             }
         }
-        _character.HandleUpdate();
+        Character.HandleUpdate();
     }
 
     /// <summary>
@@ -43,28 +43,28 @@ public class NpcController : MonoBehaviour, Interactable
     /// <returns>Coroutine.</returns>
     private IEnumerator Walk()
     {
-        _npcState = NpcState.Walking;
+        NpcState = NpcState.Walking;
         Vector3 oldPosition = transform.position;
-        yield return _character.Move(movementPattern[_currentPattern]);
+        yield return Character.Move(movementPattern[_currentPattern]);
         if (transform.position != oldPosition) // Only increment pattern count if NPC walked
             _currentPattern = (_currentPattern + 1) % movementPattern.Count;
-        _npcState = NpcState.Idling;
+        NpcState = NpcState.Idling;
     }
 
     /// <summary>
     /// As the NPC, speak to the dialog box.
     /// </summary>
-    /// <param name="initiatior">The transformr of the GameObject that initiated the interaction.</param>
-    public void Interact(Transform initiatior)
+    /// <param name="initiator">The transformr of the GameObject that initiated the interaction.</param>
+    public virtual void Interact(Transform initiator)
     {
-        if (_npcState == NpcState.Idling)
+        if (NpcState == NpcState.Idling)
         {
-            _npcState = NpcState.Dialog;
-            _character.LookTowards(initiatior.position);
+            NpcState = NpcState.Dialog;
+            Character.LookTowards(initiator.position);
             StartCoroutine(DialogManager.Instance.PrintDialog(dialog, () =>
             { // Go back to the idling state once the dialog is over
-                _idleTimer = 0f;
-                _npcState = NpcState.Idling;
+                IdleTimer = 0f;
+                NpcState = NpcState.Idling;
             }));
         }
     }

@@ -25,4 +25,7 @@ public class UniteonParty : MonoBehaviour
     /// </summary>
     /// <returns>First healthy Uniteon.</returns>
     public Uniteon GetHealthyUniteon() => uniteons.FirstOrDefault(u => u.HealthPoints > 0);
+
+    public void HealAllUniteons() =>
+        uniteons.ForEach(x => x.HealthPoints = Mathf.FloorToInt((x.UniteonBase.MaxHealthPoints * x.Level) / 100f) + 10 + x.Level);
 }

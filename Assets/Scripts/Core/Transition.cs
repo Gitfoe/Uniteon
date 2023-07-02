@@ -16,7 +16,7 @@ public class Transition : MonoBehaviour
     /// </summary>
     /// <param name="fadeTime">The time it takes to fade in.</param>
     /// <param name="fadeColor">The color of the fade.</param>
-    /// <returns></returns>
+    /// <returns>Coroutine.</returns>
     public IEnumerator FadeIn(float fadeTime, Color fadeColor)
     {
         Color colour = fadeColor;
@@ -30,7 +30,7 @@ public class Transition : MonoBehaviour
     /// <param name="fadeTime">The time it takes to fade in.</param>
     /// <param name="waitTime">The time the function waits to start fading in.</param>
     /// <param name="fadeColor">The color of the fade.</param>
-    /// <returns></returns>
+    /// <returns>Coroutine.</returns>
     public IEnumerator FadeIn(float fadeTime, float waitTime, Color fadeColor)
     {
         yield return new WaitForSeconds(waitTime);
@@ -42,11 +42,24 @@ public class Transition : MonoBehaviour
     /// </summary>
     /// <param name="fadeTime">The time it takes to fade out.</param>
     /// <param name="fadeColor">The color of the fade.</param>
-    /// <returns></returns>
+    /// <returns>Coroutine.</returns>
     public IEnumerator FadeOut(float fadeTime, Color fadeColor)
     {
         Color colour = fadeColor;
         _transition.color = new Color(colour.r, colour.g, colour.b, 1f);
         yield return _transition.DOFade(0f, fadeTime).WaitForCompletion();
+    }
+    
+    /// <summary>
+    /// Fades out the overworld transition.
+    /// </summary>
+    /// <param name="fadeTime">The time it takes to fade out.</param>
+    /// <param name="waitTime">The time the function waits to start fading out.</param>
+    /// <param name="fadeColor">The color of the fade.</param>
+    /// <returns>Coroutine.</returns>
+    public IEnumerator FadeOut(float fadeTime, float waitTime, Color fadeColor)
+    {
+        yield return new WaitForSeconds(waitTime);
+        yield return FadeOut(fadeTime, fadeColor);
     }
 }
