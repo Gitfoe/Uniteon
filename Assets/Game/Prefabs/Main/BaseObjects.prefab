@@ -320,8 +320,10 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: b4ad52c2e0756ca4f89e26fa38574e7e, type: 3}
   - clipName: goOutside
     clip: {fileID: 8300000, guid: 45fa1dc107f03e34d86c4621bae64b47, type: 3}
+  - clipName: lowHealth
+    clip: {fileID: 8300000, guid: f073db3f67256c24ab04e0cf18855401, type: 3}
   musicClips:
-  - clipName: eternaCity
+  - clipName: eternaLoop
     clip: {fileID: 8300000, guid: 0d21a5938f3449a4faaa7ef9503e5c33, type: 3}
   - clipName: wildBattleIntro
     clip: {fileID: 8300000, guid: b5373601505befc429a0600ff447cbc8, type: 3}
@@ -331,6 +333,10 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: d4ef96b869ae92949a6ffb90cf5a5466, type: 3}
   - clipName: victoryMentorLoop
     clip: {fileID: 8300000, guid: d7563ea5ee3410e41b10ef8abf9da304, type: 3}
+  - clipName: ecruteakIntro
+    clip: {fileID: 8300000, guid: e73f4a352e7add74ab182896b821955c, type: 3}
+  - clipName: ecruteakLoop
+    clip: {fileID: 8300000, guid: 614eeaa3248a4204eaaab06ec08248c8, type: 3}
 --- !u!1 &4793920549046404322
 GameObject:
   m_ObjectHideFlags: 0
@@ -776,7 +782,6 @@ MonoBehaviour:
   healthColourLow: {r: 0.8867924, g: 0.4908033, b: 0.50426316, a: 1}
   endFlashColour: {r: 0.9433962, g: 0.23733231, b: 0.23733231, a: 1}
   flashDuration: 0.72
-  lowHealth: {fileID: 8300000, guid: f073db3f67256c24ab04e0cf18855401, type: 3}
 --- !u!1 &4793920549224889347
 GameObject:
   m_ObjectHideFlags: 0
@@ -872,7 +877,6 @@ MonoBehaviour:
   healthColourLow: {r: 0.8867924, g: 0.4908033, b: 0.50426316, a: 1}
   endFlashColour: {r: 0.9433962, g: 0.23733231, b: 0.23733231, a: 1}
   flashDuration: 0.72
-  lowHealth: {fileID: 8300000, guid: f073db3f67256c24ab04e0cf18855401, type: 3}
 --- !u!1 &4793920549228061466
 GameObject:
   m_ObjectHideFlags: 0
@@ -5287,7 +5291,6 @@ MonoBehaviour:
   healthColourLow: {r: 0.8867924, g: 0.4908033, b: 0.50426316, a: 1}
   endFlashColour: {r: 0.9433962, g: 0.23733231, b: 0.23733231, a: 1}
   flashDuration: 0.72
-  lowHealth: {fileID: 8300000, guid: f073db3f67256c24ab04e0cf18855401, type: 3}
 --- !u!1001 &4793920549411449363
 PrefabInstance:
   m_ObjectHideFlags: 0

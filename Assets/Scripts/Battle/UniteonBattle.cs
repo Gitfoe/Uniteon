@@ -251,9 +251,8 @@ public class UniteonBattle : MonoBehaviour
         AudioManager.Instance.PlaySfx("aButton");
         // Fade out screen and music
         fade.color = new Color(0f, 0f, 0f, 0f);
-        AudioManager.Instance.StopMusic(true, 0.72f);
+        StartCoroutine(AudioManager.Instance.StopMusic(true, 0.72f));
         yield return fade.DOFade(1f, 0.72f).WaitForCompletion();
-        AudioManager.Instance.StopMusic();
         _gamerParty.Uniteons.ForEach(u => u.OnBattleOver());
         OnBattleOver?.Invoke(won);
         // Reset variables

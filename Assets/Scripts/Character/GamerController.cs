@@ -43,7 +43,7 @@ public class GamerController : MonoBehaviour
     /// <summary>
     /// Play music.
     /// </summary>
-    private void Start() => AudioManager.Instance.PlayMusic("eternaCity");
+    private void Start() => AudioManager.Instance.PlayMusic("eternaLoop");
 
     /// <summary>
     /// Sets a few key variables for switching back to the world mode from battle modes.
@@ -53,9 +53,9 @@ public class GamerController : MonoBehaviour
         // Set camera back to original size
         mainCamera.orthographicSize = _cameraSize;
         // Start playing music
-        AudioManager.Instance.PlayMusic("eternaCity");
+        AudioManager.Instance.PlayMusic("eternaLoop");
         // Fade in
-        StartCoroutine(transition.FadeIn(0.72f, Color.white));
+        StartCoroutine(transition.FadeOut(0.72f, Color.white));
     }
 
     /// <summary>

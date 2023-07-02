@@ -12,7 +12,6 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private Color healthColourLow;
     [SerializeField] private Color endFlashColour;
     [SerializeField] private float flashDuration;
-    [SerializeField] private AudioClip lowHealth;
     private Coroutine _flashCoroutine;
     private Color _originalHealthColor;
     private Color _startFlashColour;
@@ -131,19 +130,19 @@ public class HealthBar : MonoBehaviour
             // Flash health border between 0% and 20% HP and play low health sfx
             case <= 0f:
                 SetFlashingHealthBorder(false);
-                if (sfx) AudioManager.Instance.StopSfx(2, lowHealth);
+                if (sfx) AudioManager.Instance.StopSfx(2, "lowHealth");
                 break;
             case <= 0.2f:
                 SetFlashingHealthBorder(true);
                 // Only start playing low health sfx if it's not already playing
-                if (!AudioManager.Instance.IsPlayingSfx(lowHealth) && sfx)
-                    AudioManager.Instance.PlaySfx(lowHealth, true, 2);
+                if (!AudioManager.Instance.IsPlayingSfx("lowHealth") && sfx)
+                    AudioManager.Instance.PlaySfx("lowHealth", true, 2);
                 break;
             // Any other HP, disable flashing and stop audio if it is playing, unless sfx is off
             default:
                 SetFlashingHealthBorder(false);
                 if (sfx)
-                    AudioManager.Instance.StopSfx(2, lowHealth);
+                    AudioManager.Instance.StopSfx(2, "lowHealth");
                 break;
         }
     }

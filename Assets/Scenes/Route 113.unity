@@ -311,10 +311,18 @@ CompositeCollider2D:
         Y: 20625000
       - X: -70000000
         Y: 21250000
-      - X: -60000000
-        Y: 21875000
-      - X: -50000000
-        Y: 21875000
+      - X: -60000100
+        Y: 21874994
+      - X: -60000100
+        Y: 30000041
+      - X: -60000041
+        Y: 30000100
+      - X: -49999959
+        Y: 30000100
+      - X: -49999900
+        Y: 30000041
+      - X: -49999900
+        Y: 21874988
       - X: -45000000
         Y: 21250000
       - X: -40000000
@@ -476,8 +484,10 @@ CompositeCollider2D:
       - {x: -7.624994, y: 2.2499933}
       - {x: -7.437487, y: 2.062502}
       - {x: -6.9999986, y: 2.125}
-      - {x: -5.9999986, y: 2.1875}
-      - {x: -4.999998, y: 2.1874998}
+      - {x: -6.00001, y: 2.1875265}
+      - {x: -5.9999747, y: 3.00001}
+      - {x: -4.99999, y: 2.9999747}
+      - {x: -4.9999647, y: 2.1874957}
       - {x: -4.499999, y: 2.125}
       - {x: -3.999997, y: 2.1249993}
       - {x: -3.7499971, y: 2.0625}
@@ -1519,7 +1529,7 @@ Tilemap:
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
-      m_AllTileFlags: 1073741825
+      m_AllTileFlags: 1
   - first: {x: -5, y: 2, z: 0}
     second:
       serializedVersion: 2
@@ -3070,6 +3080,14 @@ PrefabInstance:
     - target: {fileID: 3395273339670579738, guid: 5ed2ce17de45c9e4b90f77a25c87247a, type: 3}
       propertyPath: loadScene
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3395273339670579738, guid: 5ed2ce17de45c9e4b90f77a25c87247a, type: 3}
+      propertyPath: sceneMusicLoop
+      value: eternaLoop
+      objectReference: {fileID: 0}
+    - target: {fileID: 3395273339670579738, guid: 5ed2ce17de45c9e4b90f77a25c87247a, type: 3}
+      propertyPath: sceneMusicIntro
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3395273339670579739, guid: 5ed2ce17de45c9e4b90f77a25c87247a, type: 3}
       propertyPath: m_RootOrder

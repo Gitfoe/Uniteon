@@ -30,6 +30,7 @@ public class AudioManager : MonoBehaviour
         Music = UniteonAudioClip.ConvertListToDictionary(musicClips);
     }
 
+    #region Music
     /// <summary>
     /// Plays music on the music channel.
     /// </summary>
@@ -83,7 +84,69 @@ public class AudioManager : MonoBehaviour
         musicPlayer.loop = true;
         musicPlayer.Play();
     }
+    
+    /// <summary>
+    /// Stops any active music from playing.
+    /// </summary>
+    /// <param name="fade">Whether to fade out the music.</param>
+    /// <param name="fadeDuration">The duration of the fade-out effect.</param>
+    /// <returns>Coroutine.</returns>
+    public IEnumerator StopMusic(bool fade = false, float fadeDuration = 0f)
+    {
+        // Fade out the music if fade is enabled and fadeDuration is greater than 0
+        if (musicPlayer.isPlaying && fade && fadeDuration > 0f)
+        {
+            float startVolume = musicPlayer.volume;
+            yield return musicPlayer.DOFade(0f, fadeDuration).WaitForCompletion();
+            musicPlayer.Stop();
+            musicPlayer.volume = startVolume;
+        }
+        // Stop the music immediately if any other than this music is playing
+        else if (musicPlayer.isPlaying)
+            musicPlayer.Stop();
+        // Stop any active music coroutine
+        if (_playMusicRoutine != null)
+            StopCoroutine(_playMusicRoutine);
+    }
 
+    /// <summary>
+    /// Fades out playing music and then plays new music.
+    /// </summary>
+    /// <param name="clip">The music clip that must be played.</param>
+    /// <param name="fadeDuration">The duration of the fade-out effect.</param>
+    /// <param name="loop">If the clip must be looped or not.</param>
+    /// <returns>Coroutine.</returns>
+    public IEnumerator FadeOutMusicAndPlayNewMusic(AudioClip clip, float fadeDuration, bool loop = true)
+    {
+        yield return StopMusic(true, fadeDuration);
+        PlayMusic(clip, loop);
+    }
+
+    public IEnumerator FadeOutMusicAndPlayNewMusic(string clip, float fadeDuration, bool loop = true)
+    {
+        yield return FadeOutMusicAndPlayNewMusic(Music[clip], fadeDuration, loop);
+    }
+    
+    /// <summary>
+    /// Fades out playing music and then plays new music.
+    /// </summary>
+    /// <param name="beginClip">The beginning section of a looping music clip, played once.</param>
+    /// <param name="loopClip">The looping section of a music clip.</param>
+    /// <param name="fadeDuration">The duration of the fade-out effect.</param>
+    /// <returns>Coroutine.</returns>
+    public IEnumerator FadeOutMusicAndPlayNewMusic(AudioClip beginClip, AudioClip loopClip, float fadeDuration)
+    {
+        yield return StopMusic(true, fadeDuration);
+        PlayMusic(beginClip, loopClip);
+    }
+
+    public IEnumerator FadeOutMusicAndPlayNewMusic(string beginClip, string loopClip, float fadeDuration)
+    {
+        yield return FadeOutMusicAndPlayNewMusic(Music[beginClip], Music[loopClip], fadeDuration);
+    }
+    #endregion
+
+    #region Sfx
     /// <summary>
     /// Plays a sound effect.
     /// </summary>
@@ -107,31 +170,6 @@ public class AudioManager : MonoBehaviour
     public void PlaySfx(string clip, bool loop = false, int channel = 1, float panning = 0f, float pitch = 1f)
     {
         PlaySfx(Sfx[clip], loop, channel, panning, pitch);
-    }
-
-    /// <summary>
-    /// Stops any active music from playing.
-    /// </summary>
-    /// <param name="fade">Whether to fade out the music.</param>
-    /// <param name="fadeDuration">The duration of the fade-out effect.</param>
-    public void StopMusic(bool fade = false, float fadeDuration = 0f)
-    {
-        // Fade out the music if fade is enabled and fadeDuration is greater than 0
-        if (musicPlayer.isPlaying && fade && fadeDuration > 0f)
-        {
-            float startVolume = musicPlayer.volume;
-            musicPlayer.DOFade(0f, fadeDuration).OnComplete(() =>
-            {
-                musicPlayer.Stop();
-                musicPlayer.volume = startVolume;
-            });
-        }
-        // Stop the music immediately
-        else if (musicPlayer.isPlaying)
-            musicPlayer.Stop();
-        // Stop any active music coroutine
-        if (_playMusicRoutine != null)
-            StopCoroutine(_playMusicRoutine);
     }
 
     /// <summary>
@@ -185,6 +223,7 @@ public class AudioManager : MonoBehaviour
         };
         return sfxPlayerChannel;
     }
+    #endregion
 }
 
 /// <summary>

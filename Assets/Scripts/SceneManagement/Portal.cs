@@ -11,7 +11,9 @@ public class Portal : MonoBehaviour, IPlayerTriggerable
     [SerializeField] private int loadScene = -1;
     [SerializeField] private Transform spawn;
     [SerializeField] private PortalDestination destination;
-    [SerializeField] private SfxType _sfx;
+    [SerializeField] private PortalSfx portalSfx;
+    [SerializeField] private string sceneMusicIntro;
+    [SerializeField] private string sceneMusicLoop;
     private Transition _transition;
     private GamerController _gamer;
 
@@ -42,7 +44,13 @@ public class Portal : MonoBehaviour, IPlayerTriggerable
         // Transition in - don't destroy portal
         DontDestroyOnLoad(gameObject);
         GameController.Instance.PauseGame(true);
-        PlayPortalSfx(_sfx);
+        PlayPortalSfx(portalSfx);
+        // Play new scene music if set
+        if (sceneMusicIntro != "" && sceneMusicLoop != "")
+            StartCoroutine(AudioManager.Instance.FadeOutMusicAndPlayNewMusic(sceneMusicIntro, sceneMusicLoop, 0.72f));
+        else if (sceneMusicIntro == "" && sceneMusicLoop != "")
+            StartCoroutine(AudioManager.Instance.FadeOutMusicAndPlayNewMusic(sceneMusicLoop, 0.72f));
+        // Fade in
         yield return _transition.FadeIn(0.72f, Color.black);
         // Load scene
         yield return SceneManager.LoadSceneAsync(loadScene);
@@ -60,15 +68,15 @@ public class Portal : MonoBehaviour, IPlayerTriggerable
     /// Plays a portal sfx.
     /// </summary>
     /// <param name="type">The portal sfx you want to have played.</param>
-    private void PlayPortalSfx(SfxType type)
+    private void PlayPortalSfx(PortalSfx type)
     {
         string sfxName;
         switch (type)
         {
-            case SfxType.GoInside:
+            case PortalSfx.GoInside:
                 sfxName = "goInside";
                 break;
-            case SfxType.GoOutside:
+            case PortalSfx.GoOutside:
                 sfxName = "goOutside";
                 break;
             default:
@@ -89,7 +97,7 @@ public enum PortalDestination
 /// <summary>
 /// Which sfx the portal should play.
 /// </summary>
-public enum SfxType
+public enum PortalSfx
 {
     None,
     GoInside,
