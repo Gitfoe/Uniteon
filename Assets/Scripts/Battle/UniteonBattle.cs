@@ -595,7 +595,8 @@ public class UniteonBattle : MonoBehaviour
                     // Check for level up
                     while (uniteonUnitGamer.Uniteon.CheckLevelUp())
                     {
-                        uniteonUnitGamer.UniteonHud.UpdateLevel();
+                        uniteonUnitGamer.Uniteon.CalculateStats(true);
+                        uniteonUnitGamer.UniteonHud.UpdateLevelAndHealth();
                         AudioManager.Instance.PlaySfx("levelUp");
                         yield return battleDialogBox.TypeOutDialog(
                             $"{uniteonUnitGamer.Uniteon.UniteonBase.UniteonName} grew to level {uniteonUnitGamer.Uniteon.Level}!");

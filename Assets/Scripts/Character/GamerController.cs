@@ -53,9 +53,9 @@ public class GamerController : MonoBehaviour
         // Set camera back to original size
         mainCamera.orthographicSize = _cameraSize;
         // Start playing music
-        AudioManager.Instance.PlayMusic("eternaLoop");
+        AudioManager.Instance.PlayMusic("eternaLoop"); // Bug: this needs to return to the scene music, not hard coded
         // Fade in
-        StartCoroutine(transition.FadeOut(0.72f, Color.white));
+        StartCoroutine(transition.FadeOut(0.72f, Color.black));
     }
 
     /// <summary>

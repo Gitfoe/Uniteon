@@ -23,7 +23,7 @@ public class UniteonHud : MonoBehaviour
     {
         _uniteon = uniteon;
         nameText.text = uniteon.UniteonBase.UniteonName;
-        UpdateLevel();
+        UpdateLevelAndHealth();
         if (healthText != null) // Only assign health text if there is place for it (only for the gamer, not for the foe)
             healthText.text = $"{uniteon.HealthPoints}/{uniteon.MaxHealthPoints}";
         healthBar.SetHealthBar((float)uniteon.HealthPoints / uniteon.MaxHealthPoints, isGamer); // Normalize health points
@@ -33,7 +33,8 @@ public class UniteonHud : MonoBehaviour
     /// <summary>
     /// Updates new health points to the health bar, and if available, health text.
     /// </summary>
-    /// <param name="currentHealthPoints">The health points the Uniteon had before taking damage.</param>
+    /// <param name="currentHealthPoints">The health points the Uniteon had before taking damage,
+    /// or if you want to simply update to new values, the Uniteons current health.</param>
     public IEnumerator UpdateHealthPoints(float currentHealthPoints)
     {
         var updateCoroutines = new Coroutine[]
@@ -113,6 +114,14 @@ public class UniteonHud : MonoBehaviour
         int nextExp = _uniteon.UniteonBase.GetExperienceForLevel(_uniteon.Level + 1);
         return Mathf.Clamp01((float)(_uniteon.Experience - currentExp) / (nextExp - currentExp)); // Normalize
     }
-    
-    public void UpdateLevel() => levelText.text = $"Lv.{_uniteon.Level}";
+
+    /// <summary>
+    /// Update level and health for leveling up.
+    /// </summary>
+    public void UpdateLevelAndHealth()
+    {
+        levelText.text = $"Lv.{_uniteon.Level}";
+        StartCoroutine(UpdateHealthPoints(_uniteon.HealthPoints));
+
+    }
 }

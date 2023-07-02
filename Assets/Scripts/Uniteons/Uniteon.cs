@@ -58,9 +58,18 @@ public class Uniteon
     /// <summary>
     /// Calculate stats based on formula from Pokemon to calculate stats based on the current Uniteon's level
     /// https://bulbapedia.bulbagarden.net/wiki/Stat#Generation_III_onward
+    /// <param name="levelUp">Update the Uniteons health points on level up.</param>
     /// </summary>
-    private void CalculateStats()
+    public void CalculateStats(bool levelUp = false)
     {
+        // Calculates the health points the Uniteon should have after leveling up
+        int newMaxHealthPoints = Mathf.FloorToInt((UniteonBase.MaxHealthPoints * Level) / 100f) + 10 + Level;
+        if (levelUp)
+        {
+            float healthPointsAmplifier = ((float)HealthPoints / MaxHealthPoints) - ((float)HealthPoints / newMaxHealthPoints) + 1;
+            HealthPoints = Mathf.FloorToInt(HealthPoints * healthPointsAmplifier);
+        }
+        // Set Uniteon stats
         Stats = new Dictionary<Statistic, int>
         {
             { Statistic.Attack, Mathf.FloorToInt((UniteonBase.Attack * Level) / 100f) + 5 },
@@ -69,7 +78,7 @@ public class Uniteon
             { Statistic.SpecialDefense, Mathf.FloorToInt((UniteonBase.SpecialDefense * Level) / 100f) + 5 },
             { Statistic.Speed, Mathf.FloorToInt((UniteonBase.Speed * Level) / 100f) + 5 } 
         };
-        MaxHealthPoints = Mathf.FloorToInt((UniteonBase.MaxHealthPoints * Level) / 100f) + 10 + Level;
+        MaxHealthPoints = newMaxHealthPoints;
     }
 
     /// <summary>
