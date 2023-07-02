@@ -128,8 +128,10 @@ public class AudioManager : MonoBehaviour
             PlayingMusic = null;
         }
         // Stop any active music coroutine
-        if (_playMusicRoutine != null) {
-            StopCoroutine(_playMusicRoutine); }
+        if (_playMusicRoutine != null)
+        {
+            StopCoroutine(_playMusicRoutine); 
+        }
     }
 
     /// <summary>
