@@ -127,4 +127,6 @@ MonoBehaviour:
     level: 7
   - moveBase: {fileID: 11400000, guid: 605ccb603c6d0af4f9258760a977dbe6, type: 2}
     level: 12
+  - moveBase: {fileID: 11400000, guid: c77bb84254cf42e47951e0c5faa08dad, type: 2}
+    level: 21
   cry: {fileID: 8300000, guid: 7a0a01fec22abee41b1e1476618bd77d, type: 3}
