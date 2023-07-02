@@ -14,4 +14,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/House.unity
     guid: e1fec37f9eba0a14fa8d3e9daf26b16f
+  - enabled: 1
+    path: Assets/Scenes/Lake Verity.unity
+    guid: a885edb80cb91f4499a629b73565e24e
+  - enabled: 1
+    path: Assets/Scenes/Ecruteak City.unity
+    guid: de9040ad371a78d4e93d50cd4d01ef52
   m_configObjects: {}

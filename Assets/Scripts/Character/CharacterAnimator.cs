@@ -47,13 +47,13 @@ public class CharacterAnimator : MonoBehaviour
     private void Update()
     {
         var previousAnimation = _currentAnimation;
-        if (MoveX == 1)
+        if ((int)MoveX == 1)
             _currentAnimation = _walkRightAnimation;
-        else if (MoveX == -1)
+        else if ((int)MoveX == -1)
             _currentAnimation = _walkLeftAnimation;
-        else if (MoveY == 1)
+        else if ((int)MoveY == 1)
             _currentAnimation = _walkUpAnimation;
-        else if (MoveY == -1)
+        else if ((int)MoveY == -1)
             _currentAnimation = _walkDownAnimation;
         if (_currentAnimation != previousAnimation || IsMoving != _wasPreviouslyMoving)
             _currentAnimation.StartAnimation();
@@ -68,7 +68,7 @@ public class CharacterAnimator : MonoBehaviour
     /// Sets the MoveX and MoveY parameters depending on the facing cardinal.
     /// </summary>
     /// <param name="cardinal">Facing cardinal.</param>
-    public void SetFacingCardinal(FacingCardinal cardinal)
+    private void SetFacingCardinal(FacingCardinal cardinal)
     {
         switch (cardinal)
         {

@@ -351,6 +351,10 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 9ddeb23a93dfd8349ab7a3c6c23e04f5, type: 3}
   - clipName: ho-ohLoop
     clip: {fileID: 8300000, guid: b15b8dedd0d137a44b51c9eda1f16965, type: 3}
+  - clipName: lakeIntro
+    clip: {fileID: 8300000, guid: 00d2b89849b90f146b7338455be56f2d, type: 3}
+  - clipName: lakeLoop
+    clip: {fileID: 8300000, guid: b048775d23ea123408a90e45e0d6f437, type: 3}
 --- !u!1 &4793920549046404322
 GameObject:
   m_ObjectHideFlags: 0

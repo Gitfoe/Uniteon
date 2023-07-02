@@ -8808,12 +8808,8 @@ MonoBehaviour:
     - Kiirooooo!
   uniteonName: Ho-Oh
   fov: {fileID: 193573930}
-  battlePlatforms: {fileID: -1520494570, guid: bfbb8e7a02446124caf234989428f2e2, type: 3}
-  cry: {fileID: 8300000, guid: 732c3e081c4650c4884af02bfb125f31, type: 3}
   battleIntro: {fileID: 8300000, guid: 9ddeb23a93dfd8349ab7a3c6c23e04f5, type: 3}
   battleLoop: {fileID: 8300000, guid: b15b8dedd0d137a44b51c9eda1f16965, type: 3}
-  victoryIntro: {fileID: 8300000, guid: 758fc9d3a9c11ab4c94230fac87630bd, type: 3}
-  victoryLoop: {fileID: 8300000, guid: 8ac58c0e4d99d9f48b187eceadead717, type: 3}
   overworldSprites:
   - {fileID: 359048880, guid: ebd842aa332e4504c9126cc85b10d178, type: 3}
   - {fileID: -601238636, guid: ebd842aa332e4504c9126cc85b10d178, type: 3}
@@ -11862,7 +11858,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3395273339670579733, guid: 5ed2ce17de45c9e4b90f77a25c87247a, type: 3}
       propertyPath: m_Name
-      value: Portal
+      value: Route113Portal
       objectReference: {fileID: 0}
     - target: {fileID: 3395273339670579738, guid: 5ed2ce17de45c9e4b90f77a25c87247a, type: 3}
       propertyPath: loadScene

@@ -86,8 +86,8 @@ public class Character : MonoBehaviour
     public void LookTowards(Vector3 targetDirection)
     {
         var position = transform.position;
-        var xDifference = Mathf.Round(targetDirection.x) - Mathf.Round(position.x);
-        var yDifference = Mathf.Round(targetDirection.y) - Mathf.Round(position.y);
+        var xDifference = Mathf.FloorToInt(targetDirection.x) - Mathf.FloorToInt(position.x);
+        var yDifference = Mathf.FloorToInt(targetDirection.y) - Mathf.FloorToInt(position.y);
         if (xDifference == 0 || yDifference == 0) // Only check cardinal directions, not diagonal
         {
             _animator.MoveX = Mathf.Clamp(xDifference, -1f, 1f); // Pass variables through to animator
@@ -98,8 +98,8 @@ public class Character : MonoBehaviour
     public FacingCardinal GetFacingDirection(Vector3 targetDirection)
     {
         var position = transform.position;
-        var xDifference = Mathf.Round(targetDirection.x) - Mathf.Round(position.x);
-        var yDifference = Mathf.Round(targetDirection.y) - Mathf.Round(position.y);
+        var xDifference = Mathf.FloorToInt(targetDirection.x) - Mathf.FloorToInt(position.x);
+        var yDifference = Mathf.FloorToInt(targetDirection.y) - Mathf.FloorToInt(position.y);
         if (xDifference == 0 || yDifference == 0) // Only check cardinal directions, not diagonal
         {
             float x = Mathf.Clamp(xDifference, -1f, 1f);
@@ -117,8 +117,8 @@ public class Character : MonoBehaviour
     public void SetPositionAndSnapToTile(Vector2 position)
     {
         // Example: 2.7 => Floor => 2.0 => 2.5 (center of tile)
-        position.x = Mathf.Floor(position.x) + 0.5f;
-        position.y = Mathf.Floor(position.y) + 0.5f + YOffset;
+        position.x = Mathf.FloorToInt(position.x) + 0.5f;
+        position.y = Mathf.FloorToInt(position.y) + 0.5f + YOffset;
         transform.position = position;
     }
 }
