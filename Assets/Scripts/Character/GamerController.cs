@@ -12,7 +12,7 @@ public class GamerController : MonoBehaviour
     [SerializeField] private string gamerName;
     [SerializeField] private Sprite sprite;
     [SerializeField] private Camera mainCamera;
-    [SerializeField] private Image transition;
+    [SerializeField] private Transition transition;
     [SerializeField] private AudioClip[] grassSteps;
     private Character _character;
     private Vector2 _gamerInput;
@@ -55,8 +55,7 @@ public class GamerController : MonoBehaviour
         // Start playing music
         AudioManager.Instance.PlayMusic("eternaCity");
         // Fade in
-        transition.color = new Color(0f, 0f, 0f, 1f);
-        transition.DOFade(0f, 0.72f).OnComplete(() => transition.gameObject.SetActive(false));
+        StartCoroutine(transition.FadeIn(0.72f, Color.white));
     }
 
     /// <summary>
@@ -178,7 +177,6 @@ public class GamerController : MonoBehaviour
     private void BattleTransition(AudioClip introClip, AudioClip loopClip, Sequence sequence = null, float transitionTime = 2.6f)
     {
         _inTransition = true;
-        transition.color = new Color(1f, 1f, 1f, 0f);
         transition.gameObject.SetActive(true);
         Debug.Log($"In battle transition: {_inTransition}");
         if (ReferenceEquals(sequence, null))
@@ -187,7 +185,7 @@ public class GamerController : MonoBehaviour
         float halvedTransitionTime = transitionTime / 2;
         sequence.Append(mainCamera.DOOrthoSize(_cameraSize + 2.5f, halvedTransitionTime));
         sequence.Append(mainCamera.DOOrthoSize(_cameraSize - 3.5f, halvedTransitionTime).SetEase(Ease.InSine));
-        sequence.Join(transition.DOFade(1f, halvedTransitionTime).SetEase(Ease.InSine));
+        StartCoroutine(transition.FadeIn(halvedTransitionTime, halvedTransitionTime, Color.white));
     }
 
     /// <summary>

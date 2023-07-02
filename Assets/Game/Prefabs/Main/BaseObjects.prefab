@@ -2756,7 +2756,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4793920549930426379
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2922,7 +2922,7 @@ MonoBehaviour:
   gamerName: Gitfoe
   sprite: {fileID: 1984116760, guid: 7c73451e418ef4845b27b4946aef4a43, type: 3}
   mainCamera: {fileID: 4793920548822447287}
-  transition: {fileID: 4793920550673673642}
+  transition: {fileID: 6532843223986429704}
   grassSteps:
   - {fileID: 8300000, guid: de2c6a81e6287f44fbb4c5f17b27b891, type: 3}
   - {fileID: 8300000, guid: 8e184e29eeb6ff642be2ad46e1c1389b, type: 3}
@@ -4449,13 +4449,14 @@ GameObject:
   - component: {fileID: 4793920550673673641}
   - component: {fileID: 4793920550673673643}
   - component: {fileID: 4793920550673673642}
+  - component: {fileID: 6532843223986429704}
   m_Layer: 5
   m_Name: Transition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4793920550673673641
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4497,7 +4498,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4514,6 +4515,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6532843223986429704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4793920550673673640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e011c736579d0f84abafb738825bef2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4793920550706649799
 GameObject:
   m_ObjectHideFlags: 0

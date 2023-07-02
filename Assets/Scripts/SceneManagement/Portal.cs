@@ -10,6 +10,7 @@ public class Portal : MonoBehaviour, IPlayerTriggerable
     [SerializeField] private int loadScene = -1;
     [SerializeField] private Transform spawn;
     [SerializeField] private PortalDestination destination;
+    private Transition _transition;
     private GamerController _gamer;
 
     /// <summary>
@@ -23,17 +24,31 @@ public class Portal : MonoBehaviour, IPlayerTriggerable
     }
 
     /// <summary>
+    /// Load transition fader.
+    /// </summary>
+    private void Start()
+    {
+        _transition = FindObjectOfType<Transition>();
+    }
+
+    /// <summary>
     /// Switches the scene when a portal is entered.
     /// </summary>
     /// <returns>Coroutine.</returns>
     private IEnumerator SwitchScene()
     {
-        DontDestroyOnLoad(gameObject); // Don't destroy portal
+        // Transition in - don't destroy portal
+        DontDestroyOnLoad(gameObject);
         GameController.Instance.PauseGame(true);
+        yield return _transition.FadeIn(0.72f, Color.black);
+        // Load scene
         yield return SceneManager.LoadSceneAsync(loadScene);
         // Find same destination portal
         Portal destination = FindObjectsOfType<Portal>().First(x => x != this && x.destination == this.destination);
-        _gamer.Character.SetPositionAndSnapToTile(destination.spawn.position);;
+        // Set character position to portal
+        _gamer.Character.SetPositionAndSnapToTile(destination.spawn.position);
+        // Transition out
+        yield return _transition.FadeOut(0.72f, Color.black);
         GameController.Instance.PauseGame(false);
         Destroy(gameObject); // After executing code, portal can be destroyed
     }
