@@ -12,7 +12,6 @@ public class PartyMemberUI : MonoBehaviour
     [SerializeField] private HealthBar healthBar;
     [SerializeField] private Color selectedColour;
     [SerializeField] private Color deselectedColour;
-    private Uniteon _uniteon;
 
     /// <summary>
     /// Sets the data for the Uniteon's in the party slot.
@@ -20,7 +19,6 @@ public class PartyMemberUI : MonoBehaviour
     /// <param name="uniteon">The Uniteon that needs to be set.</param>
     public void SetGamerData(Uniteon uniteon)
     {
-        _uniteon = uniteon;
         nameText.text = uniteon.UniteonBase.UniteonName;
         levelText.text = $"Lv.{uniteon.Level}";
         healthText.text = $"{uniteon.HealthPoints}/{uniteon.MaxHealthPoints}";

@@ -14,6 +14,8 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private List<UniteonAudioClip> sfxClips;
     [SerializeField] private List<UniteonAudioClip> musicClips;
     private Coroutine _playMusicRoutine;
+    private AudioClip _cachedLoopClip;
+
 
     // Properties
     public static AudioManager Instance { get; private set; }
@@ -42,6 +44,8 @@ public class AudioManager : MonoBehaviour
     {
         if (clip == null)
             return;
+        if (_playMusicRoutine != null) // Stop any active coroutine from re-setting the music
+            StopCoroutine(_playMusicRoutine);
         musicPlayer.clip = clip;
         musicPlayer.loop = loop;
         musicPlayer.Play();
@@ -64,6 +68,8 @@ public class AudioManager : MonoBehaviour
             PlayMusic(loopClip);
         else
         {
+            if (_playMusicRoutine != null) // Stop any active coroutine from re-setting the music
+                StopCoroutine(_playMusicRoutine);
             _playMusicRoutine = StartCoroutine(PlayMusicRoutine(beginClip, loopClip));
             PlayingMusic = new List<AudioClip>() { beginClip, loopClip };
         }
@@ -98,12 +104,12 @@ public class AudioManager : MonoBehaviour
         musicPlayer.clip = beginClip;
         musicPlayer.loop = false;
         musicPlayer.Play();
-        yield return new WaitForSeconds(beginClip.length);
+        yield return new WaitForSecondsRealtime(beginClip.length);
         musicPlayer.clip = loopClip;
         musicPlayer.loop = true;
         musicPlayer.Play();
     }
-    
+
     /// <summary>
     /// Stops any active music from playing.
     /// </summary>
@@ -150,7 +156,6 @@ public class AudioManager : MonoBehaviour
     public IEnumerator FadeOutMusicAndPlayNewMusic(string clip, float fadeDuration, bool loop = true)
     {
         yield return FadeOutMusicAndPlayNewMusic(Music[clip], fadeDuration, loop);
-        yield return StopMusic(true, fadeDuration);
     }
     
     /// <summary>

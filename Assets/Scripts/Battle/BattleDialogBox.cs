@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,6 +20,7 @@ public class BattleDialogBox : MonoBehaviour
     [SerializeField] private Color deselectedColour;
     [SerializeField] private Color lowPPColour;
     [SerializeField] private Color noPPColour;
+    private bool _isTyping;
 
     /// <summary>
     /// Sets dialog text immediately.
@@ -30,18 +33,24 @@ public class BattleDialogBox : MonoBehaviour
     /// </summary>
     /// <param name="text">Text that has to be set.</param>
     /// <param name="waitTime">The time that needs to be waited after printing the text.</param>
+    /// <param name="lineWidth">The width of the text box you are going to write in.</param>
     /// <returns>Coroutine.</returns>
-    public IEnumerator TypeOutDialog(string text, float waitTime = 0.72f)
+    public IEnumerator TypeOutDialog(string text, float waitTime = 0.72f, int lineWidth = 32)
     {
+        if (_isTyping) // Don't execute if still typing (previous dialog/call)
+            yield break;
+        string splitText = text.SplitStringByWords(lineWidth);
+        _isTyping = true;
         dialogText.text = "";
-        foreach (var l in text)
+        foreach (var l in splitText)
         {
             dialogText.text += l;
             yield return new WaitForSeconds(1f/typeOutSpeed);
         }
+        _isTyping = false;
         yield return new WaitForSeconds(waitTime);
     }
-    
+
     /// <summary>
     /// Enables or disables the move selector and the accompanying move details.
     /// </summary>
@@ -118,5 +127,38 @@ public class BattleDialogBox : MonoBehaviour
             else
                 moveTexts[i].text = "---";
         }
+    }
+}
+
+public static class StringExtensions
+{
+    public static string SplitStringByWords(this string input, int maxLineLength)
+    {
+        if (string.IsNullOrEmpty(input))
+            return input;
+
+        string[] words = input.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+        StringBuilder result = new StringBuilder();
+        StringBuilder currentLine = new StringBuilder();
+
+        foreach (string word in words)
+        {
+            if (currentLine.Length + word.Length <= maxLineLength)
+            {
+                currentLine.Append(word).Append(' ');
+            }
+            else
+            {
+                result.AppendLine(currentLine.ToString().TrimEnd());
+                currentLine.Clear().Append(word).Append(' ');
+            }
+        }
+
+        if (currentLine.Length > 0)
+        {
+            result.AppendLine(currentLine.ToString().TrimEnd());
+        }
+
+        return result.ToString().TrimEnd();
     }
 }

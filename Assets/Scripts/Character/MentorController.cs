@@ -66,7 +66,7 @@ public class MentorController : MonoBehaviour, Interactable
             Vector3 differenceVector = gamer.transform.position - transform.position;
             Vector3 moveVector = differenceVector - differenceVector.normalized; // Subtract by 1
             moveVector = new Vector3(Mathf.Round(moveVector.x), Mathf.Round(moveVector.y));
-            // Fix for an issue where mentor is not animating when moving
+            // Bug: workaround for an issue where mentor is not animating when moving
             _character.Animator.IsMoving = true;
             yield return _character.Move(moveVector);
             _character.Animator.IsMoving = false;

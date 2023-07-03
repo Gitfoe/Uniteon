@@ -206,14 +206,14 @@ public class Uniteon
         {
             MoveCategory.Physical => attacker.Attack,
             MoveCategory.Special => attacker.SpecialAttack,
-            MoveCategory.Status => 0, // Status moves, temporarily set to 0 until we implement status moves
+            MoveCategory.Status => 0f, // No need to check for status moves
             _ => throw new ArgumentOutOfRangeException()
         };
         float defense = move.MoveBase.MoveCategory switch
         {
             MoveCategory.Physical => Defense,
             MoveCategory.Special => SpecialDefense,
-            MoveCategory.Status => Defense, // Temporarily default to defense for status moves
+            MoveCategory.Status => 0f,
             _ => throw new ArgumentOutOfRangeException()
         };
         // Calculate damage

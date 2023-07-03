@@ -108,7 +108,6 @@ public class GamerController : MonoBehaviour
             {
                 OnEncountered?.Invoke(null, null);
                 _inTransition = false;
-                Debug.Log($"In battle transition: {_inTransition}");
             });
         }
         else
@@ -154,7 +153,6 @@ public class GamerController : MonoBehaviour
     /// </summary>
     public void TransitionIntoMentorBattle()
     {
-        Debug.Log($"In battle transition: {_inTransition}");
         Sequence sequence = DOTween.Sequence();
         BattleTransition(_battlingMentor.BattleIntro, _battlingMentor.BattleLoop, sequence, 2.8f);
         sequence.OnComplete(() =>
@@ -171,7 +169,6 @@ public class GamerController : MonoBehaviour
     /// </summary>
     public void TransitionIntoOverworldUniteonBattle()
     {
-        Debug.Log($"In battle transition: {_inTransition}");
         Sequence sequence = DOTween.Sequence();
         BattleTransition(_battlingOverworldUniteon.BattleIntro, _battlingOverworldUniteon.BattleLoop, sequence, 2.8f);
         sequence.OnComplete(() =>
@@ -192,7 +189,6 @@ public class GamerController : MonoBehaviour
     /// <param name="transitionTime">The total time it takes to complete th transition.</param>
     private void BattleTransition(AudioClip introClip, AudioClip loopClip, Sequence sequence = null, float transitionTime = 2.6f)
     {
-        Debug.Log($"In battle transition: {_inTransition}");
         float cameraSize = mainCamera.orthographicSize;
         _inTransition = true;
         if (ReferenceEquals(sequence, null))

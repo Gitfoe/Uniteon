@@ -26,6 +26,18 @@ public class UniteonParty : MonoBehaviour
     /// <returns>First healthy Uniteon.</returns>
     public Uniteon GetHealthyUniteon() => uniteons.FirstOrDefault(u => u.HealthPoints > 0);
 
-    public void HealAllUniteons() =>
-        uniteons.ForEach(x => x.HealthPoints = Mathf.FloorToInt((x.UniteonBase.MaxHealthPoints * x.Level) / 100f) + 10 + x.Level);
+    /// <summary>
+    /// Fully heals all health and PP for all Uniteons in the party.
+    /// </summary>
+    public void FullHealAllUniteons()
+    {
+        foreach (var uniteon in uniteons)
+        {
+            uniteon.HealthPoints = Mathf.FloorToInt((uniteon.UniteonBase.MaxHealthPoints * uniteon.Level) / 100f) + 10 + uniteon.Level;
+            foreach (var move in uniteon.Moves)
+            {
+                move.PowerPoints = move.MoveBase.PowerPoints;
+            }
+        }
+    }
 }

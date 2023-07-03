@@ -175,4 +175,6 @@ MonoBehaviour:
     level: 25
   - moveBase: {fileID: 11400000, guid: 410ebe0965f0e6e459ffa429c9b90139, type: 2}
     level: 48
+  - moveBase: {fileID: 11400000, guid: c77bb84254cf42e47951e0c5faa08dad, type: 2}
+    level: 50
   cry: {fileID: 8300000, guid: f4887ad8422a14e499382e02d7619431, type: 3}

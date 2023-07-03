@@ -19,7 +19,8 @@ public class UniteonBattle : MonoBehaviour
     [SerializeField] private Image gamerSprite; 
     [SerializeField] private Image foeSprite;
     [SerializeField] private MoveSelectionScreen moveSelectionScreen; 
-    [SerializeField] private Image platforms; 
+    [SerializeField] private Image platforms;
+    private Sprite _wildBattlePlatforms;
     private BattleSequenceState _battleState;
     private BattleSequenceState _prevBattleState;
     private CurrentBattleTurn _currentTurn;
@@ -62,7 +63,7 @@ public class UniteonBattle : MonoBehaviour
     #endregion
     
     #region Events
-    public event Action<bool> OnBattleOver;
+    public event Action<BattleOverState> OnBattleOver;
     #endregion
 
     #region Initialisation
@@ -74,6 +75,8 @@ public class UniteonBattle : MonoBehaviour
         _gamerParty = gamerParty;
         _wildUniteon = wildUniteon;
         _obtainUniteonAfterWin = obtainUniteonAfterWin;
+        if (!ReferenceEquals(_wildBattlePlatforms, null))
+            platforms.sprite = _wildBattlePlatforms;
         StartCoroutine(InitialiseBattle());
     }
     
@@ -87,6 +90,7 @@ public class UniteonBattle : MonoBehaviour
         _isMentorBattle = true;
         _gamerController = gamerParty.GetComponent<GamerController>();
         _mentorController = mentorParty.GetComponent<MentorController>();
+        _wildBattlePlatforms ??= platforms.sprite; // Cache wild battle platforms for wild Uniteon battles
         platforms.sprite = _mentorController.BattlePlatforms;
         StartCoroutine(InitialiseBattle());
     }
@@ -240,7 +244,11 @@ public class UniteonBattle : MonoBehaviour
         if (_isMentorBattle)
         {
             AudioManager.Instance.PlaySfx("thud");
-            yield return battleDialogBox.TypeOutDialog("You can't run from mentor battles!");
+            BattleState = BattleSequenceState.Printing;
+            battleDialogBox.EnableActionSelector(false);
+            yield return battleDialogBox.TypeOutDialog("You can't run from mentor battles!", lineWidth: 20);
+            battleDialogBox.EnableActionSelector(true);
+            BattleState = BattleSequenceState.ActionSelection;
         }
         else
         {
@@ -248,37 +256,38 @@ public class UniteonBattle : MonoBehaviour
             AudioManager.Instance.PlaySfx("run");
             battleDialogBox.EnableActionSelector(false);
             yield return battleDialogBox.TypeOutDialog("You ran away!");
-            yield return HandleBattleOver(true); // Didn't actually win, but needs to use win logic
+            yield return HandleBattleOver(BattleOverState.Ran);
         }
     }
 
     /// <summary>
     /// Sets the state to battle over and clean up the class.
     /// </summary>
-    /// <param name="won">If the gamer won or lost the battle.</param>
-    private IEnumerator HandleBattleOver(bool won)
+    private IEnumerator HandleBattleOver(BattleOverState overState)
     {
         // Wait until the gamer continues
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter));
         // Add Uniteon to gamer's party if they won and party isn't full
-        if (won && _obtainUniteonAfterWin && _gamerParty.Uniteons.Count < 6)
+        if (overState == BattleOverState.Won && _obtainUniteonAfterWin && _gamerParty.Uniteons.Count < 6)
         {
             AudioManager.Instance.PlaySfx("levelUp");
             yield return battleDialogBox.TypeOutDialog(
                 $"{uniteonUnitFoe.Uniteon.UniteonBase.UniteonName} has been added to your party!");
             _gamerParty.Uniteons.Add(uniteonUnitFoe.Uniteon);
-            _gamerParty.HealAllUniteons();
+            _gamerParty.FullHealAllUniteons();
         }
-        // Fade out screen and music
+        // Fade out screen and music, disable channel 2 sfx
+        AudioManager.Instance.StopSfx(2); // Stop any playing channel 2 SFX (low health)
         fade.color = new Color(0f, 0f, 0f, 0f);
         StartCoroutine(AudioManager.Instance.StopMusic(true, 0.72f));
         yield return fade.DOFade(1f, 0.72f).WaitForCompletion();
         _gamerParty.Uniteons.ForEach(u => u.ResetBoosts());
         // Heal party Uniteon if gamer has lost, and the battle didn't end because of running away
-        if (!won)
-            _gamerParty.HealAllUniteons();
-        OnBattleOver?.Invoke(won);
+        if (overState == BattleOverState.Lost)
+            _gamerParty.FullHealAllUniteons();
+        OnBattleOver?.Invoke(overState);
         // Reset variables
+        partyScreen.ResetAllPartyMemberSlots();
         _actionSelection = 0;
         _moveSelection = 0;
         _memberSelection = 0;
@@ -288,6 +297,7 @@ public class UniteonBattle : MonoBehaviour
         _isMentorBattle = false;
         _gamerController = null;
         _mentorController = null;
+        _obtainUniteonAfterWin = false;
     }
     #endregion
 
@@ -567,11 +577,14 @@ public class UniteonBattle : MonoBehaviour
             else
             {
                 DamageData damageData = defendingUnit.Uniteon.TakeDamage(move, attackingUnit.Uniteon);
-                // Play Uniteon damage animation and sfx
-                defendingUnit.PlayHitAnimation(damageData.EffectivenessModifier);
-                PlayHitSfx(damageData, -panning);
-                // Show damage decay on health bar
-                yield return defendingUnit.UniteonHud.UpdateHealthPoints(previousHealthPoints);
+                // Play Uniteon damage animation and sfx if the move was effective
+                if (damageData.EffectivenessModifier > 0f)
+                {
+                    defendingUnit.PlayHitAnimation(damageData.EffectivenessModifier);
+                    PlayHitSfx(damageData, -panning);
+                    // Show damage decay on health bar
+                    yield return defendingUnit.UniteonHud.UpdateHealthPoints(previousHealthPoints);
+                }
                 // Write effectiveness/critical hit to the dialog box
                 yield return WriteDamageData(damageData);
             }
@@ -598,7 +611,7 @@ public class UniteonBattle : MonoBehaviour
                             victoryLoop = _mentorController.VictoryLoop;
                         }
                         BattleState = BattleSequenceState.BattleOver;
-                        AudioManager.Instance.StopSfx(2);
+                        AudioManager.Instance.StopSfx(2); // Stop low health SFX
                         AudioManager.Instance.PlayMusic(victoryIntro, victoryLoop);
                     }
                     // Gain experience for gamer Uniteon if they are below level 100
@@ -665,7 +678,7 @@ public class UniteonBattle : MonoBehaviour
     private IEnumerator CheckBattleOver(UniteonUnit faintedUnit)
     {
         if (BattleState == BattleSequenceState.BattleOver)
-            yield return HandleBattleOver(true);
+            yield return HandleBattleOver(BattleOverState.Won);
         else if (faintedUnit.IsGamerUniteon)
         { // Check if gamer has more Uniteon in it's party
             Uniteon nextUniteon = _gamerParty.GetHealthyUniteon();
@@ -674,7 +687,7 @@ public class UniteonBattle : MonoBehaviour
             else
             {
                 // If not, lost
-                yield return HandleBattleOver(false);
+                yield return HandleBattleOver(BattleOverState.Lost);
             }
         }
         else if (_isMentorBattle) // If it's a mentor battle, just send out next Uniteon
@@ -825,18 +838,21 @@ public class UniteonBattle : MonoBehaviour
     /// <returns></returns>
     private IEnumerator WriteDamageData(DamageData damageData)
     {
-        if (damageData.CriticalHitModifier > 1f)
+        if (damageData.CriticalHitModifier > 1f && damageData.EffectivenessModifier > 0)
             yield return battleDialogBox.TypeOutDialog("It's a critical hit!");
         switch (damageData.EffectivenessModifier)
         {
-            case > 2f:
+            case 4f:
                 yield return battleDialogBox.TypeOutDialog("It's mega effective!!!");
                 break;
-            case > 1f:
+            case 2f:
                 yield return battleDialogBox.TypeOutDialog("It's super effective!");
                 break;
-            case < 1f:
+            case 0.5f or 0.25f:
                 yield return battleDialogBox.TypeOutDialog("It's not very effective...");
+                break;
+            case 0f:
+                yield return battleDialogBox.TypeOutDialog("The move had no effect.");
                 break;
         }
     }
@@ -878,7 +894,7 @@ public class UniteonBattle : MonoBehaviour
             battleDialogBox.SetMoveNames(uniteonUnitGamer.Uniteon.Moves); // Reload moves
         }
         _moveToLearn = null;
-        BattleState = BattleSequenceState.BattleOver;   
+        BattleState = _isMentorBattle ? BattleSequenceState.ExecutingTurns : BattleSequenceState.BattleOver;
     }
     #endregion
 
@@ -935,6 +951,7 @@ public enum BattleSequenceState
     NoMoveSelection, // If there are no remaining moves
     ExecutingTurns,
     Switching,
+    Printing,
     FoeSwitching,
     PartyScreenFromSelection,
     PartyScreenFromFaint,
@@ -955,4 +972,11 @@ public enum BattleAction
     Switch,
     Pack,
     Run
+}
+
+public enum BattleOverState
+{
+    Won,
+    Lost,
+    Ran
 }

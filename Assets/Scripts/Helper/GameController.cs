@@ -116,22 +116,22 @@ public class GameController : MonoBehaviour
     /// Gets called once the battle is over.
     /// </summary>
     /// <param name="won">If the gamer won or not.</param>
-    private void EndBattle(bool won)
+    private void EndBattle(BattleOverState overState)
     {
         _gameState = GameState.World;
         uniteonBattle.gameObject.SetActive(false);
         worldCamera.gameObject.SetActive(true);
         worldUI.gameObject.SetActive(true);
-        if (won)
+        if (!ReferenceEquals(_overworldUniteon, null))
+            _overworldUniteon.OnBattleOver();
+        if (overState is BattleOverState.Won or BattleOverState.Ran)
         {
             if (!ReferenceEquals(_mentor, null))
                 _mentor.HandleBattleLost();
-            if (!ReferenceEquals(_overworldUniteon, null))
-                _overworldUniteon.HandleBattleLost();
             StartCoroutine(_transition.FadeOut(0.72f, Color.black));
             AudioManager.Instance.PlayMusic(AudioManager.PlayingWorldMusic);
         }
-        else
+        else if (overState is BattleOverState.Lost)
         {
             _transition.SetTransitionColor(Color.black);
             StartCoroutine(DialogManager.Instance.PrintDialog(lostDialog,

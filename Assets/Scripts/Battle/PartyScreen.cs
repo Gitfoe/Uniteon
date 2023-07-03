@@ -36,4 +36,12 @@ public class PartyScreen : MonoBehaviour
     }
 
     public void SetMessageText(string text) => messageText.text = text;
+
+    public void ResetAllPartyMemberSlots()
+    {
+        foreach (var slot in _partyMemberSlots)
+        {
+            slot.gameObject.SetActive(true);
+        }
+    }
 }

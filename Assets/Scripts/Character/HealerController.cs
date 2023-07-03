@@ -36,7 +36,7 @@ public class HealerController : NpcController
     private IEnumerator HealUniteonsSequence(UniteonParty gamerParty)
     {
         yield return GameController.Instance.HealUniteonsTransition("centerHeal");
-        gamerParty.HealAllUniteons();
+        gamerParty.FullHealAllUniteons();
         IdleTimer = 0f;
         NpcState = NpcState.Idling;
     }

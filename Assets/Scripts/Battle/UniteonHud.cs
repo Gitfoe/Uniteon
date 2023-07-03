@@ -35,7 +35,8 @@ public class UniteonHud : MonoBehaviour
     /// </summary>
     /// <param name="currentHealthPoints">The health points the Uniteon had before taking damage,
     /// or if you want to simply update to new values, the Uniteons current health.</param>
-    public IEnumerator UpdateHealthPoints(float currentHealthPoints)
+    /// <param name="sfx">If you want sfx to play for new health points updating. You don't want this for leveling up.</param>
+    public IEnumerator UpdateHealthPoints(float currentHealthPoints, bool sfx = true)
     {
         var updateCoroutines = new Coroutine[]
         {
@@ -47,7 +48,7 @@ public class UniteonHud : MonoBehaviour
             yield return coroutine;
         }
         if (isGamer)
-            healthBar.CalculateFlashHealthBorder((float)_uniteon.HealthPoints / _uniteon.MaxHealthPoints);
+            healthBar.CalculateFlashHealthBorder((float)_uniteon.HealthPoints / _uniteon.MaxHealthPoints, sfx);
     }
 
     /// <summary>
@@ -121,6 +122,6 @@ public class UniteonHud : MonoBehaviour
     public void UpdateLevelAndHealth()
     {
         levelText.text = $"Lv.{_uniteon.Level}";
-        StartCoroutine(UpdateHealthPoints(_uniteon.HealthPoints));
+        StartCoroutine(UpdateHealthPoints(_uniteon.HealthPoints, false));
     }
 }

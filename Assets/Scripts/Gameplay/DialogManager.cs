@@ -71,12 +71,14 @@ public class DialogManager : MonoBehaviour
     /// Types out text based on a certain interval.
     /// </summary>
     /// <param name="line">Text that has to be set.</param>
+    /// <param name="lineWidth">The width of the text line for splitting.</param>
     /// <returns>Coroutine.</returns>
-    private IEnumerator TypeOutDialog(string line)
+    private IEnumerator TypeOutDialog(string line, int lineWidth = 32)
     {
         _isPrinting = true;
+        string splitLine = line.SplitStringByWords(lineWidth);
         dialogText.text = "";
-        foreach (var l in line)
+        foreach (var l in splitLine)
         {
             dialogText.text += l;
             yield return new WaitForSeconds(1f/typeOutSpeed);

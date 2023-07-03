@@ -66,7 +66,7 @@ public class OverworldUniteonController : MonoBehaviour, Interactable
         StartCoroutine(DialogManager.Instance.PrintDialog(dialog));
     }
     
-    public void HandleBattleLost()
+    public void OnBattleOver()
     {
         fov.gameObject.SetActive(false);
         gameObject.SetActive(false);

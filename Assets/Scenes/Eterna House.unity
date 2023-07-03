@@ -216,7 +216,7 @@ GameObject:
   - component: {fileID: 563480402}
   - component: {fileID: 563480401}
   m_Layer: 8
-  m_Name: Healer
+  m_Name: Father
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1042,6 +1042,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5065103376159989109, guid: 510b86f0c3ef39b4299beaeab4fdeca6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6159263548183895945, guid: 510b86f0c3ef39b4299beaeab4fdeca6, type: 3}
+      propertyPath: wildUniteons.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8449237659638027168, guid: 510b86f0c3ef39b4299beaeab4fdeca6, type: 3}
